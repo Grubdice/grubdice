@@ -1,0 +1,9 @@
+package co.grubdice.scorekeeper.security
+
+import org.springframework.security.core.userdetails.AuthenticationUserDetailsService
+import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.openid.OpenIDAuthenticationToken
+
+interface SecureUserDetailsService extends UserDetailsService, AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
+
+}
