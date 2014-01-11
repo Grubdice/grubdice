@@ -34,9 +34,9 @@ class SecureUserDetailsServiceImpl implements SecureUserDetailsService {
             }
         }
         if (email ==~ /.*@grubhub\.com/ || email ==~ /.*@ehdev.io/) {
-            return new SecureUserDetails()
+            return new SecureUserDetails(email)
         } else {
-            throw new UsernameNotFoundException()
+            throw new UsernameNotFoundException("User not found")
         }
     }
 }

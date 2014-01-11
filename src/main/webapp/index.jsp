@@ -7,7 +7,7 @@
 <h1>OpenID Sample Home Page</h1>
 
 <p>
-    Welcome <sec:authentication property='principal.name'/>!
+    Welcome <sec:authentication property='principal.username'/>!
 </p>
 
 <h3>Technical Information</h3>
@@ -16,6 +16,6 @@
     Your principal object is....: <%= request.getUserPrincipal() %>
 </p>
 
-<p><a href="j_spring_security_logout">Logout</a>
+<p><a href="/logout">Logout</a>
 </body>
 </html>

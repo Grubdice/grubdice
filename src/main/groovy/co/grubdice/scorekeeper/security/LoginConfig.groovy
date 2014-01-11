@@ -1,18 +1,11 @@
-package co.grubdice.scorekeeper.config
-
-import co.grubdice.scorekeeper.security.SecureUserDetailsService
-import co.grubdice.scorekeeper.security.SecureUserDetailsServiceImpl
+package co.grubdice.scorekeeper.security
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Import
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl
-
-@Configuration
-@EnableWebSecurity
-@Import(BaseConfig.class)
+//@Configuration
+//@EnableWebSecurity
+//@Import(BaseConfig.class)
 class LoginConfig extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -25,6 +18,7 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/images/**").permitAll()
                 .antMatchers('/api/**').authenticated()
+                .anyRequest().authenticated()
                 .and()
                 .openidLogin()
                 .loginPage("/login.jsp")
@@ -61,7 +55,7 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .attribute("fullname")
                 .type("http://schema.openid.net/namePerson")
-                .required(true);
+                .required(true)
     }
 
     @Bean

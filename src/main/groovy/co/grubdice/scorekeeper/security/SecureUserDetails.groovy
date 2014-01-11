@@ -7,6 +7,12 @@ import org.springframework.security.core.userdetails.UserDetails
 
 class SecureUserDetails implements UserDetails, CredentialsContainer {
 
+    String username
+
+    SecureUserDetails(String username){
+        this.username = username
+    }
+
     @Override
     Collection<? extends GrantedAuthority> getAuthorities() {
         return AuthorityUtils.createAuthorityList("ROLE_USER");
@@ -14,10 +20,6 @@ class SecureUserDetails implements UserDetails, CredentialsContainer {
 
     String getPassword() {
         return ""
-    }
-
-    String getUsername() {
-        systemUser.getAuthToken()
     }
 
     boolean isEnabled() {

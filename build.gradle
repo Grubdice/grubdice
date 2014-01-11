@@ -2,10 +2,28 @@
 apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'war'
+apply plugin: 'tomcat'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath("org.gradle.api.plugins:gradle-tomcat-plugin:1.0")
+    }
+}
 
 repositories {
     mavenCentral()
     maven { url 'http://repo.spring.io/snapshot' }
+}
+
+tomcatRun {
+    doFirst {
+        System.setProperty("spring.profiles.active", "dev")
+    }
 }
 
 def versions = [
@@ -16,6 +34,12 @@ def versions = [
 ]
 
 dependencies {
+
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${versions['tomcatVersion']}",
+            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${versions['tomcatVersion']}"
+    tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${versions['tomcatVersion']}") {
+        exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+    }
 
     //Goovy / util libs
     compile 'org.codehaus.groovy:groovy-all:2.2.1'
