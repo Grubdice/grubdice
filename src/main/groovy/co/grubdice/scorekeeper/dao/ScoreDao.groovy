@@ -5,7 +5,7 @@ import co.grubdice.scorekeeper.model.persistant.Player
 
 public interface ScoreDao extends BaseDao<GameResult>{
 
-    Map<String, Integer> getScoreBoard()
+    List<ScoreDaoImpl.SearchResults> getScoreBoard()
 
     List<GameResult> getPlayersScores(Player player)
 }

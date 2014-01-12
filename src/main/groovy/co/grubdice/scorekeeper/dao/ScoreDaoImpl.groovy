@@ -13,7 +13,7 @@ import javax.transaction.Transactional
 class ScoreDaoImpl extends BaseDaoImpl<GameResult> implements ScoreDao {
 
     @Override
-    Map<String, Integer> getScoreBoard() {
+    List<SearchResults> getScoreBoard() {
         /*
         def query =
                 getSession().createCriteria(GameResult.class)
@@ -22,20 +22,19 @@ class ScoreDaoImpl extends BaseDaoImpl<GameResult> implements ScoreDao {
                         .add(Projections.sum("score"))
                         .add(Projections.groupProperty("player")))
                     .setResultTransformer(Transformers.aliasToBean(SearchResults.class))
-        List<SearchResults> resultList = query.list()
+        List<SearchResults> queryList = query.list()
         */
 
-        def resultList = getSession().createSQLQuery("select p.name, sum(score) from game_results gr join players p on gr.player_id = p.id group by p.id").list()
+        def queryList = getSession().createSQLQuery("select p.name, sum(score) from game_results gr join players p on gr.player_id = p.id group by p.id").list()
 
-        def returnMap = [:]
-        resultList.each {
-            returnMap[it[0]] = (int)it[1] + 1500
+        def returnList = queryList.collect {
+            new SearchResults(name: it[0], score: it[1] + 1500)
         }
 
-        returnMap.sort { a,b ->
-            a.value <=> b.value
+        returnList.sort { a,b ->
+            a.score <=> b.score
         }
-        return returnMap
+        return returnList
     }
 
     @Override
@@ -46,10 +45,10 @@ class ScoreDaoImpl extends BaseDaoImpl<GameResult> implements ScoreDao {
         return query.list()
     }
 
-    /*
+
     static class SearchResults {
-        def Player player
+        def String name
         def int score
     }
-    */
+
 }
