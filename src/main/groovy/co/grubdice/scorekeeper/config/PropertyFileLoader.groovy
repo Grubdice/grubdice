@@ -33,6 +33,17 @@ class PropertyFileLoader {
 
     }
 
+    @Configuration
+    @PropertySource("classpath:dev.properties")
+    @Profile("prod")
+    @Slf4j
+    static class ProdDefaults {
+        static {
+            log.info("Creating profile: prod")
+        }
+
+    }
+
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
