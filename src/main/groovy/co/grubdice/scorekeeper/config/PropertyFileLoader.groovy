@@ -34,7 +34,7 @@ class PropertyFileLoader {
     }
 
     @Configuration
-    @PropertySource("classpath:dev.properties")
+    @PropertySource("classpath:prod.properties")
     @Profile("prod")
     @Slf4j
     static class ProdDefaults {

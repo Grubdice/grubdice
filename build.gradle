@@ -5,6 +5,15 @@ apply plugin: 'war'
 apply plugin: 'tomcat'
 apply plugin: 'flyway'
 
+def versions = [
+        springVersion: '4.0.0.RELEASE',
+        jacksonVersion: '2.3.0',
+        cargo: '1.4.5',
+        tomcatVersion: '7.0.42',
+        hibernateVersion: '4.3.0.Final',
+        flywayVersion: '2.3.1'
+]
+
 buildscript {
     repositories {
         mavenCentral()
@@ -13,18 +22,10 @@ buildscript {
 
     dependencies {
         classpath("org.gradle.api.plugins:gradle-tomcat-plugin:1.0")
-        classpath("com.googlecode.flyway:flyway-gradle-plugin:2.3")
+        classpath("com.googlecode.flyway:flyway-gradle-plugin:2.3.1")
         classpath('org.postgresql:postgresql:9.3-1100-jdbc41')
     }
 }
-
-def versions = [
-        springVersion: '4.0.0.RELEASE',
-        jacksonVersion: '2.3.0',
-        cargo: '1.4.5',
-        tomcatVersion: '7.0.42',
-        hibernateVersion: '4.3.0.Final'
-]
 
 dependencies {
 
@@ -52,6 +53,7 @@ dependencies {
     compile 'com.jolbox:bonecp-spring:0.8.0.RELEASE'
     compile 'org.postgresql:postgresql:9.3-1100-jdbc41'
     compile 'org.jadira.usertype:usertype.core:3.1.0.CR10'
+    compile "com.googlecode.flyway:flyway-core:${versions['flywayVersion']}"
 
     //Jackson
     compile "com.fasterxml.jackson.core:jackson-databind:${versions['jacksonVersion']}"
@@ -90,7 +92,7 @@ test {
 }
 
 flyway {
-    url = 'jdbc:postgresql://localhost/grubdice'
+    url = 'jdbc:postgresql://localhost/grubdice_dev'
     user = 'grubdice'
 }
 

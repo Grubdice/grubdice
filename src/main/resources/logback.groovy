@@ -11,7 +11,7 @@ appender("STDOUT", ConsoleAppender) {
 }
 
 appender("ROOT-LOG", RollingFileAppender) {
-    file = "grub-dice.log"
+    file = System.getProperty("catalina.base") + "/logs/grub-dice.log"
     rollingPolicy(TimeBasedRollingPolicy) {
         fileNamePattern = "logFile.%d{yyyy-MM-dd}.log"
         maxHistory = 30
