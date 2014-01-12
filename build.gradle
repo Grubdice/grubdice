@@ -112,4 +112,7 @@ task createDbMigrationScript() << {
     file(filePath).text = ' -- CHANGE ME'
     println("New DB Migration script created at $filePath")
 }
-    
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.10'
+}
