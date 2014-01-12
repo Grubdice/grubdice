@@ -1,22 +1,26 @@
-package co.grubdice.scorekeeper.model
+package co.grubdice.scorekeeper.model.persistant
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
-@Table
-class Player {
+@Table(name = 'turns')
+class Turn {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     Integer id
 
-    String name
+    @ManyToOne
+    Game game
 
     @OneToMany
-    List<NickName> nickNames
+    List<Bid> bids
+
+    int turnNumber
 }

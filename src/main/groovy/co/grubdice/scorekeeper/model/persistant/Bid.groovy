@@ -1,4 +1,4 @@
-package co.grubdice.scorekeeper.model
+package co.grubdice.scorekeeper.model.persistant
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
-@Table
+@Table(name = "bids")
 class Bid {
 
     @Id

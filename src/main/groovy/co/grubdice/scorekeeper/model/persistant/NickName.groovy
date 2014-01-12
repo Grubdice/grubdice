@@ -1,4 +1,4 @@
-package co.grubdice.scorekeeper.model
+package co.grubdice.scorekeeper.model.persistant
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -8,8 +8,8 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
-@Table
-class GameResult {
+@Table(name = 'nick_names')
+class NickName {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -18,5 +18,5 @@ class GameResult {
     @ManyToOne
     Player player
 
-    int score
+    String nickName
 }

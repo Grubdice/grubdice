@@ -41,6 +41,8 @@ class HibernateConfig {
     String acquireIncrement
     @Value('${datasource.statementsCacheSize}')
     String statementCacheSize
+    @Value('${datasource.update}')
+    String hibernateUpdateDdl
 
     @Bean
     public DataSource dataSource() {
@@ -68,7 +70,7 @@ class HibernateConfig {
     @Bean
     public SessionFactory sessionFactory() {
         def builder = new LocalSessionFactoryBuilder(dataSource())
-        builder.setProperty("hibernate.hbm2ddl.auto", "update")
+        builder.setProperty("hibernate.hbm2ddl.auto", hibernateUpdateDdl)
         builder.scanPackages("co.grubdice.scorekeeper")
         return builder.buildSessionFactory()
     }
