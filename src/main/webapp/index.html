@@ -1,325 +1,124 @@
-<!doctype html>
-<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
-<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Foundation Template | Marketing</title>
+<!DOCTYPE HTML>
+<!--
+	This site was developed by badasses, for badasses. (C) 2014
+-->
+<html>
+	<head>
+		<title>League of Incrandulous Arugumentative Rollers</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" rel="stylesheet" type="text/css" />
+		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.dropotron.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-panels.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel-noscript.css" />
+			<link rel="stylesheet" href="css/style.css" />
+			<link rel="stylesheet" href="css/style-desktop.css" />
+			<link rel="stylesheet" href="css/style-noscript.css" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
+	</head>
+	<body class="homepage">
 
-    
-    <meta name="description" content="Documentation and reference library for ZURB Foundation. JavaScript, CSS, components, grid and more." />
-    
-    <meta name="author" content="ZURB, inc. ZURB network also includes zurb.com" />
-    <meta name="copyright" content="ZURB, inc. Copyright (c) 2013" />
+		<!-- Header -->
+			<div id="header">
+						
+				<!-- Inner -->
+					<div class="inner">
+						<header>
+							<h1><a href="#" id="logo">L.I.A.R.</a></h1>
+							<hr />
+							<span class="byline">League of Incrandulous Argumentative Rollers</span>
+						</header>
+						<footer>
+							<a href="#banner" class="button circled scrolly">Get Weird</a>
+						</footer>
+					</div>
+				
+			</div>
+			
+		<!-- Banner -->
+			<div id="banner">
+				<h2>Hello. Welcome to the <strong>L.I.A.R.</strong></h2>
+								<br>
+				<img src="images/liarsshield.png">
+				<div id="leader"><span class="byline">
+					Here, the greatest Liar's Dice players in the world are ranked. Each person fighting to reach the<br> number 1 spot in the League of Incrandulous Argumentative Rollers. 
+				</span></div>
+			</div>
 
-    <link rel="stylesheet" href="css/foundation.css" />
-    <script src="js/modernizr.js"></script>
+		<!-- Main -->
+			<div class="wrapper style2">
 
-    <link type="text/css" media="screen" rel="stylesheet" href="css/responsive-tables.css" />
+				<article id="main" class="container special">
+					<header>
+						<div id="leaderboard"><h2>Check out the current world leaderboard below!</h2></div>
+						<span class="byline">
+							Leaderboard goes here
+						</span>
+					</header>
+					<p>
+						
+					</p>
+					<footer>
+						<a href="#scores" class="button circled scrolly">Click to Enter Scores</a>
+				
+			<!--Scores -->
+				<div id="scores">
+					<span class="byline" align="center">
+						Here is where all of the scores should be entered. Ethan, get on this foo. 
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+					</span>
+					<a href="#leaderboard" class= "button circled scrolly">Back to Leaderboard</a>
+					</footer>
+				</article>
+			</div>
+		<!-- Footer -->
+			<div id="footer">
+				<div class="container">
+					<div class="row">
 
-    <script>
-    function addNewRow() {
-      // Find a <table> element with id="myTable":
-      var table = document.getElementById("newGameTable");
-      addRowToTable(table, '<div><input type="text" placeholder="name" /></div>', '<div><input type="text" placeholder="points" /></div>')
-    }
+					</div>
+					<hr />
+					<div class="row">
+						<div class="12u">
+							
+							<!-- Contact -->
+								<section class="contact">
+									<header>
+										<h3></h3>
+									</header>
+									<p>If you're not tying ol' yeller, I'm gonna call you no matter what. Unless you show some digits, ofcourse.</p>
+								</section>
+							
+							<!-- Copyright -->
+								<div class="copyright">
+									<ul class="menu">
+										<li>V1.0 &copy;2014 League of Incrandulous Argumentative Rollers. All Rights Reserved</li>
+									</ul>
+								</div>
+							
+						</div>
+					
+					</div>
+				</div>
+			</div>
 
-    function addRowToTable(table, cell1Contents, cell2Contents){
-      var row = table.insertRow(-1);
-
-      // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-      var cell1 = row.insertCell(0);
-      var cell2 = row.insertCell(1);
-
-      cell1.innerHTML = cell1Contents;
-      cell2.innerHTML = cell2Contents;
-    }
-
-    function refreshScoreBoard() {
-      $.ajax({
-        type: "GET",
-        url: "/api/score",
-        processData: false,
-        success: updateScoreBoard,
-        dataType: 'JSON'
-      });
-    }
-
-    function updateScoreBoard(values) {
-      var table = document.getElementById("scoreTable");
-      table.innerHTML = '<THEAD><tr><td><h6> Name </h6></td><td><h6> Score </h6></td></tr></THEAD>';
-      
-      for(var i = values.length - 1; i >= 0; i--){
-        var player = values[i];
-        console.log(player);
-        addRowToTable(table, '<div>' + player['name'] + '</div>', "<div>" + player['score'] + "</div>");
-      }
-    }
-
-    function preformPostAndClearTable() {
-      var json = { };
-      var nodeList = document.getElementById('newGameTable').getElementsByTagName('tr');
-      var gameResults = new Array()
-      for (var i = 0; i < nodeList.length; ++i) {
-        var textBoxes = nodeList[i].getElementsByTagName("input");
-        var result = {}
-        result['name'] = textBoxes[0].value
-        result['points'] = textBoxes[1].value
-        if(!isNumber(result['points'])) {
-          alert("The value for " + textBoxes[0].value + " is not a number!");
-          return;
-        }
-        gameResults.push(result) 
-      }
-
-      json['results'] = gameResults;
-      json['gameType'] = 'LEAGUE';
-      console.log(json);
-
-      $.ajax({
-        type: "POST",
-        url: "/api/game",
-        processData: false,
-        data: JSON.stringify(json),
-        success: function() {
-          alert("This game has been successfully posted")
-        },
-        contentType: "application/json"
-      });
-
-      clearGameTable();
-      refreshScoreBoard();
-    }
-
-    function clearGameTable() {
-      document.getElementById("newGameTable").innerHTML = '<tr><td><div><input type="text" placeholder="name" /></div></td><td><div><input type="text" placeholder="points" /></div></td></tr>'
-    }
-    function isNumber(n) {
-      return !isNaN(parseFloat(n)) && isFinite(n);
-    }
-
-    function createNewPlayer() {
-      //{"name":"Player 2"}
-      var playerName = {};
-      playerName['name'] = document.getElementById("newPlayer").value;
-      console.log(playerName);
-      $.ajax({
-        type: "POST",
-        url: "/api/player",
-        processData: false,
-        data: JSON.stringify(playerName),
-        success: function() {
-          alert("Player has been added");
-          document.getElementById("newPlayer").value = "";
-        },
-        contentType: "application/json"
-      });
-    }
-    </script>
-  </head>
-  <body>
-    
-<!-- Navigation -->
- 
-  <nav class="top-bar" data-topbar>
-    <ul class="title-area">
-      <!-- Title Area -->
-      <li class="name">
-        <h1>
-          <a href="#">
-            L.I.A.R.S Dice Score Card
-          </a>
-        </h1>
-      </li>
-      <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
-    </ul>
- 
-    <!-- <section class="top-bar-section">
-      <ul class="right">
-        <li class="divider"></li>
-        <li class="has-dropdown">
-          <a href="#">Main Item 1</a>
-          <ul class="dropdown">
-            <li><label>Section Name</label></li>
-            <li class="has-dropdown">
-              <a href="#" class="">Has Dropdown, Level 1</a>
-              <ul class="dropdown">
-                <li><a href="#">Dropdown Options</a></li>
-                <li><a href="#">Dropdown Options</a></li>
-                <li><a href="#">Level 2</a></li>
-                <li><a href="#">Subdropdown Option</a></li>
-                <li><a href="#">Subdropdown Option</a></li>
-                <li><a href="#">Subdropdown Option</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Dropdown Option</a></li>
-            <li><a href="#">Dropdown Option</a></li>
-            <li class="divider"></li>
-            <li><label>Section Name</label></li>
-            <li><a href="#">Dropdown Option</a></li>
-            <li><a href="#">Dropdown Option</a></li>
-            <li><a href="#">Dropdown Option</a></li>
-            <li class="divider"></li>
-            <li><a href="#">See all &rarr;</a></li>
-          </ul>
-        </li>
-        <li class="divider"></li>
-        <li><a href="#">Main Item 2</a></li>
-        <li class="divider"></li>
-        <li class="has-dropdown">
-          <a href="#">Main Item 3</a>
-          <ul class="dropdown">
-            <li><a href="#">Dropdown Option</a></li>
-            <li><a href="#">Dropdown Option</a></li>
-            <li><a href="#">Dropdown Option</a></li>
-            <li class="divider"></li>
-            <li><a href="#">See all &rarr;</a></li>
-          </ul>
-        </li>
-      </ul>
-    </section> -->
-  </nav>
- 
-  <!-- End Top Bar -->
- 
-  <div class="row">
-    <div class="large-12 columns">
- 
-    <!-- Content Slider -->
- 
-<!--       <div class="row">
-        <div class="large-12 hide-for-small">
- 
-          <div id="featured" data-orbit>
-              <img src="http://placehold.it/1200x500&text=Slide Image 1" alt="slide image">
-              <img src="http://placehold.it/1200x500&text=Slide Image 2" alt="slide image">
-              <img src="http://placehold.it/1200x500&text=Slide Image 3" alt="slide image">
-            </div>
- 
-      </div>
-    </div> -->
- 
-    <!-- End Content Slider -->
- 
-    <!-- Mobile Header -->
- 
-      <!-- <div class="row">
-        <div class="large-12 columns show-for-small">
- 
-          <img src="http://placehold.it/1200x700&text=Mobile Header">
- 
-        </div>
-      </div><br> -->
- 
-    <!-- End Mobile Header -->
- 
- 
-      <div class="row">
-        <div class="large-12 columns">
-          <div class="row">
-            <!-- Shows -->
-            <div class="large-4 small-6 columns">
- 
-              <h4>New Game</h4><hr>
-
-              <a href="#" class="small round secondary button" onclick="addNewRow()">Add New Player</a><br/>  
-              <table class="responsive" id="newGameTable">
-                <tr>
-                  <td>
-                    <div>
-                      <input type="text" placeholder="name" />
-                    </div>
-                  </td>
-                  <td>
-                    <div>
-                      <input type="text" placeholder="points" />
-                    </div>
-                  </td>
-                </tr>
-              </table>
-
-              <a href="#" class="small round success button" onclick="preformPostAndClearTable()">Submit</a><br/>  
-            </div>
-            <!-- End Shows -->
- 
- 
-            <!-- Image -->
- 
-            <div class="large-4 small-6 columns">
-              <h4>Score Board</h4><hr>
-              <a href="#" class="small round success button" onClick="refreshScoreBoard()" >Refresh</a><br/>
-              <table class="responsive" id="scoreTable">
-              </table>
-            </div>
- 
-            <!-- End Image -->
- 
- 
-            <!-- Feed -->
- 
-            <div class="large-4 small-12 columns">
- 
-              <h4>New Player</h4><hr>
-
-              <div class="large-8 medium-8 columns">
-                <input type="text" placeholder="name" id='newPlayer'/>
-                <a href="#" class="small round success button" onclick="createNewPlayer()">Submit</a>
-              </div>
- 
-            </div>
- 
-            <!-- End Feed -->
- 
-          </div>
-        </div>
-      </div>
- 
-    <!-- End Content -->
- 
- 
-    <!-- Footer -->
- 
-      <footer class="row">
-        <div class="large-12 columns"><hr>
-            <div class="row">
- 
-              <div class="large-6 columns">
-                  <p>&copy; GrubDice.</p>
-              </div>
- 
-              <!-- <div class="large-6 small-12 columns">
-                  <ul class="inline-list right">
-                    <li><a href="#">Link 1</a></li>
-                    <li><a href="#">Link 2</a></li>
-                    <li><a href="#">Link 3</a></li>
-                    <li><a href="#">Link 4</a></li>
-                  </ul>
-              </div> -->
- 
-            </div>
-        </div>
-      </footer>
- 
-    <!-- End Footer -->
- 
-    </div>
-  </div>
- 
-    <script src="js/vendor/jquery.js"></script>
-    <script src="js/vendor/zepto.min.js"></script>
-    <script src="js/foundation.min.js"></script>
-    <script type="text/javascript" src="js/responsive-tables.js"></script>  
-    <script>
-      $(document).foundation();
-    </script>
-  <!-- End Footer -->
-    <script>
-      $( document ).ready(function() {
-        refreshScoreBoard()
-      });
-
-      var doc = document.documentElement;
-      doc.setAttribute('data-useragent', navigator.userAgent);
-    </script>
-  </body>
+	</body>
 </html>
