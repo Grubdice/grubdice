@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/score")
+@RequestMapping("/api/score")
 class ScoreController {
 
     @Autowired

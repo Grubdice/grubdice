@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
-@RequestMapping("/player")
+@RequestMapping("/api/player")
 @RestController
 class PlayerController {
 

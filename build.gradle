@@ -105,6 +105,8 @@ tomcatRun {
     doFirst {
         System.setProperty("spring.profiles.active", "dev")
     }
+    contextPath = '/'
+    reloadable = true
 }
 
 task createDbMigrationScript() << {
