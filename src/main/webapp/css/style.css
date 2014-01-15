@@ -461,45 +461,14 @@
 	
 		table
 		{
-			width: 100%;
+		margin-right: auto;
+		margin-left: auto;
+		}
+		tr {
+			color: gray;
 		}
 		
-			table.style1
-			{
-				width: 100%;
-			}
-			
-				table.style1 tbody tr:nth-child(2n+2)
-				{
-					background: #f4f4f4;
-				}
-				
-				table.style1 td
-				{
-					padding: 0.5em 1em 0.5em 1em;
-				}
-				
-				table.style1 th
-				{
-					text-align: left;
-					font-weight: 400;
-					padding: 0.5em 1em 0.5em 1em;
-				}
-			
-				table.style1 thead
-				{
-					background: #444;
-					color: #fff;
-				}
-				
-				table.style1 tfoot
-				{
-					background: #eee;
-				}
-				
-				table.style1 tbody
-				{
-				}
+
 
 	/* Buttons */
 		
