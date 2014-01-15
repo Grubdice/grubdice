@@ -15,6 +15,7 @@
 		<script src="js/skel.min.js"></script>
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
+        <script src="js/grubdice.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="css/skel-noscript.css" />
 			<link rel="stylesheet" href="css/style.css" />
@@ -22,6 +23,12 @@
 			<link rel="stylesheet" href="css/style-noscript.css" />
 		</noscript>
 		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
+        <script>
+            $( document ).ready(function() {
+                clearGameTable();
+                refreshScoreBoard();
+            });
+        </script>
 	</head>
 	<body class="homepage">
 
@@ -58,6 +65,8 @@
 				<article id="main" class="container special">
 					<header>
 						<div id="leaderboard"><h2>Check out the current world leaderboard below!</h2></div>
+                        <table class="responsive" id="scoreTable">
+                        </table>
 						<span class="byline">
 							Leaderboard goes here
 						</span>
@@ -68,25 +77,19 @@
 					<footer>
 						<a href="#scores" class="button circled scrolly">Click to Enter Scores</a>
 				
-			<!--Scores -->
-				<div id="scores">
-					<span class="byline" align="center">
-						Here is where all of the scores should be entered. Ethan, get on this foo. 
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-					</span>
-					<a href="#leaderboard" class= "button circled scrolly">Back to Leaderboard</a>
-					</footer>
+                        <!--Scores -->
+                        <div id="scores">
+                            <span class="byline" align="center">
+
+                                Here is where all of the scores should be entered. Ethan, get on this foo.
+                                <table id="newGameTable">
+                                </table>
+                                <button type="button" onclick="preformPostAndClearTable()">Score!</button>
+                                <button type="button"  onclick="addNewRow()">Add More Players</button>
+                            </span>
+                            <a href="#leaderboard" class= "button circled scrolly">Back to Leaderboard</a>
+                        </div>
+                    </footer>
 				</article>
 			</div>
 		<!-- Footer -->
