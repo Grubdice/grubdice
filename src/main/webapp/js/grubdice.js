@@ -1,6 +1,7 @@
 function addNewRow() {
     var table = document.getElementById("newGameTable");
-    add2RowToTable(table, '<div><input type="text" placeholder="name" /></div>', '<div><input type="text" placeholder="points" /></div>')
+    var numberOfRows = document.getElementById('newGameTable').getElementsByTagName('tr').length + 1;
+    add2RowToTable(table, '<div>' + numberOfRows + '</div>', '<div><input type="text" placeholder="name" /></div>')
 }
 
 function add2RowToTable(table, cell1Contents, cell2Contents) {
@@ -41,11 +42,10 @@ function updateScoreBoard(values) {
     var table = document.getElementById("scoreTable");
     table.innerHTML = '<THEAD><tr><td></td><td><h6> Name </h6></td><td><h6> Score </h6></td></tr></THEAD>';
 
-    for (var i = values.length - 1; i >= 0; i--) {
+    for (var i = 0; i < values.length; i++) {
         var player = values[i];
         console.log(player);
-        var place = values.length - i + 0.0
-        add3RowToTable(table, '<div>' + place + '</div>', '<div>' + player['name'] + '</div>', "<div>" + player['score'] + "</div>");
+        add3RowToTable(table, '<div>' + player['place'] + '</div>', '<div>' + player['name'] + '</div>', "<div>" + player['score'] + "</div>");
     }
 }
 
@@ -56,15 +56,10 @@ function preformPostAndClearTable() {
     for (var i = 0; i < nodeList.length; ++i) {
         var textBoxes = nodeList[i].getElementsByTagName("input");
         var result = {}
-        result['name'] = textBoxes[0].value
-        result['points'] = textBoxes[1].value
-        if(!result['name']) {
-            alert("Looks like you forgot to enter a players name. Skipping it.")
+        result['name'] = [textBoxes[0].value]
+        if(result['name'] == "") {
+            //alert("Looks like you forgot to enter a players name. Skipping it.")
             continue;
-        }
-        if (!isNumber(result['points'])) {
-            alert("The value for " + textBoxes[0].value + " is not a number!");
-            return;
         }
         gameResults.push(result)
     }
@@ -80,13 +75,12 @@ function preformPostAndClearTable() {
         data: JSON.stringify(json),
         success: function () {
             alert("This game has been successfully posted")
+            refreshScoreBoard();
+            clearGameTable();
         },
         error: reportNewGameError,
         contentType: "application/json"
     });
-
-    clearGameTable();
-    refreshScoreBoard();
 }
 
 function reportNewGameError(jqXHR, textStatus, errorThrown){
@@ -96,8 +90,25 @@ function reportNewGameError(jqXHR, textStatus, errorThrown){
 }
 
 function clearGameTable() {
-    document.getElementById("newGameTable").innerHTML = '<tr><td><div><input type="text" placeholder="name" /></div></td><td><div><input type="text" placeholder="points" /></div></td></tr>'
+    document.getElementById("newGameTable").innerHTML = '';
+    for(var i = 0; i < 4; i++) {
+        addNewRow();
+    }
 }
-function isNumber(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
+
+function createNewPlayer() {
+    var playerName = {};
+    playerName['name'] = document.getElementById("newPlayer").value;
+    console.log(playerName);
+    $.ajax({
+        type: "POST",
+        url: "/api/player",
+        processData: false,
+        data: JSON.stringify(playerName),
+        success: function() {
+            alert("Player has been added");
+            document.getElementById("newPlayer").value = "";
+        },
+        contentType: "application/json"
+    });
 }

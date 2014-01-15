@@ -4,6 +4,5 @@ import groovy.transform.TupleConstructor
 
 @TupleConstructor
 class ScoreResult {
-    String name
-    int points
+    List<String> name
 }

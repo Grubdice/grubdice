@@ -14,17 +14,6 @@ class ScoreDaoImpl extends BaseDaoImpl<GameResult> implements ScoreDao {
 
     @Override
     List<SearchResults> getScoreBoard() {
-        /*
-        def query =
-                getSession().createCriteria(GameResult.class)
-                    .setProjection(Projections.projectionList()
-                        .add(Projections.property("player"), "player")
-                        .add(Projections.sum("score"))
-                        .add(Projections.groupProperty("player")))
-                    .setResultTransformer(Transformers.aliasToBean(SearchResults.class))
-        List<SearchResults> queryList = query.list()
-        */
-
         def queryList = getSession().createSQLQuery("select p.name, sum(score) from game_results gr join players p on gr.player_id = p.id group by p.id").list()
 
         def returnList = queryList.collect {
@@ -32,8 +21,13 @@ class ScoreDaoImpl extends BaseDaoImpl<GameResult> implements ScoreDao {
         }
 
         returnList.sort { a,b ->
-            a.score <=> b.score
+            b.score <=> a.score
         }
+
+        returnList.eachWithIndex { entry, i ->
+            entry.place = i + 1
+        }
+
         return returnList
     }
 
@@ -47,6 +41,7 @@ class ScoreDaoImpl extends BaseDaoImpl<GameResult> implements ScoreDao {
 
 
     static class SearchResults {
+        def int place
         def String name
         def int score
     }
