@@ -16,6 +16,7 @@
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
         <script src="js/grubdice.js"></script>
+        <script type="text/javascript" src="js/twitterFetcher_v10_min.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="css/skel-noscript.css" />
 			<link rel="stylesheet" href="css/style.css" />
@@ -117,16 +118,19 @@
 
 		<strong><p>Boom.</strong></p>
 	</div>
+</div>
 			<!-- Footer -->
 			<div id="footer">
 				<div class="container">
 					<div class="row">
-
+						<!--IM PRETTY SURE THIS WONT EVEN WORK -->
+						<p>Check out our tweets</p>
+						<div id="tweet"></div>
 					</div>
 					<hr/>
 					<div class="row">
 						<div class="12u">
-	<!-- Contact -->
+			<!-- Contact -->
 								<section class="contact">
 									<header>
 										<h3><a href="index.html" class= "button circled scrolly">Take me home, Scotty!</a></h3>
@@ -134,7 +138,7 @@
 									<p>If you're not tying ol' yeller, I'm gonna call you no matter what. Unless you show some digits, ofcourse.</p>
 								</section>
 							
-							<!-- Copyright -->
+			<!-- Copyright -->
 								<div class="copyright">
 									<ul class="menu">
 										<li>V1.0 &copy;2014 League of Incrandulous Argumentative Rollers. All Rights Reserved</li>
@@ -145,6 +149,8 @@
 						</div>
 					</div>
 			</div>
-
+		   	<script> 
+		      twitterFetcher.fetch('423922384559546368', 'tweet', 1, true);
+		    </script>
 	</body>
 </html>
