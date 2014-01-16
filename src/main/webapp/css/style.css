@@ -71,7 +71,16 @@
 		margin-top: 1em;
 		line-height: 1.5em;
 	}
-
+	.rulespage
+	{
+		display: block;
+		font-size: 1.5em;
+		margin-top: 1em;
+		line-height: 1.5em;
+		padding-right: 10%;
+		padding-left: 10%;
+		text-align: left;
+	}
 	strong, b
 	{
 		font-weight: 400;
