@@ -2,6 +2,7 @@
 
 @font-face{font-family:'FontAwesome';src:url('font/fontawesome-webfont.eot?v=4.0.1');src:url('font/fontawesome-webfont.eot?#iefix&v=4.0.1') format('embedded-opentype'),url('font/fontawesome-webfont.woff?v=4.0.1') format('woff'),url('font/fontawesome-webfont.ttf?v=4.0.1') format('truetype'),url('font/fontawesome-webfont.svg?v=4.0.1#fontawesomeregular') format('svg');font-weight:normal;font-style:normal}
 
+
 /*********************************************************************************/
 /* Some basic CSS dice shit                                                                       */
 /*********************************************************************************/
@@ -74,11 +75,11 @@
 	.rulespage
 	{
 		display: block;
-		font-size: 1.5em;
+		font-size: 1em;
 		margin-top: 1em;
 		line-height: 1.5em;
-		padding-right: 10%;
-		padding-left: 10%;
+		padding-right: 7%;
+		padding-left: 7%;
 		text-align: left;
 	}
 	strong, b
