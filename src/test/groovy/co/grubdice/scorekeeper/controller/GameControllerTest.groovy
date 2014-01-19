@@ -52,15 +52,18 @@ class GameControllerTest {
 
     @Test
     public void testGetScore() throws Exception {
-        assertThat(GameController.getScore(3, 1)).isEqualTo(2)
-        assertThat(GameController.getScore(3, 2)).isEqualTo(0)
-        assertThat(GameController.getScore(3, 3)).isEqualTo(-2)
+        assertThat(GameController.getScore([1,1,1], 0)).isEqualTo(2)
+        assertThat(GameController.getScore([1,1,1], 1)).isEqualTo(0)
+        assertThat(GameController.getScore([1,1,1], 2)).isEqualTo(-2)
 
-        assertThat(GameController.getScore(6, 1)).isEqualTo(5)
-        assertThat(GameController.getScore(6, 2)).isEqualTo(3)
-        assertThat(GameController.getScore(6, 3)).isEqualTo(1)
-        assertThat(GameController.getScore(6, 4)).isEqualTo(-1)
-        assertThat(GameController.getScore(6, 5)).isEqualTo(-3)
-        assertThat(GameController.getScore(6, 6)).isEqualTo(-5)
+        assertThat(GameController.getScore([1,1,1,1,1,1], 0)).isEqualTo(5)
+        assertThat(GameController.getScore([1,1,1,1,1,1], 1)).isEqualTo(3)
+        assertThat(GameController.getScore([1,1,1,1,1,1], 2)).isEqualTo(1)
+        assertThat(GameController.getScore([1,1,1,1,1,1], 3)).isEqualTo(-1)
+        assertThat(GameController.getScore([1,1,1,1,1,1], 4)).isEqualTo(-3)
+        assertThat(GameController.getScore([1,1,1,1,1,1], 5)).isEqualTo(-5)
+
+        assertThat(GameController.getScore([1,2], 0)).isEqualTo(2)
+        assertThat(GameController.getScore([1,2], 1)).isEqualTo(-1)
     }
 }

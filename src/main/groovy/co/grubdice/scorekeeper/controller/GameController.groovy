@@ -48,14 +48,14 @@ class GameController {
     public Game createGameFromScoreModel(ScoreModel model) {
         def game = new Game(postingDate: DateTime.now())
 
-        def numberOfPlayers = model.results.sum {
+        def playersInScoreGroup = model.results.collect {
             it.name.size()
         }
 
         model.results.eachWithIndex { gameResult, finishedAt ->
             gameResult.name.each { name ->
                 def player = playerDao.getUserByName(name)
-                game.results << new GameResult(game: game, player: player, score: getScore(numberOfPlayers, finishedAt + 1))
+                game.results << new GameResult(game: game, player: player, score: getScore(playersInScoreGroup, finishedAt))
             }
         }
 
@@ -65,6 +65,17 @@ class GameController {
     }
 
     def static Integer getScore(numberOfPlayers, place){
-        numberOfPlayers - (2 * (place - 1)) - 1
+        int wonTo = 0
+        int lostTo = 0
+
+        for(int i = 0; i < place; i++){
+            lostTo += numberOfPlayers[i]
+        }
+
+        for(int i = place + 1; i < numberOfPlayers.size(); i++){
+            wonTo += numberOfPlayers[i]
+        }
+
+        return wonTo - lostTo
     }
 }
