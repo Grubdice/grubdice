@@ -1,7 +1,7 @@
-function addNewRow() {
+function addNewPlayerRowToGameTable() {
     var table = document.getElementById("newGameTable");
     var numberOfRows = document.getElementById('newGameTable').getElementsByTagName('tr').length + 1;
-    add2RowToTable(table, '<div>' + numberOfRows + '</div>', '<div><input type="text" placeholder="name" /></div>')
+    add3RowToTable(table, '<div>' + numberOfRows + '</div>', '<div><input type="text" placeholder="name" /></div>', '<div><button type="button" class="button circled scrolly" onclick="addTiePlayer(this)">+</button></div>')
 }
 
 function add2RowToTable(table, cell1Contents, cell2Contents) {
@@ -26,6 +26,10 @@ function add3RowToTable(table, cell1Contents, cell2Contents, cell3Contents) {
     cell1.innerHTML = cell1Contents;
     cell2.innerHTML = cell2Contents;
     cell3.innerHTML = cell3Contents;
+}
+
+function addTiePlayer(reference) {
+    $(reference).parents('td').siblings().get(1).innerHTML+='<div><input type="text" placeholder="name" /></div>';
 }
 
 function refreshScoreBoard() {
@@ -56,11 +60,15 @@ function preformPostAndClearTable() {
     for (var i = 0; i < nodeList.length; ++i) {
         var textBoxes = nodeList[i].getElementsByTagName("input");
         var result = {}
-        result['name'] = [textBoxes[0].value]
-        if(result['name'] == "") {
-            //alert("Looks like you forgot to enter a players name. Skipping it.")
-            continue;
+        result['name'] = [];
+        for (var j=0; j<textBoxes.length; j++) {
+            if(textBoxes[j].value != "") {
+                result['name'].push(textBoxes[j].value);
+                //alert("Looks like you forgot to enter a players name. Skipping it.")
+            }
         }
+
+
         gameResults.push(result)
     }
 
@@ -92,7 +100,7 @@ function reportNewGameError(jqXHR, textStatus, errorThrown){
 function clearGameTable() {
     document.getElementById("newGameTable").innerHTML = '';
     for(var i = 0; i < 4; i++) {
-        addNewRow();
+        addNewPlayerRowToGameTable();
     }
 }
 
