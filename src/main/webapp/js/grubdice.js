@@ -24,7 +24,7 @@ function addTiePlayer(reference) {
 function publicRefreshScoreBoard() {
     $.ajax({
         type: "GET",
-        url: "/public/score",
+        url: "/api/public/score",
         processData: false,
         success: updateScoreBoard,
         dataType: 'JSON'

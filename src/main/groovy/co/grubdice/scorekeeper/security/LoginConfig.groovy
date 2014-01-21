@@ -19,7 +19,7 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/js/**").permitAll()
                     .antMatchers("/css/**").permitAll()
                     .antMatchers("/images/**").permitAll()
-                    .antMatchers("/public/**").permitAll()
+                    .antMatchers("/api/public/**").permitAll()
                     .antMatchers('/api/**').authenticated()
                     .anyRequest().authenticated()
                 .and()
