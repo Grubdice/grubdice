@@ -132,7 +132,20 @@
 					</div>
 			</div>
 		   	<script> 
-  				twitterFetcher.fetch('423922384559546368', 'tweets', 1, true);
-		    </script>
+ twitterFetcher.fetch('423921339481608193', '', 3, true, true, true, '', false, handleTweets);
+
+      function handleTweets(tweets){
+          var x = tweets.length;
+          var n = 0;
+          var element = document.getElementById('example4');
+          var html = '<ul>';
+          while(n < x) {
+            html += '<li>' + tweets[n] + '</li>';
+            n++;
+          }
+          html += '</ul>';
+          element.innerHTML = html;
+      }
+    </script>
 	</body>
 </html>
