@@ -36,6 +36,8 @@ class HibernateConfig {
 
         def builder = new LocalSessionFactoryBuilder(dataSource)
         builder.setProperty("hibernate.hbm2ddl.auto", hibernateUpdateDdl)
+        builder.setProperty("show_sql", "true")
+        builder.setProperty("format_sql", "true")
         builder.scanPackages("co.grubdice.scorekeeper")
         return builder.buildSessionFactory()
     }
@@ -47,10 +49,10 @@ class HibernateConfig {
 
     public void flyway() {
 
-        if(StringUtils.trimToEmpty(System.getProperty("spring.profiles.active")).equalsIgnoreCase("prod")) {
+//        if(StringUtils.trimToEmpty(System.getProperty("spring.profiles.active")).equalsIgnoreCase("prod")) {
             def flyway = new Flyway()
             flyway.setDataSource(dataSource)
             flyway.migrate()
-        }
+//        }
     }
 }

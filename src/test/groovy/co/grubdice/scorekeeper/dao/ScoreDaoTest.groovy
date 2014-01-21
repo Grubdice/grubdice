@@ -52,7 +52,9 @@ class ScoreDaoTest extends AbstractTransactionalTestNGSpringContextTests{
         gameDao.save(getNewGame(player1, player2, player3))
 
         def board = scoreDao.getScoreBoard()
-        assertThat(board).includes(entry(player1.name, 6), entry(player2.name, 3), entry(player3.name, 0))
+        assertThat(board).contains(new ScoreDaoImpl.SearchResults(name: player1.name, score: 1506, place: 1),
+                new ScoreDaoImpl.SearchResults(name: player2.name, score: 1503, place: 2),
+                new ScoreDaoImpl.SearchResults(name: player3.name, score: 1500, place: 3))
     }
 
     @Test

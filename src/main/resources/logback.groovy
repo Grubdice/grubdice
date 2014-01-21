@@ -21,9 +21,10 @@ appender("ROOT-LOG", RollingFileAppender) {
     }
 }
 
-logger("org.hibernate", Level.WARN)
+//logger("org.hibernate", Level.WARN)
+logger("org.hibernate.type", Level.TRACE)
 
-if(System.getProperty("spring.profiles.active").equalsIgnoreCase("prod")){
+if(System.getProperty("spring.profiles.active")?.equalsIgnoreCase("prod")){
     root(Level.INFO, ["STDOUT", "ROOT-LOG"])
 } else {
     root(Level.DEBUG, ["STDOUT"])
