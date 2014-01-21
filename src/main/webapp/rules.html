@@ -119,39 +119,52 @@
 
 		<strong><p>Boom.</strong></p>
 	</div>
-</div>
-			<!-- Footer -->
-			<div id="footer">
-				<div class="container">
-					<div class="row">
-						<!--IM PRETTY SURE THIS WONT EVEN WORK -->
-						<p><strong>#GrubDice</strong></p>
-						<div id="hashtag"></div>
-					</div>
-					<hr/>
-					<div class="row">
-						<div class="12u">
-			<!-- Contact -->
-								<section class="contact">
-									<header>
-										<h3><a href="index.html" class= "button circled scrolly">Take me home, Scotty!</a></h3>
-									</header>
-									<p>If you're not tying ol' yeller, I'm gonna call you no matter what. Unless you show some digits, ofcourse.</p>
-								</section>
-							
-			<!-- Copyright -->
-								<div class="copyright">
-									<ul class="menu">
-										<li>V1.0 &copy;2014 League of Incrandulous Argumentative Rollers. All Rights Reserved</li>
-									</ul>
-								<p style="text-align:center">Yea...we know we took this too far.</p>
-								</div>
-							</div>
-						</div>
-					</div>
-			</div>
-		   	<script> 
-  				twitterFetcher.fetch('423921339481608193', 'hashtag', 3, true, false, true, dateFormatter, false);
-		    </script>
-	</body>
+</div><!-- Footer -->
+                        <div id="footer">
+                                <div class="container">
+                                        <div class="row">
+                                                <!--IM PRETTY SURE THIS WONT EVEN WORK -->
+                                                <p style="color:white;"><strong>#GrubDice</strong></p>
+                                                <div id="tweets"></div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row">
+                                                <div class="12u">
+                                                        
+                                                        <!-- Contact -->
+                                                                <section class="contact">
+                                                                        <header>
+                                                                                <h3><a href="index.html" class= "button circled scrolly">Take me home, Scotty!</a></h3>
+                                                                        </header>
+                                                                        <p>If you're not tying ol' yeller, I'm gonna call you no matter what. Unless you show some digits, ofcourse.</p>
+                                                                </section>
+                                                        
+                                                        <!-- Copyright -->
+                                                                <div class="copyright">
+                                                                        <ul class="menu">
+                                                                                <li>V1.0 &copy;2014 League of Incrandulous Argumentative Rollers. All Rights Reserved</li>
+                                                                        </ul>
+                                                                <p style="text-align:center">Yea...we know we took this too far.</p>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                        </div>
+                           <script> 
+ twitterFetcher.fetch('423921339481608193', '', 3, true, true, true, '', false, handleTweets);
+
+      function handleTweets(tweets){
+          var x = tweets.length;
+          var n = 0;
+          var element = document.getElementById('tweets');
+          var html = '<ul>';
+          while(n < x) {
+            html += '<li>' + tweets[n] + '</li>';
+            n++;
+          }
+          html += '</ul>';
+          element.innerHTML = html;
+      }
+    </script>
+        </body>
 </html>
