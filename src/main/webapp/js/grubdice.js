@@ -4,17 +4,6 @@ function addNewPlayerRowToGameTable() {
     add3RowToTable(table, '<div>' + numberOfRows + '</div>', '<div><input type="text" placeholder="name" /></div>', '<div><button type="button" class="button circled scrolly" onclick="addTiePlayer(this)">+</button></div>')
 }
 
-function add2RowToTable(table, cell1Contents, cell2Contents) {
-    var row = table.insertRow(-1);
-
-    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-
-    cell1.innerHTML = cell1Contents;
-    cell2.innerHTML = cell2Contents;
-}
-
 function add3RowToTable(table, cell1Contents, cell2Contents, cell3Contents) {
     var row = table.insertRow(-1);
 
@@ -30,6 +19,16 @@ function add3RowToTable(table, cell1Contents, cell2Contents, cell3Contents) {
 
 function addTiePlayer(reference) {
     $(reference).parents('td').siblings().get(1).innerHTML+='<div><input type="text" placeholder="name" /></div>';
+}
+
+function publicRefreshScoreBoard() {
+    $.ajax({
+        type: "GET",
+        url: "/public/score",
+        processData: false,
+        success: updateScoreBoard,
+        dataType: 'JSON'
+    });
 }
 
 function refreshScoreBoard() {

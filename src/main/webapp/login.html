@@ -16,12 +16,20 @@
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
         <script src="js/grubdice.js"></script>
+        <script type="text/javascript" src="/js/openid-jquery.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="css/skel-noscript.css" />
 			<link rel="stylesheet" href="css/style.css" />
 			<link rel="stylesheet" href="css/style-desktop.css" />
 			<link rel="stylesheet" href="css/style-noscript.css" />
 		</noscript>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                openid.init('openid_identifier');
+                publicRefreshScoreBoard();
+            });
+        </script>
 		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
         
 	</head>
@@ -38,9 +46,24 @@
 							<span class="byline">League of Incrandulous Argumentative Rollers</span>
 						</header>
 						<footer>
-							<a href="#" class="button circled scrolly">Log In</a>
+                            <form action="login/openid" method="post" id="openid_form">
+                                <input type="hidden" name="action" value="verify" />
+                                <a title="Google" href="javascript: openid.signin('google');" class="button circled scrolly">Log In</a>
+                            </form>
 						</footer>
 					</div>
 			</div>
+
+            <div class="wrapper style2">
+
+                <article id="main" class="container special">
+                    <header>
+                        <div id="leaderboard"><h2>Check out the current world leaderboard below!</h2></div>
+                        <table class="responsive" id="scoreTable">
+                        </table>
+                    </header>
+                    <p>
+                </article>
+            </div>
 	</body>
 </html>

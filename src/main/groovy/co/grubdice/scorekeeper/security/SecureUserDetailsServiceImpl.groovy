@@ -33,6 +33,7 @@ class SecureUserDetailsServiceImpl implements SecureUserDetailsService {
                 email = attribute.getValues().get(0)
             }
         }
+        log.debug("trying to login with email {}", email)
         if (email ==~ /.*@grubhub\.com/ || email ==~ /.*@ehdev.io/) {
             return new SecureUserDetails(email)
         } else {
