@@ -1,7 +1,7 @@
 function addNewPlayerRowToGameTable() {
     var table = document.getElementById("newGameTable");
     var numberOfRows = document.getElementById('newGameTable').getElementsByTagName('tr').length + 1;
-    add3RowToTable(table, '<div>' + numberOfRows + '</div>', '<div><input type="text" placeholder="name" /></div>', '<div><button type="button" class="button circled scrolly" onclick="addTiePlayer(this)">+</button></div>')
+    add3RowToTable(table, '<div>' + numberOfRows + '</div>', '<div><input type="text" placeholder="name" /></div>', '<div><button type="button" class="fa fa-plus-circle" onclick="addTiePlayer(this)">+</button></div>')
 }
 
 function add3RowToTable(table, cell1Contents, cell2Contents, cell3Contents) {
