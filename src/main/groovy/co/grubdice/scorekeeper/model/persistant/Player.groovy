@@ -1,14 +1,7 @@
 package co.grubdice.scorekeeper.model.persistant
-
 import groovy.transform.TupleConstructor
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.OneToMany
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "players")
@@ -16,12 +9,12 @@ import javax.persistence.Table
 class Player {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id
 
-    @Column(unique = true)
+    @Column(unique = true, name = 'player_name')
     String name
 
-    @OneToMany
+    @OneToMany(mappedBy = "player")
     List<NickName> nickNames
 }

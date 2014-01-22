@@ -13,13 +13,13 @@ import javax.persistence.Table
 class Turn {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id
 
     @ManyToOne
     Game game
 
-    @OneToMany
+    @OneToMany(mappedBy = 'turn')
     List<Bid> bids
 
     int turnNumber

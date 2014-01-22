@@ -14,7 +14,7 @@ import javax.persistence.*
 class Game {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     Integer id
 
@@ -29,7 +29,7 @@ class Game {
 
     Integer players
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "game")
     List<Turn> turns = []
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "game")

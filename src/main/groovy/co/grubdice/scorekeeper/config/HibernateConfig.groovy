@@ -36,6 +36,8 @@ class HibernateConfig {
 
         def builder = new LocalSessionFactoryBuilder(dataSource)
         builder.setProperty("hibernate.hbm2ddl.auto", hibernateUpdateDdl)
+        builder.setProperty("show_sql", "true")
+        builder.setProperty("format_sql", "true")
         builder.scanPackages("co.grubdice.scorekeeper")
         return builder.buildSessionFactory()
     }
