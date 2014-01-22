@@ -90,6 +90,13 @@
 		padding-left: 7%;
 		text-align: left;
 	}
+	.shield 
+	{
+		display: block;
+		margin-right: auto;
+		margin-left: auto;
+	}
+
 	strong, b
 	{
 		font-weight: 400;
