@@ -9,10 +9,10 @@ import javax.persistence.*
 class Player {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id
 
-    @Column(unique = true)
+    @Column(unique = true, name = 'player_name')
     String name
 
     @OneToMany(mappedBy = "player")

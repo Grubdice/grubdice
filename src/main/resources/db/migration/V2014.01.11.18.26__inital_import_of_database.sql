@@ -3,7 +3,7 @@ SET lock_timeout = 0;
 CREATE SEQUENCE player_id_seq START 1;
 CREATE TABLE players (
   id   INTEGER NOT NULL PRIMARY KEY DEFAULT nextval('player_id_seq'),
-  name VARCHAR(255)
+  player_name VARCHAR(255)
 );
 
 CREATE SEQUENCE game_id_seq START 1;

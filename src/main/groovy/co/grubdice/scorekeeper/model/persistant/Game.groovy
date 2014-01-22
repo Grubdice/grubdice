@@ -14,7 +14,7 @@ import javax.persistence.*
 class Game {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     Integer id
 

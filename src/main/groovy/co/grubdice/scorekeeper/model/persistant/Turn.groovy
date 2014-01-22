@@ -13,7 +13,7 @@ import javax.persistence.Table
 class Turn {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id
 
     @ManyToOne

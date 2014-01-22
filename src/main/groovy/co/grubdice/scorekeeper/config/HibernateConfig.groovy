@@ -1,6 +1,8 @@
 package co.grubdice.scorekeeper.config
+
 import com.googlecode.flyway.core.Flyway
 import groovy.util.logging.Slf4j
+import org.apache.commons.lang3.StringUtils
 import org.hibernate.SessionFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -47,10 +49,10 @@ class HibernateConfig {
 
     public void flyway() {
 
-//        if(StringUtils.trimToEmpty(System.getProperty("spring.profiles.active")).equalsIgnoreCase("prod")) {
+        if(StringUtils.trimToEmpty(System.getProperty("spring.profiles.active")).equalsIgnoreCase("prod")) {
             def flyway = new Flyway()
             flyway.setDataSource(dataSource)
             flyway.migrate()
         }
-//    }
+    }
 }

@@ -7,7 +7,7 @@ import javax.persistence.*
 class NickName {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id
 
     @ManyToOne

@@ -14,7 +14,7 @@ class ScoreDaoImpl extends BaseDaoImpl<GameResult> implements ScoreDao {
 
     @Override
     List<SearchResults> getScoreBoard() {
-        def queryList = getSession().createSQLQuery("select p.name, sum(score) from game_results gr join players p on gr.player_id = p.id group by p.id").list()
+        def queryList = getSession().createSQLQuery("select p.player_name, sum(score) from game_results gr join players p on gr.player_id = p.id group by p.id").list()
 
         def returnList = queryList.collect {
             new SearchResults(name: it[0], score: it[1] + 1500)

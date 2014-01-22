@@ -12,7 +12,7 @@ import javax.persistence.*
 class GameResult {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     @Column(nullable = false)
     Integer id
