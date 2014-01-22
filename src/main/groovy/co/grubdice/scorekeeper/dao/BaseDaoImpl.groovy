@@ -12,6 +12,7 @@ class BaseDaoImpl<T> implements BaseDao<T> {
     @Autowired
     SessionFactory sessionFactory
 
+    @Transactional
     public Session getSession() throws HibernateException {
         try {
             return sessionFactory.getCurrentSession();

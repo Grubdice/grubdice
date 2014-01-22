@@ -14,13 +14,14 @@ class GameResult {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @JsonIgnore
+    @Column(nullable = false)
     Integer id
 
     @ManyToOne
     @JsonIgnore
     Game game
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     Player player
 

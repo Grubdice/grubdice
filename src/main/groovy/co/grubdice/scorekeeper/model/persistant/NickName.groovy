@@ -1,11 +1,6 @@
 package co.grubdice.scorekeeper.model.persistant
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.ManyToOne
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = 'nick_names')
@@ -16,6 +11,7 @@ class NickName {
     Integer id
 
     @ManyToOne
+    @JoinColumn(name = "player_id")
     Player player
 
     String nickName

@@ -90,8 +90,9 @@ test {
     useTestNG()
 }
 
+def dbName = hasProperty('db') ? getProperty('db') : 'grubdice_dev';
 flyway {
-    url = 'jdbc:postgresql://localhost/grubdice_dev'
+    url = "jdbc:postgresql://localhost/${dbName}"
     user = 'grubdice'
 }
 

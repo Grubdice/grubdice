@@ -19,7 +19,7 @@ class Turn {
     @ManyToOne
     Game game
 
-    @OneToMany
+    @OneToMany(mappedBy = 'turn')
     List<Bid> bids
 
     int turnNumber
