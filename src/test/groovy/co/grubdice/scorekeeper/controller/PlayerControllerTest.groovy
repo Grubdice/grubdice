@@ -10,6 +10,8 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests
 import org.testng.annotations.Test
 
+import javax.persistence.NonUniqueResultException
+
 import static org.fest.assertions.Assertions.assertThat
 
 @Slf4j
@@ -20,20 +22,37 @@ class PlayerControllerTest extends AbstractTransactionalTestNGSpringContextTests
     @Autowired
     PlayerDao playerDao
 
-    static def player1 = new Player(name: "player 1", currentScore: 6)
-    static def player2 = new Player(name: "player 2", currentScore: 6)
-    static def player3 = new Player(name: "player 3", currentScore: 6)
-
     @Test
     public void testGettingPlayersInOrder() throws Exception {
-        player1 = playerDao.saveAndFlush(player1)
-        player2 = playerDao.saveAndFlush(player2)
-        player3 = playerDao.saveAndFlush(player3)
+        def player1 = playerDao.save(new Player(name: "player 1", currentScore: 6))
+        def player2 = playerDao.save(new Player(name: "player 2", currentScore: 6))
+        def player3 = playerDao.save(new Player(name: "player 3", currentScore: 6))
 
-        def order = playerDao.findAllOrderByCurrentScore()//new Sort(Sort.Direction.DESC, 'currentScore'))
+        def order = playerDao.findAllOrderByCurrentScore()
         assertThat(order).hasSize(3)
         assertThat(order[0]).isEqualTo(player1)
         assertThat(order[1]).isEqualTo(player2)
         assertThat(order[2]).isEqualTo(player3)
+    }
+
+    @Test
+    public void testFindingPlayerByName() throws Exception {
+        def player1 = playerDao.save(new Player(name: "player 1", currentScore: 6))
+        def player2 = playerDao.save(new Player(name: "player 2", currentScore: 6))
+        def player3 = playerDao.save(new Player(name: "player 3", currentScore: 6))
+
+        assertThat(playerDao.findByNameLikeIgnoreCase("1")).isEqualTo(player1)
+        assertThat(playerDao.findByNameLikeIgnoreCase("2")).isEqualTo(player2)
+        assertThat(playerDao.findByNameLikeIgnoreCase("3")).isEqualTo(player3)
+
+        assertThat(playerDao.findByNameLikeIgnoreCase("PLAYER 1")).isEqualTo(player1)
+    }
+
+    @Test(expectedExceptions = NonUniqueResultException.class)
+    public void testFindingPlayerByName_shouldThrowNonUniqueResultException() throws Exception {
+        playerDao.save(new Player(name: "player 1", currentScore: 6))
+        playerDao.save(new Player(name: "player 2", currentScore: 6))
+
+        playerDao.findByNameLikeIgnoreCase("player")
     }
 }
