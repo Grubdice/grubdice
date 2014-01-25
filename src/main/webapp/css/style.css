@@ -65,6 +65,14 @@
 		margin: 0 0 0.25em 0;
 	}
 	
+	.grubdice 
+	{
+		text-align: center;
+		font-size: 2.5em;
+		font-family: 'Source Sans Pro', sans-serif;
+		color: white;
+		
+	}
 	.byline
 	{
 		display: block;
@@ -82,6 +90,13 @@
 		padding-left: 7%;
 		text-align: left;
 	}
+	.shield 
+	{
+		display: block;
+		margin-right: auto;
+		margin-left: auto;
+	}
+
 	strong, b
 	{
 		font-weight: 400;
@@ -1356,7 +1371,7 @@
 	{
 		position: relative;
 		overflow: hidden;
-		padding: 6em 0 6em 0;
+		padding: 1em 0 1em 0;
 		background: #2b252c;
 		color: #fff;
 	}

@@ -9,6 +9,7 @@
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
 		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" rel="stylesheet" type="text/css" />
+		<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery.dropotron.min.js"></script>
@@ -121,10 +122,11 @@
 	</div>
 </div><!-- Footer -->
                         <div id="footer">
+                        	<div class="grubdice">
+								#GrubDice
+							</div>
                                 <div class="container">
                                         <div class="row">
-                                                <!--IM PRETTY SURE THIS WONT EVEN WORK -->
-                                                <p style="color:white;"><strong>#GrubDice</strong></p>
                                                 <div id="tweets"></div>
                                         </div>
                                         <hr/>
@@ -137,6 +139,9 @@
                                                                                 <h3><a href="index.html" class= "button circled scrolly">Take me home, Scotty!</a></h3>
                                                                         </header>
                                                                         <p>If you're not tying ol' yeller, I'm gonna call you no matter what. Unless you show some digits, ofcourse.</p>
+		                                                                    <div class="shield" style="width: 100%">
+																			<img src="images/shieldsmall.png">
+																			</div>
                                                                 </section>
                                                         
                                                         <!-- Copyright -->
@@ -151,7 +156,7 @@
                                         </div>
                         </div>
                            <script> 
- twitterFetcher.fetch('423921339481608193', '', 3, true, true, true, '', false, handleTweets);
+ twitterFetcher.fetch('423921339481608193', '', 4, true, true, true, '', false, handleTweets);
 
       function handleTweets(tweets){
           var x = tweets.length;
