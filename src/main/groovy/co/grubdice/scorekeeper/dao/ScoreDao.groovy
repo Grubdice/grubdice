@@ -2,12 +2,9 @@ package co.grubdice.scorekeeper.dao
 
 import co.grubdice.scorekeeper.model.persistant.GameResult
 import co.grubdice.scorekeeper.model.persistant.Player
-import org.springframework.data.jpa.repository.Query
-import org.springframework.data.repository.CrudRepository
-import org.springframework.data.repository.query.Param
+import org.springframework.data.jpa.repository.JpaRepository
 
-public interface ScoreDao extends CrudRepository<GameResult, Integer>{
+public interface ScoreDao extends JpaRepository<GameResult, Integer>{
 
-    @Query("select result from GameResult result where result.player = :player")
-    List<GameResult> getPlayersScores(@Param('player') Player player)
+    List<GameResult> findByPlayer(Player player)
 }

@@ -1,7 +1,6 @@
-package co.grubdice.scorekeeper.controller
+package co.grubdice.scorekeeper.dao
 import co.grubdice.scorekeeper.config.HibernateConfig
 import co.grubdice.scorekeeper.config.PropertyFileLoader
-import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.model.persistant.Player
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,13 +10,15 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.annotations.Test
 
 import javax.persistence.NonUniqueResultException
+import javax.transaction.Transactional
 
 import static org.fest.assertions.Assertions.assertThat
 
 @Slf4j
 @ActiveProfiles("test")
 @ContextConfiguration(classes = [PropertyFileLoader.class, HibernateConfig.class])
-class PlayerControllerTest extends AbstractTransactionalTestNGSpringContextTests{
+@Transactional
+class PlayerDaoTest extends AbstractTransactionalTestNGSpringContextTests {
 
     @Autowired
     PlayerDao playerDao
@@ -55,4 +56,5 @@ class PlayerControllerTest extends AbstractTransactionalTestNGSpringContextTests
 
         playerDao.findByNameLikeIgnoreCase("player")
     }
+
 }
