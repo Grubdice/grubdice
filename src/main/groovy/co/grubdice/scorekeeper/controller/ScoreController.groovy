@@ -1,7 +1,7 @@
 package co.grubdice.scorekeeper.controller
 import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.dao.ScoreDao
-import co.grubdice.scorekeeper.helper.PlayerHelper
+import co.grubdice.scorekeeper.dao.helper.PlayerDaoHelper
 import co.grubdice.scorekeeper.model.external.ExternalScore
 import co.grubdice.scorekeeper.model.external.ExternalScoreBoard
 import co.grubdice.scorekeeper.model.external.PlayedGames
@@ -42,13 +42,13 @@ class ScoreController {
     }
 
     public ExternalScore getScoreForPlayerByName(String name) {
-        def player = PlayerHelper.verifyPlayerExistst(playerDao, name)
+        def player = PlayerDaoHelper.verifyPlayerExists(playerDao, name)
         return createExternalScore(player)
     }
 
     ExternalScore createExternalScore(Player player) {
         def games = convertGameResultsToPlayedGames(player)
-        new ExternalScore(games:  games, playerName: player.getName(), totalScore: games.score.sum() + 1500)
+        new ExternalScore(games:  games, playerName: player.getName(), totalScore: player.currentScore + 1500)
     }
 
     List<PlayedGames> convertGameResultsToPlayedGames(Player player) {
@@ -56,7 +56,7 @@ class ScoreController {
             def pastGame = new PlayedGames()
             pastGame.gamePlayedAt = gameResult.game.getPostingDate()
             pastGame.numberOfPlayers = gameResult.game.players
-            pastGame.score = gameResult.score
+            pastGame.place = gameResult.place
             pastGame
         }
     }

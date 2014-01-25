@@ -2,11 +2,13 @@ package co.grubdice.scorekeeper.controller
 
 import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.PlayerDao
+import co.grubdice.scorekeeper.engine.LeagueScoreEngine
 import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.external.ScoreResult
 import co.grubdice.scorekeeper.model.persistant.GameType
 import co.grubdice.scorekeeper.model.persistant.Player
 import groovy.mock.interceptor.MockFor
+import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
@@ -27,10 +29,15 @@ class GameControllerTest {
         gameDaoMockFor = new MockFor(GameDao)
     }
 
+    @AfterMethod
+    public void tearDown() {
+        playerDaoMockFor.verify playerDaoProxy
+        gameDaoMockFor.verify gameDaoProxy
+    }
+
     @Test
     public void testCreateGameFromScoreModel() throws Exception {
-
-        playerDaoMockFor.demand.findByNameLikeIgnoreCase("name") { return new Player("name") }
+        settingDemands()
 
         GameController controller = createScoreControllerFromMock()
         def game = controller.createGameFromScoreModel(
@@ -41,30 +48,15 @@ class GameControllerTest {
 
         def result = game.getResults().first()
         assertThat(result.player.name).isEqualTo("name")
-        assertThat(result.score).isEqualTo(0)
+        assertThat(result.place).isEqualTo(0)
 
-    }
-
-    @Test
-    public void testGetScore() throws Exception {
-        assertThat(GameController.getScore(0, [1,1,1])).isEqualTo(2)
-        assertThat(GameController.getScore(1, [1,1,1])).isEqualTo(0)
-        assertThat(GameController.getScore(2, [1,1,1])).isEqualTo(-2)
-
-        assertThat(GameController.getScore(0, [1,1,1,1,1,1])).isEqualTo(5)
-        assertThat(GameController.getScore(1, [1,1,1,1,1,1])).isEqualTo(3)
-        assertThat(GameController.getScore(2, [1,1,1,1,1,1])).isEqualTo(1)
-        assertThat(GameController.getScore(3, [1,1,1,1,1,1])).isEqualTo(-1)
-        assertThat(GameController.getScore(4, [1,1,1,1,1,1])).isEqualTo(-3)
-        assertThat(GameController.getScore(5, [1,1,1,1,1,1])).isEqualTo(-5)
-
-        assertThat(GameController.getScore(0, [1,2])).isEqualTo(2)
-        assertThat(GameController.getScore(1, [1,2])).isEqualTo(-1)
     }
 
     @Test
     public void testPlaceInGameCalculation() throws Exception {
-        playerDaoMockFor.demand.findByNameLikeIgnoreCase(1..4) { name -> return new Player(name) }
+        for(def i in 1..4){
+            settingDemands()
+        }
 
         GameController controller = createScoreControllerFromMock()
 
@@ -86,9 +78,14 @@ class GameControllerTest {
 
     }
 
+    public void settingDemands() {
+        playerDaoMockFor.demand.findByNameLikeIgnoreCase() { name -> return new Player(name) }
+        playerDaoMockFor.demand.save() {}
+    }
+
     private GameController createScoreControllerFromMock() {
         playerDaoProxy = playerDaoMockFor.proxyInstance()
         gameDaoProxy = gameDaoMockFor.proxyInstance()
-        return new GameController(playerDao: playerDaoProxy, gameDao: gameDaoProxy)
+        return new GameController(playerDao: playerDaoProxy, gameDao: gameDaoProxy, leagueScoreEngine: new LeagueScoreEngine(playerDao: playerDaoProxy))
     }
 }
