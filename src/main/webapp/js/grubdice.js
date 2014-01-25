@@ -59,20 +59,22 @@ function preformPostAndClearTable() {
     for (var i = 0; i < nodeList.length; ++i) {
         var textBoxes = nodeList[i].getElementsByTagName("input");
         var result = {}
-        result['name'] = [];
+        var nameResults = [];
+
         for (var j=0; j<textBoxes.length; j++) {
             if(textBoxes[j].value != "") {
-                result['name'].push(textBoxes[j].value);
-                //alert("Looks like you forgot to enter a players name. Skipping it.")
+                nameResults.push(textBoxes[j].value);
             }
         }
 
-
-        gameResults.push(result)
+        if(nameResults.length != 0){
+            result['name'] = nameResults
+            gameResults.push(result)
+        }
     }
 
     json['results'] = gameResults;
-    json['gameType'] = 'LEAGUE';
+    json['gameType'] = $('#gameType').val();
     console.log(json);
 
     $.ajax({

@@ -5,7 +5,6 @@ import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.external.ScoreResult
 import co.grubdice.scorekeeper.model.persistant.Game
 import co.grubdice.scorekeeper.model.persistant.GameType
-import groovy.json.JsonBuilder
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -27,8 +26,7 @@ class GameController {
 
     @RequestMapping(method = RequestMethod.POST)
     def postNewGameScore(@RequestBody ScoreModel model){
-
-        log.debug(new JsonBuilder(model).toPrettyString())
+        log.info("Posting game of type {}", model.gameType)
 
         return createGameFromScoreModel(model)
     }
