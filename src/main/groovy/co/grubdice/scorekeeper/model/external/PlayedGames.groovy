@@ -6,6 +6,6 @@ class PlayedGames {
 
     DateTime gamePlayedAt
     Integer numberOfPlayers
-    Integer score
+    Integer place
 
 }

@@ -1,10 +1,10 @@
 package co.grubdice.scorekeeper.controller
-
 import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.dao.ScoreDao
+import co.grubdice.scorekeeper.dao.helper.PlayerDaoHelper
 import co.grubdice.scorekeeper.model.external.ExternalScore
+import co.grubdice.scorekeeper.model.external.ExternalScoreBoard
 import co.grubdice.scorekeeper.model.external.PlayedGames
-import co.grubdice.scorekeeper.model.persistant.GameResult
 import co.grubdice.scorekeeper.model.persistant.Player
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMapping
@@ -25,27 +25,38 @@ class ScoreController {
     @RequestMapping(method = RequestMethod.GET)
     public def getScoreBoard(@RequestParam(required = false) String name) {
         if(name) {
-            return createExternalScore(playerDao.getUserByName(name))
+            return getScoreForPlayerByName(name)
         } else {
-            return scoreDao.getScoreBoard()
+            return createScoreBoard()
         }
     }
 
+    def createScoreBoard(){
+        def players = playerDao.findAllOrderByCurrentScore()
+        def returnList = []
+        players.eachWithIndex { it, index ->
+            returnList << new ExternalScoreBoard(name: it.name, score: it.currentScore + 1500, place: index + 1)
+        }
+
+        return returnList
+    }
+
+    public ExternalScore getScoreForPlayerByName(String name) {
+        def player = PlayerDaoHelper.verifyPlayerExists(playerDao, name)
+        return createExternalScore(player)
+    }
+
     ExternalScore createExternalScore(Player player) {
-        def games = convertGameResultsToPlayedGames(scoreDao.getPlayersScores(player))
-        new ExternalScore(games:  games, playerName: player.getName(), totalScore: getTotalScore(games))
+        def games = convertGameResultsToPlayedGames(player)
+        new ExternalScore(games:  games, playerName: player.getName(), totalScore: player.currentScore + 1500)
     }
 
-    int getTotalScore(List<PlayedGames> playedGameses) {
-        playedGameses.score.sum() + 1500
-    }
-
-    List<PlayedGames> convertGameResultsToPlayedGames(List<GameResult> results) {
-        results.collect { gameResult ->
+    List<PlayedGames> convertGameResultsToPlayedGames(Player player) {
+        scoreDao.findByPlayer(player).collect { gameResult ->
             def pastGame = new PlayedGames()
             pastGame.gamePlayedAt = gameResult.game.getPostingDate()
             pastGame.numberOfPlayers = gameResult.game.players
-            pastGame.score = gameResult.score
+            pastGame.place = gameResult.place
             pastGame
         }
     }

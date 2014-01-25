@@ -1,0 +1,1 @@
+alter table players add column current_score integer default 0 not null;

@@ -2,10 +2,9 @@ package co.grubdice.scorekeeper.dao
 
 import co.grubdice.scorekeeper.model.persistant.GameResult
 import co.grubdice.scorekeeper.model.persistant.Player
+import org.springframework.data.jpa.repository.JpaRepository
 
-public interface ScoreDao extends BaseDao<GameResult>{
+public interface ScoreDao extends JpaRepository<GameResult, Integer>{
 
-    List<ScoreDaoImpl.SearchResults> getScoreBoard()
-
-    List<GameResult> getPlayersScores(Player player)
+    List<GameResult> findByPlayer(Player player)
 }

@@ -1,15 +1,11 @@
 package co.grubdice.scorekeeper.controller
-
-import co.grubdice.scorekeeper.dao.GameDao
-import co.grubdice.scorekeeper.dao.PlayerDao
+import co.grubdice.scorekeeper.engine.LeagueScoreEngine
+import co.grubdice.scorekeeper.engine.LudicrousScoreEngine
 import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.external.ScoreResult
 import co.grubdice.scorekeeper.model.persistant.Game
-import co.grubdice.scorekeeper.model.persistant.GameResult
 import co.grubdice.scorekeeper.model.persistant.GameType
-import groovy.json.JsonBuilder
 import groovy.util.logging.Slf4j
-import org.joda.time.DateTime
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.RequestBody
@@ -23,21 +19,16 @@ import org.springframework.web.bind.annotation.RestController
 class GameController {
 
     @Autowired
-    PlayerDao playerDao
+    LudicrousScoreEngine ludicrousScoreEngine
 
     @Autowired
-    GameDao gameDao
+    LeagueScoreEngine leagueScoreEngine
 
     @RequestMapping(method = RequestMethod.POST)
     def postNewGameScore(@RequestBody ScoreModel model){
+        log.info("Posting game of type {}", model.gameType)
 
-        log.debug(new JsonBuilder(model).toPrettyString())
-
-        Game game = createGameFromScoreModel(model)
-
-        gameDao.save(game)
-
-        return game
+        return createGameFromScoreModel(model)
     }
 
     @RequestMapping(value = "/example", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,36 +37,12 @@ class GameController {
     }
 
     public Game createGameFromScoreModel(ScoreModel model) {
-        def game = new Game(postingDate: DateTime.now())
-
-        def playersInScoreGroup = model.results.collect {
-            it.name.size()
+        if(GameType.LEAGUE == model.gameType) {
+            return leagueScoreEngine.createGameFromScoreModel(model)
+        } else if(GameType.LUDICROUS == model.gameType) {
+            return ludicrousScoreEngine.createGameFromScoreModel(model)
+        } else {
+            throw new RuntimeException("This shouldn't ever happen... WTF")
         }
-
-        model.results.eachWithIndex { gameResult, finishedAt ->
-            gameResult.name.each { name ->
-                def player = playerDao.getUserByName(name)
-                game.results << new GameResult(game: game, player: player, score: getScore(playersInScoreGroup, finishedAt))
-            }
-        }
-
-        game.players = game.results.size()
-        game.type = model.gameType
-        return game
-    }
-
-    def static Integer getScore(numberOfPlayers, place){
-        int wonTo = 0
-        int lostTo = 0
-
-        for(int i = 0; i < place; i++){
-            lostTo += numberOfPlayers[i]
-        }
-
-        for(int i = place + 1; i < numberOfPlayers.size(); i++){
-            wonTo += numberOfPlayers[i]
-        }
-
-        return wonTo - lostTo
     }
 }

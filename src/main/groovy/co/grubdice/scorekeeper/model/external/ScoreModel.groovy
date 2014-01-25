@@ -6,5 +6,5 @@ import groovy.transform.TupleConstructor
 @TupleConstructor
 class ScoreModel {
     List<ScoreResult> results
-    GameType gameType
+    GameType gameType = GameType.LEAGUE
 }
