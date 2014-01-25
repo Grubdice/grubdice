@@ -48,14 +48,16 @@ class GameController {
     public Game createGameFromScoreModel(ScoreModel model) {
         def game = new Game(postingDate: DateTime.now())
 
-        def playersInScoreGroup = model.results.collect {
+        List<Integer> playersInScoreGroup = model.results.collect {
             it.name.size()
         }
 
         model.results.eachWithIndex { gameResult, finishedAt ->
             gameResult.name.each { name ->
-                def player = playerDao.getUserByName(name)
-                game.results << new GameResult(game: game, player: player, score: getScore(playersInScoreGroup, finishedAt))
+
+                GameResult resultForPlayer = createGameResultForPlayer(name, finishedAt, playersInScoreGroup)
+                resultForPlayer.setGame(game)
+                game.results << resultForPlayer
             }
         }
 
@@ -64,18 +66,34 @@ class GameController {
         return game
     }
 
-    def static Integer getScore(numberOfPlayers, place){
-        int wonTo = 0
-        int lostTo = 0
+    public GameResult createGameResultForPlayer(String name, int finishedAt, playersInScoreGroup) {
+        def player = playerDao.getUserByName(name)
+        def position = numberOfPlayersLostTo(finishedAt, playersInScoreGroup)
 
-        for(int i = 0; i < place; i++){
-            lostTo += numberOfPlayers[i]
-        }
+        return new GameResult(player: player, score: getScore(finishedAt, playersInScoreGroup), place: position)
+    }
 
-        for(int i = place + 1; i < numberOfPlayers.size(); i++){
-            wonTo += numberOfPlayers[i]
-        }
+    def static Integer getScore(int place, List<Integer> numberOfPlayersOutInEachPosition){
+        int lostTo = numberOfPlayersLostTo(place, numberOfPlayersOutInEachPosition)
+
+        int wonTo = numberOfPlayersWonTo(place, numberOfPlayersOutInEachPosition)
 
         return wonTo - lostTo
+    }
+
+    public static int numberOfPlayersLostTo(int place, List<Integer> numberOfPlayersOutInEachPosition) {
+        int lostTo = 0
+        for (int i = 0; i < place; i++) {
+            lostTo += numberOfPlayersOutInEachPosition[i]
+        }
+        return lostTo
+    }
+
+    public static int numberOfPlayersWonTo(int place, List<Integer> numberOfPlayers) {
+        int wonTo = 0
+        for (int i = place + 1; i < numberOfPlayers.size(); i++) {
+            wonTo += numberOfPlayers[i]
+        }
+        return wonTo
     }
 }

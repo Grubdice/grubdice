@@ -1,8 +1,8 @@
 package co.grubdice.scorekeeper.controller
-
 import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.dao.ScoreDao
 import co.grubdice.scorekeeper.model.external.ExternalScore
+import co.grubdice.scorekeeper.model.external.ExternalScoreBoard
 import co.grubdice.scorekeeper.model.external.PlayedGames
 import co.grubdice.scorekeeper.model.persistant.GameResult
 import co.grubdice.scorekeeper.model.persistant.Player
@@ -27,8 +27,18 @@ class ScoreController {
         if(name) {
             return createExternalScore(playerDao.getUserByName(name))
         } else {
-            return scoreDao.getScoreBoard()
+            return createScoreBoard(playerDao.getPlayersInRankedOrder())
         }
+    }
+
+    static def createScoreBoard(List<Player> players){
+
+        def returnList = []
+        players.eachWithIndex { it, index ->
+            returnList << new ExternalScoreBoard(name: it.name, score: it.currentScore + 1500, place: index + 1)
+        }
+
+        return returnList
     }
 
     ExternalScore createExternalScore(Player player) {

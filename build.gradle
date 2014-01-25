@@ -53,6 +53,7 @@ dependencies {
     compile 'org.postgresql:postgresql:9.3-1100-jdbc41'
     compile 'org.jadira.usertype:usertype.core:3.1.0.CR10'
     compile "com.googlecode.flyway:flyway-core:${versions['flywayVersion']}"
+    compile 'org.springframework.data:spring-data-jpa:1.4.3.RELEASE'
 
     //Jackson
     compile "com.fasterxml.jackson.core:jackson-databind:${versions['jacksonVersion']}"

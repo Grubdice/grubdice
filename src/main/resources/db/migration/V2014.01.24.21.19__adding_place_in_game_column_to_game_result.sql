@@ -1,0 +1,1 @@
+alter table game_results add column place_in_game integer;

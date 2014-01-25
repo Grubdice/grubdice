@@ -28,6 +28,9 @@ class GameResult {
     @Column(name = "score")
     Integer score
 
+    @Column(name = "place_in_game")
+    Integer place
+
     @JsonGetter
     public String getPlayerName() {
         player.getName()
