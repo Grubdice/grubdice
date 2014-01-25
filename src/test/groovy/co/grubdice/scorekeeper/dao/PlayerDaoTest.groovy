@@ -57,4 +57,9 @@ class PlayerDaoTest extends AbstractTransactionalTestNGSpringContextTests {
         playerDao.findByNameLikeIgnoreCase("player")
     }
 
+    @Test
+    public void testFindingPlayerByName_whereNameNotFound() throws Exception {
+        assertThat(playerDao.findByNameLikeIgnoreCase("z")).isNull()
+    }
+
 }

@@ -1,5 +1,7 @@
 package co.grubdice.scorekeeper.controller
 
+import co.grubdice.scorekeeper.dao.GameDao
+import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.external.ScoreResult
 import co.grubdice.scorekeeper.model.persistant.GameType
@@ -21,8 +23,8 @@ class GameControllerTest {
 
     @BeforeMethod
     public void setup() {
-        playerDaoMockFor = new MockFor(PlayerDaoImpl)
-        gameDaoMockFor = new MockFor(GameDaoImpl)
+        playerDaoMockFor = new MockFor(PlayerDao)
+        gameDaoMockFor = new MockFor(GameDao)
     }
 
     @Test
