@@ -30,7 +30,7 @@ class GameControllerTest {
     @Test
     public void testCreateGameFromScoreModel() throws Exception {
 
-        playerDaoMockFor.demand.getUserByName("name") { return new Player("name") }
+        playerDaoMockFor.demand.findByNameLikeIgnoreCase("name") { return new Player("name") }
 
         GameController controller = createScoreControllerFromMock()
         def game = controller.createGameFromScoreModel(
@@ -64,7 +64,7 @@ class GameControllerTest {
 
     @Test
     public void testPlaceInGameCalculation() throws Exception {
-        playerDaoMockFor.demand.getUserByName(1..4) { name -> return new Player(name) }
+        playerDaoMockFor.demand.findByNameLikeIgnoreCase(1..4) { name -> return new Player(name) }
 
         GameController controller = createScoreControllerFromMock()
 

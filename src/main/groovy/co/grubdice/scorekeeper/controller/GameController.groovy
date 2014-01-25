@@ -1,7 +1,7 @@
 package co.grubdice.scorekeeper.controller
-
 import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.PlayerDao
+import co.grubdice.scorekeeper.helper.PlayerHelper
 import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.external.ScoreResult
 import co.grubdice.scorekeeper.model.persistant.Game
@@ -67,7 +67,7 @@ class GameController {
     }
 
     public GameResult createGameResultForPlayer(String name, int finishedAt, playersInScoreGroup) {
-        def player = playerDao.getUserByName(name)
+        def player = PlayerHelper.verifyPlayerExistst(playerDao, name)
         def position = numberOfPlayersLostTo(finishedAt, playersInScoreGroup)
 
         return new GameResult(player: player, score: getScore(finishedAt, playersInScoreGroup), place: position)
@@ -75,9 +75,7 @@ class GameController {
 
     def static Integer getScore(int place, List<Integer> numberOfPlayersOutInEachPosition){
         int lostTo = numberOfPlayersLostTo(place, numberOfPlayersOutInEachPosition)
-
         int wonTo = numberOfPlayersWonTo(place, numberOfPlayersOutInEachPosition)
-
         return wonTo - lostTo
     }
 

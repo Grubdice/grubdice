@@ -1,7 +1,7 @@
 package co.grubdice.scorekeeper.controller
 import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.dao.ScoreDao
-import co.grubdice.scorekeeper.exception.PlayerNotFoundException
+import co.grubdice.scorekeeper.helper.PlayerHelper
 import co.grubdice.scorekeeper.model.external.ExternalScore
 import co.grubdice.scorekeeper.model.external.ExternalScoreBoard
 import co.grubdice.scorekeeper.model.external.PlayedGames
@@ -42,10 +42,7 @@ class ScoreController {
     }
 
     public ExternalScore getScoreForPlayerByName(String name) {
-        def player = playerDao.findByNameLikeIgnoreCase(name)
-        if (null == player) {
-            throw new PlayerNotFoundException(name)
-        }
+        def player = PlayerHelper.verifyPlayerExistst(playerDao, name)
         return createExternalScore(player)
     }
 
