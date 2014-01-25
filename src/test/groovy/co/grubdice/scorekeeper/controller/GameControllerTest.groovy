@@ -2,7 +2,7 @@ package co.grubdice.scorekeeper.controller
 
 import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.PlayerDao
-import co.grubdice.scorekeeper.engine.LeagueScoreEngine
+import co.grubdice.scorekeeper.engine.LeagueScoreEngineImpl
 import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.external.ScoreResult
 import co.grubdice.scorekeeper.model.persistant.GameType
@@ -27,6 +27,8 @@ class GameControllerTest {
     public void setup() {
         playerDaoMockFor = new MockFor(PlayerDao)
         gameDaoMockFor = new MockFor(GameDao)
+
+        gameDaoMockFor.demand.save { }
     }
 
     @AfterMethod
@@ -86,6 +88,6 @@ class GameControllerTest {
     private GameController createScoreControllerFromMock() {
         playerDaoProxy = playerDaoMockFor.proxyInstance()
         gameDaoProxy = gameDaoMockFor.proxyInstance()
-        return new GameController(playerDao: playerDaoProxy, gameDao: gameDaoProxy, leagueScoreEngine: new LeagueScoreEngine(playerDao: playerDaoProxy))
+        return new GameController(leagueScoreEngine: new LeagueScoreEngineImpl(playerDao: playerDaoProxy, gameDao: gameDaoProxy))
     }
 }

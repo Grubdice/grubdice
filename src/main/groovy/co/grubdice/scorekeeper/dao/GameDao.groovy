@@ -1,7 +1,6 @@
 package co.grubdice.scorekeeper.dao
-
 import co.grubdice.scorekeeper.model.persistant.Game
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 
-interface GameDao extends CrudRepository<Game, Integer> {
+interface GameDao extends JpaRepository<Game, Integer> {
 }

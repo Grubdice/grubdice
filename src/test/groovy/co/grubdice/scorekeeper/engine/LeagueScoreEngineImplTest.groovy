@@ -5,13 +5,13 @@ import org.testng.annotations.Test
 
 import static org.fest.assertions.Assertions.assertThat
 
-class LeagueScoreEngineTest {
+class LeagueScoreEngineImplTest {
 
-    LeagueScoreEngine leagueScoreEngine
+    LeagueScoreEngineImpl leagueScoreEngine
 
     @BeforeMethod
     public void setup() {
-        leagueScoreEngine = new LeagueScoreEngine()
+        leagueScoreEngine = new LeagueScoreEngineImpl()
     }
 
     @Test

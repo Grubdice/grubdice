@@ -37,7 +37,6 @@ class HibernateConfig {
 
     @Bean
     public EntityManagerFactory entityManagerFactory() throws SQLException {
-
         flyway();
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
@@ -72,7 +71,9 @@ class HibernateConfig {
 
     public void flyway() {
 
-        if(StringUtils.trimToEmpty(System.getProperty("spring.profiles.active")).equalsIgnoreCase("prod")) {
+        if(['prod', 'dev'].contains(
+                StringUtils.trimToEmpty(
+                        System.getProperty("spring.profiles.active")).toLowerCase())){
             def flyway = new Flyway()
             flyway.setDataSource(dataSource)
             flyway.migrate()

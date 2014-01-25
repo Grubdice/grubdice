@@ -46,7 +46,7 @@ insert into game_results (score, game_id, player_id) values
   (1, (select id from games where note = '1'), (select id from players where player_name = 'Lev')),
   (-3, (select id from games where note = '1'), (select id from players where player_name = 'Slotnick')),
   (-1, (select id from games where note = '1'), (select id from players where player_name = 'James')),
-  (5, (select id from games where note = '1'), (select id from players where player_name = 'Derrel')),
+  (5, (select id from games where note = '1'), (select id from players where player_name = 'Darrel')),
   (-1, (select id from games where note = '1'), (select id from players where player_name = 'Rockford')),
   (14, (select id from games where note = '1'), (select id from players where player_name = 'Slayer')),
   (12, (select id from games where note = '1'), (select id from players where player_name = 'Lee')),

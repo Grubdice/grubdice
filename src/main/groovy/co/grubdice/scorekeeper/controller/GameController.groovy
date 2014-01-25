@@ -1,6 +1,4 @@
 package co.grubdice.scorekeeper.controller
-import co.grubdice.scorekeeper.dao.GameDao
-import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.engine.LeagueScoreEngine
 import co.grubdice.scorekeeper.engine.LudicrousScoreEngine
 import co.grubdice.scorekeeper.model.external.ScoreModel
@@ -22,27 +20,17 @@ import org.springframework.web.bind.annotation.RestController
 class GameController {
 
     @Autowired
-    PlayerDao playerDao
-
-    @Autowired
-    GameDao gameDao
+    LudicrousScoreEngine ludicrousScoreEngine
 
     @Autowired
     LeagueScoreEngine leagueScoreEngine
-
-    @Autowired
-    LudicrousScoreEngine ludicrousScoreEngine
 
     @RequestMapping(method = RequestMethod.POST)
     def postNewGameScore(@RequestBody ScoreModel model){
 
         log.debug(new JsonBuilder(model).toPrettyString())
 
-        Game game = createGameFromScoreModel(model)
-
-        gameDao.save(game)
-
-        return game
+        return createGameFromScoreModel(model)
     }
 
     @RequestMapping(value = "/example", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
