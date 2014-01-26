@@ -13,7 +13,7 @@ import javax.persistence.Table
 class Bid {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id
 
     @ManyToOne
