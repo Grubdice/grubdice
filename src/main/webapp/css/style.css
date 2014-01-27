@@ -510,7 +510,8 @@
 			text-decoration: none;
 			padding: 0.65em 3em 0.65em 3em;
 			border: 0;
-			cursor: pointer;
+			cursor: url(images/cursor.cur);
+			cursor: url(images/cursor.png) x y, auto;
 			outline: 0;
 		}
 
@@ -1050,7 +1051,8 @@
 		color: #fff;
 		text-align: center;
 		padding: 2.5em 0 2em 0;
-		cursor: default;
+		cursor: url(images/cursor.cur);
+		cursor: url(images/cursor.png) x y, auto;
 	}
 
 		.homepage #header

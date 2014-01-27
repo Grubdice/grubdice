@@ -11,6 +11,8 @@
 		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" rel="stylesheet" type="text/css" />
 		<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" type="text/css" href="css/style2.css" />
+		<script type="text/javascript" src="js/modernizr.custom.79639.js"></script>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery.dropotron.min.js"></script>
 		<script src="js/skel.min.js"></script>
@@ -18,6 +20,7 @@
 		<script src="js/init.js"></script>
         <script src="js/grubdice.js"></script>
         <script type="text/javascript" src="js/twitterFetcher_v10_min.js"></script>
+        <script src="js/modernizr.custom.63321.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="css/skel-noscript.css" />
 			<link rel="stylesheet" href="css/style.css" />
@@ -79,19 +82,19 @@
 					</p>
 					<footer>
 						<a href="#scores" class="button circled scrolly">Click to Enter Scores</a>
-				
                         <!--Scores -->
                         <div id="scores">
                             <span class="byline" align="center">
                                 Enter the order in which the players of your game finished. We'll automagically figure everything else out.<br>To calculate a tie, use the plus button next to the position the players tied.<br>
-                                <table id="newGameTable">
-                                </table>
-                                <div>
-                                    <select id="gameType">
-                                        <option value="LEAGUE">League</option>
-                                        <option value="LUDICROUS">Ludicrous</option>
-                                    </select>
-                                </div>
+                                <table id="newGameTable"></table>
+                                <div class="fleft">
+									<select id="cd-dropdown" class="cd-select">
+										<option value="-1" selected>Choose the game style</option>
+										<option value="LEAGUE" class="icon-google-plus">Standard</option>
+										<option value="LUDICROUS" class="icon-facebook">Ludicrous</option>
+										<option value="NOSCORE" class="icon-twitter">Just for shits</option>
+									</select>
+								</div>
                                 <button type="button" class="button circled scrolly"onclick="preformPostAndClearTable()">Score It!</button>
                                 <button type="button" class="button circled scrolly"onclick="addNewPlayerRowToGameTable()">Add More Players</button>
                                 <button type="button" class="button circled scrolly" onclick="clearGameTable()">Clear</button>
@@ -141,6 +144,20 @@
 						</div>
 					</div>
 			</div>
+			<script type="text/javascript" src="js/jquery.dropdown.js"></script>
+		<script type="text/javascript">
+			
+			$( function() {
+				
+				$( '#cd-dropdown' ).dropdown( {
+					gutter : 5,
+					delay : 100,
+					random : true
+				} );
+
+			});
+
+		</script>
 		   	<script> 
  twitterFetcher.fetch('423921339481608193', '', 4, true, true, true, '', false, handleTweets);
 
