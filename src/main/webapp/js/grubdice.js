@@ -74,7 +74,7 @@ function preformPostAndClearTable() {
     }
 
     json['results'] = gameResults;
-    json['gameType'] = $('#gameType').val();
+    json['cd-dropdown'] = $('#cd-dropdown').val();
     console.log(json);
 
     $.ajax({
