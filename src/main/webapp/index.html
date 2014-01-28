@@ -12,6 +12,7 @@
 		<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" type="text/css" href="css/style2.css" />
+		<link rel="stylesheet" type="text/css" href="css/buttonstyle.css" />
 		<script type="text/javascript" src="js/modernizr.custom.79639.js"></script>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery.dropotron.min.js"></script>
@@ -77,11 +78,14 @@
                         <table class="responsive" id="scoreTable">
                         </table>
 					</header>
-					<p>
-						
-					</p>
 					<footer>
-						<a href="#scores" class="button circled scrolly">Click to Enter Scores</a>
+						<div class="button_container">
+							<section>
+							<div id="container_buttons">
+						<a href="#scores" class="dice_button scrolly">Click to Enter Scores</a>
+							</div>
+						</section>
+						</div>
                         <!--Scores -->
                         <div id="scores">
                             <span class="byline" align="center">
@@ -95,18 +99,17 @@
 										<option value="NOSCORE">Just for shits</option>
 									</select>
 								</div>
-                                <button type="button" class="button circled scrolly"onclick="preformPostAndClearTable()">Score It!</button>
-                                <button type="button" class="button circled scrolly"onclick="addNewPlayerRowToGameTable()">Add More Players</button>
-                                <button type="button" class="button circled scrolly" onclick="clearGameTable()">Clear</button>
+                                <button type="button" class="dice_button"onclick="preformPostAndClearTable()">Score It!</button>
+                                <button type="button" class="dice_button"onclick="addNewPlayerRowToGameTable()">Add More Players</button>
+                                <button type="button" class="dice_button" onclick="clearGameTable()">Clear</button>
                             </span>
                         </div>
-                    </footer>
                     </footer>
                     	<div>
                     		<span class="byline" align="center">
                                 If you need to add someone to the league for the first time, use the form below. Non league players are 'Guest'<br>
                         <input type="text" id="newPlayer" placeholder="New player name" />
-                        <button type="button" class="button circled scrolly" onclick="createNewPlayer()">Add player to the league</button>
+                        <button type="button" class="dice_button scrolly" onclick="createNewPlayer()">Add player to the league</button>
                     </div>
 				</article>
 			</div>
@@ -126,7 +129,7 @@
 							<!-- Contact -->
 								<section class="contact">
 									<header>
-										<h3><a href="#banner" class= "button circled scrolly">Take it from the top!</a></h3>
+										<h3><a href="#banner" class= "dice_button scrolly">Take it from the top!</a></h3>
 									</header>
 									<p>If you're not tying ol' yeller, I'm gonna call you no matter what. Unless you show some digits, ofcourse.</p>
 								<div class="shield" style="width: 100%">
