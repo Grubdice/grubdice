@@ -67,11 +67,17 @@
 				<h2>Hello. Welcome to the <strong>L.I.A.R.</strong></h2>
 				<div id="leader"><span class="byline">
 					Here, the greatest Liar's Dice players in the world are ranked. Each person fighting to reach the number 1 spot in the League of Incrandulous Argumentative Rollers. 
-				</span></div>
-			</div>
+				</span></div><br>
+							<div class="button_container">
+								<section>
+								<div id="container_buttons">
+									<a href="#scores" class="dice_button scrolly">Click to Enter Scores</a>
+									<a href="#player" class="dice_button scrolly">Click to Add New Player</a>
+								</section></div>
+								</div>
+				</div>
 		<!-- Main -->
 			<div class="wrapper style2">
-
 				<article id="main" class="container special">
 					<header>
 						<div id="leaderboard"><h2>Check out the current world leaderboard below!</h2></div>
@@ -79,13 +85,6 @@
                         </table>
 					</header>
 					<footer>
-						<div class="button_container">
-							<section>
-							<div id="container_buttons">
-						<a href="#scores" class="dice_button scrolly">Click to Enter Scores</a>
-							</div>
-						</section>
-						</div>
                         <!--Scores -->
                         <div id="scores">
                             <span class="byline" align="center">
@@ -105,12 +104,17 @@
                             </span>
                         </div>
                     </footer>
-                    	<div>
-                    		<span class="byline" align="center">
-                                If you need to add someone to the league for the first time, use the form below. Non league players are 'Guest'<br>
-                        <input type="text" id="newPlayer" placeholder="New player name" />
-                        <button type="button" class="dice_button scrolly" onclick="createNewPlayer()">Add player to the league</button>
-                    </div>
+                    	<div id="player">
+                    		<div><span class="byline" align="center">
+		                        <input type="text" id="newPlayer" placeholder="New player name" />
+		                        <button type="button" class="dice_button scrolly" onclick="createNewPlayer()">Add player to the league</button>
+		                    </div>
+                    	<div class="newplayer">
+                       If you need to add someone to the league for the first time, use the form above.<br>
+                       <strong>Non league players are 'Guest'</strong>
+                    	</div>
+                    	</div>
+               		 </div>
 				</article>
 			</div>
 		<!-- Footer -->
