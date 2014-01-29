@@ -1,5 +1,7 @@
 # Build folders
 build
+classes
+atlassian-ide-plugin.xml
 .idea
 .gradle
 
