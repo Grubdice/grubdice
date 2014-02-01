@@ -1,5 +1,5 @@
 package co.grubdice.scorekeeper.engine
-import co.grubdice.scorekeeper.dao.GameDao
+
 import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.dao.helper.PlayerDaoHelper
 import co.grubdice.scorekeeper.model.external.ScoreModel
@@ -13,9 +13,6 @@ class LeagueScoreEngineImpl extends CommonScoreEngineImpl implements LeagueScore
 
     @Autowired
     PlayerDao playerDao
-
-    @Autowired
-    GameDao gameDao
 
     List<GameResult> createGameResultList(ScoreModel model) {
         def results = []

@@ -7,13 +7,14 @@ import co.grubdice.scorekeeper.model.external.ExternalScoreBoard
 import co.grubdice.scorekeeper.model.external.PlayedGames
 import co.grubdice.scorekeeper.model.persistant.Player
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping(["/api/score", "/api/public/score"])
+@RequestMapping(["/api/season/{seasonId}/score", "/api/public/{seasonId}/score"])
 class ScoreController {
 
     @Autowired
@@ -23,7 +24,7 @@ class ScoreController {
     ScoreDao scoreDao
 
     @RequestMapping(method = RequestMethod.GET)
-    public def getScoreBoard(@RequestParam(required = false) String name) {
+    public def getScoreBoard(@PathVariable("seasonId") String seasionId, @RequestParam(required = false) String name) {
         if(name) {
             return getScoreForPlayerByName(name)
         } else {
@@ -48,7 +49,7 @@ class ScoreController {
 
     ExternalScore createExternalScore(Player player) {
         def games = convertGameResultsToPlayedGames(player)
-        new ExternalScore(games:  games, playerName: player.getName(), totalScore: player.currentScore + 1500)
+        return new ExternalScore(games:  games, playerName: player.getName(), totalScore: player.currentScore + 1500)
     }
 
     List<PlayedGames> convertGameResultsToPlayedGames(Player player) {
@@ -57,7 +58,7 @@ class ScoreController {
             pastGame.gamePlayedAt = gameResult.game.getPostingDate()
             pastGame.numberOfPlayers = gameResult.game.players
             pastGame.place = gameResult.place
-            pastGame
+            return pastGame
         }
     }
 

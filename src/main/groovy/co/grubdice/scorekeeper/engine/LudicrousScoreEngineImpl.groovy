@@ -1,5 +1,5 @@
 package co.grubdice.scorekeeper.engine
-import co.grubdice.scorekeeper.dao.GameDao
+
 import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.dao.helper.PlayerDaoHelper
 import co.grubdice.scorekeeper.model.external.ScoreModel
@@ -15,9 +15,6 @@ class LudicrousScoreEngineImpl extends CommonScoreEngineImpl implements Ludicrou
 
     @Autowired
     PlayerDao playerDao
-
-    @Autowired
-    GameDao gameDao
 
     @Override
     List<GameResult> createGameResultList(ScoreModel model) {

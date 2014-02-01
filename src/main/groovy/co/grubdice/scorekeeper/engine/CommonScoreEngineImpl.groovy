@@ -18,8 +18,6 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
         game.results = gameResult
         game.players = game.results.size()
 
-        getGameDao().save(game)
-
         return game
     }
 
