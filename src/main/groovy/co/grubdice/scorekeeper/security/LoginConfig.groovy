@@ -1,14 +1,25 @@
 package co.grubdice.scorekeeper.security
+import co.grubdice.scorekeeper.config.DataSourceConfig
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository
+
+import javax.sql.DataSource
 
 @Configuration
 @EnableWebSecurity
+@Import(DataSourceConfig.class)
 class LoginConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    DataSource dataSource
 
     @Override
     protected void configure(HttpSecurity http) {
@@ -30,7 +41,13 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
                 .attributeExchange("https://www.google.com/.*")
                     .attribute("email")
                         .type("http://axschema.org/contact/email")
-                        .required(true)
+                        .required(true);
+
+    }
+
+    @Bean
+    public PersistentTokenBasedRememberMeServices rememberMeServices() {
+        return new PersistentTokenBasedRememberMeServices("tie 'ol yeller", secureUserDetailsService(), tokenRep())
     }
 
     @Bean
@@ -39,7 +56,9 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean(name = 'tokenRepo')
-    InMemoryTokenRepositoryImpl tokenRep() {
-        return new InMemoryTokenRepositoryImpl();
+    PersistentTokenRepository tokenRep() {
+        def repo = new JdbcTokenRepositoryImpl()
+        repo.setDataSource(dataSource)
+        return repo
     }
 }
