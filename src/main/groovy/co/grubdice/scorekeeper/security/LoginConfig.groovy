@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
@@ -21,6 +22,8 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     DataSource dataSource
 
+    final String token_key = "tie 'ol yeller"
+
     @Override
     protected void configure(HttpSecurity http) {
         http
@@ -31,23 +34,38 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/css/**").permitAll()
                     .antMatchers("/images/**").permitAll()
                     .antMatchers("/api/public/**").permitAll()
+                    .antMatchers("favicon.ico").permitAll()
                     .antMatchers('/api/**').authenticated()
                     .anyRequest().authenticated()
+                    .and()
+                .rememberMe()
+                    .tokenRepository(tokenRepo())
+                    .rememberMeServices(rememberMeServices())
+                    .key(token_key)
+
                 .and()
                 .openidLogin()
-                .loginPage("/login.html")
-                .permitAll()
-                .authenticationUserDetailsService(secureUserDetailsService())
-                .attributeExchange("https://www.google.com/.*")
-                    .attribute("email")
-                        .type("http://axschema.org/contact/email")
-                        .required(true);
+                    .loginPage("/login.html")
+                    .permitAll()
+                    .authenticationUserDetailsService(secureUserDetailsService())
+                    .attributeExchange("https://www.google.com/.*")
+                        .attribute("email")
+                            .type("http://axschema.org/contact/email")
+                            .required(true);
+    }
 
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+            .jdbcAuthentication()
+            .dataSource(dataSource)
     }
 
     @Bean
     public PersistentTokenBasedRememberMeServices rememberMeServices() {
-        return new PersistentTokenBasedRememberMeServices("tie 'ol yeller", secureUserDetailsService(), tokenRep())
+        def services = new PersistentTokenBasedRememberMeServices(token_key, secureUserDetailsService(), tokenRepo())
+        services.setAlwaysRemember(true)
+        return services
     }
 
     @Bean
@@ -56,7 +74,7 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean(name = 'tokenRepo')
-    PersistentTokenRepository tokenRep() {
+    PersistentTokenRepository tokenRepo() {
         def repo = new JdbcTokenRepositoryImpl()
         repo.setDataSource(dataSource)
         return repo
