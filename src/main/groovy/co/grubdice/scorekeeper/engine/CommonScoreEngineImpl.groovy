@@ -65,7 +65,7 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
     }
 
     SeasonScore getSeasonScoreForPlayer(Player player, Season season) {
-        def seasonScore = getSeasonScoreDao().findScoreByPlayerAndSeason(player, season);
+        def seasonScore = getSeasonScoreDao().findByPlayerAndSeason(player, season);
         if(null == getSeasonScoreDao()) {
             return new SeasonScore(season, player, 0)
         } else {

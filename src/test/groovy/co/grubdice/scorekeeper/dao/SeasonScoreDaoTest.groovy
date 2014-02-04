@@ -35,15 +35,16 @@ class SeasonScoreDaoTest extends AbstractTransactionalTestNGSpringContextTests {
         def (season1, season2) = givenThatThereAreMultipleSeasons()
         givenThereAreFiveEntriesForEachSeason(season1, season2)
 
-        assertThat(seasonScoreDao.findScoreBySeasonOrderByScore(season1)).hasSize(5)
-        seasonScoreDao.findScoreBySeasonOrderByScore(season1)*.getSeason().each{
+        assertThat(seasonScoreDao.findAllBySeasonOrderByCurrentScore(season1)).hasSize(5)
+        seasonScoreDao.findAllBySeasonOrderByCurrentScore(season1)*.getSeason().each{
             assertThat(it).isEqualTo(season1)
         }
 
-        assertThat(seasonScoreDao.findScoreBySeasonOrderByScore(season2)).hasSize(5)
-        seasonScoreDao.findScoreBySeasonOrderByScore(season2)*.getSeason().each{
+        assertThat(seasonScoreDao.findAllBySeasonOrderByCurrentScore(season2)).hasSize(5)
+        seasonScoreDao.findAllBySeasonOrderByCurrentScore(season2)*.getSeason().each{
             assertThat(it).isEqualTo(season2)
         }
+        assertThat(seasonScoreDao.findAllBySeasonOrderByCurrentScore(season2).first().player.name).isEqualTo("player 2")
     }
 
     void givenThereAreFiveEntriesForEachSeason(Season season1, Season season2) {

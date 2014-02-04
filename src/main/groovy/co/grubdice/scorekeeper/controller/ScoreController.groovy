@@ -34,13 +34,13 @@ class ScoreController {
     @RequestMapping(value = ["/api/season/{seasonId}/score", "/api/public/season/{seasonId}/score"], method = RequestMethod.GET)
     public def getScoreBoardForSeason(@PathVariable("seasonId") Integer seasionId) {
         def season = seasonDao.findOne(seasionId)
-        seasonScoreDao.findScoreBySeasonOrderByScore(season)
+        seasonScoreDao.findAllBySeasonOrderByCurrentScore(season)
         return createScoreBoard(season)
 
     }
 
     def createScoreBoard(Season season){
-        List<SeasonScore> seasonScores = seasonScoreDao.findScoreBySeasonOrderByScore(season)
+        List<SeasonScore> seasonScores = seasonScoreDao.findAllBySeasonOrderByCurrentScore(season)
         def returnList = []
         seasonScores.eachWithIndex { it, index ->
             returnList << new ExternalScoreBoard(name: it.player.name, score: it.currentScore + 1500, place: index + 1)
