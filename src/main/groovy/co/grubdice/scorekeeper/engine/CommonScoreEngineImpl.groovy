@@ -3,6 +3,8 @@ package co.grubdice.scorekeeper.engine
 import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.persistant.Game
 import org.joda.time.DateTime
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 
 import javax.transaction.Transactional
 
@@ -17,6 +19,10 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
 
         game.results = gameResult
         game.players = game.results.size()
+
+        UserDetails userDetails =
+                (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        game.submittedBy = userDetails.getUsername()
 
         getGameDao().save(game)
 

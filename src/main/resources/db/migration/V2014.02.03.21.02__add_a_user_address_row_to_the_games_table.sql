@@ -1,0 +1,1 @@
+alter table games add column submitted_by varchar (255);

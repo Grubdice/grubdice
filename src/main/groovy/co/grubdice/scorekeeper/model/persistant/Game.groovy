@@ -29,6 +29,9 @@ class Game {
 
     Integer players
 
+    @Column(name = "submitted_by")
+    String submittedBy = ""
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "game")
     List<Turn> turns = []
 
