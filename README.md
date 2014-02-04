@@ -7,11 +7,11 @@ To add a DB script run `./gradlew createDbMigrationScript -Psql='some really des
 
 In Progress:
 * Add season support (see: add_season)
+* Save who posted a game (see: log_which_user_submitted_score)
 
 Todo:
 * Add an API key to authenticate w/ spring security
 * Add more public API's (Get's only, no need to allow anyone to post data)
-* Save who posted a game
 * Allow players to add nicknames
 * Allow the wildcard player 'Guest' that points to an empty character
 * ~~Hook into LDAP to get email / real name for score updates~~
