@@ -1,10 +1,11 @@
 package co.grubdice.scorekeeper.security
-
 import groovy.util.logging.Slf4j
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.openid.OpenIDAttribute
 import org.springframework.security.openid.OpenIDAuthenticationToken
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository
 import org.springframework.stereotype.Repository
 
 import javax.transaction.Transactional
@@ -14,12 +15,16 @@ import javax.transaction.Transactional
 @Transactional
 class SecureUserDetailsServiceImpl implements SecureUserDetailsService {
 
+    @Autowired
+    PersistentTokenRepository persistentTokenRepository
+
     /**
      * Implementation of {@code UserDetailsService}. We only need this to satisfy the {@code RememberMeServices}
      * requirements.
      */
     public UserDetails loadUserByUsername(String id) {
-        return new SecureUserDetails()
+        log.info("load user by id ID: {}", id)
+        return new SecureUserDetails(id)
     }
 
     /**
@@ -35,7 +40,9 @@ class SecureUserDetailsServiceImpl implements SecureUserDetailsService {
         }
         log.debug("trying to login with email {}", email)
         if (email ==~ /.*@grubhub\.com/ || email ==~ /.*@ehdev.io/) {
-            return new SecureUserDetails(email)
+            def secureUser = new SecureUserDetails(email)
+//            persistentTokenRepository.createNewToken(createTokenFrom(secureUser))
+            return secureUser
         } else {
             throw new UsernameNotFoundException("User not found")
         }
