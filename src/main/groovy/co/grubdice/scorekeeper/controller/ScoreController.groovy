@@ -1,20 +1,16 @@
 package co.grubdice.scorekeeper.controller
 import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.dao.ScoreDao
-import co.grubdice.scorekeeper.dao.helper.PlayerDaoHelper
-import co.grubdice.scorekeeper.model.external.ExternalScore
+import co.grubdice.scorekeeper.dao.SeasonDao
+import co.grubdice.scorekeeper.dao.SeasonScoreDao
 import co.grubdice.scorekeeper.model.external.ExternalScoreBoard
-import co.grubdice.scorekeeper.model.external.PlayedGames
-import co.grubdice.scorekeeper.model.persistant.Player
+import co.grubdice.scorekeeper.model.persistant.Season
+import co.grubdice.scorekeeper.model.persistant.SeasonScore
+import org.joda.time.DateTime
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping(["/api/season/{seasonId}/score", "/api/public/{seasonId}/score"])
 class ScoreController {
 
     @Autowired
@@ -23,43 +19,34 @@ class ScoreController {
     @Autowired
     ScoreDao scoreDao
 
-    @RequestMapping(method = RequestMethod.GET)
-    public def getScoreBoard(@PathVariable("seasonId") String seasionId, @RequestParam(required = false) String name) {
-        if(name) {
-            return getScoreForPlayerByName(name)
-        } else {
-            return createScoreBoard()
-        }
+    @Autowired
+    SeasonDao seasonDao
+
+    @Autowired
+    SeasonScoreDao seasonScoreDao
+
+    @RequestMapping(value = ["/api/score", "/api/public/score"], method = RequestMethod.GET)
+    public def getScoreBoard() {
+        def id = seasonDao.findCurrentSeason(DateTime.now()).getId()
+        return getScoreBoardForSeason(id)
     }
 
-    def createScoreBoard(){
-        def players = playerDao.findAllOrderByCurrentScore()
+    @RequestMapping(value = ["/api/season/{seasonId}/score", "/api/public/season/{seasonId}/score"], method = RequestMethod.GET)
+    public def getScoreBoardForSeason(@PathVariable("seasonId") Integer seasionId) {
+        def season = seasonDao.findOne(seasionId)
+        seasonScoreDao.findScoreBySeasonOrderByScore(season)
+        return createScoreBoard(season)
+
+    }
+
+    def createScoreBoard(Season season){
+        List<SeasonScore> seasonScores = seasonScoreDao.findScoreBySeasonOrderByScore(season)
         def returnList = []
-        players.eachWithIndex { it, index ->
-            returnList << new ExternalScoreBoard(name: it.name, score: it.currentScore + 1500, place: index + 1)
+        seasonScores.eachWithIndex { it, index ->
+            returnList << new ExternalScoreBoard(name: it.player.name, score: it.currentScore + 1500, place: index + 1)
         }
 
         return returnList
-    }
-
-    public ExternalScore getScoreForPlayerByName(String name) {
-        def player = PlayerDaoHelper.verifyPlayerExists(playerDao, name)
-        return createExternalScore(player)
-    }
-
-    ExternalScore createExternalScore(Player player) {
-        def games = convertGameResultsToPlayedGames(player)
-        return new ExternalScore(games:  games, playerName: player.getName(), totalScore: player.currentScore + 1500)
-    }
-
-    List<PlayedGames> convertGameResultsToPlayedGames(Player player) {
-        scoreDao.findByPlayer(player).collect { gameResult ->
-            def pastGame = new PlayedGames()
-            pastGame.gamePlayedAt = gameResult.game.getPostingDate()
-            pastGame.numberOfPlayers = gameResult.game.players
-            pastGame.place = gameResult.place
-            return pastGame
-        }
     }
 
 }

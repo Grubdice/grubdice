@@ -1,4 +1,4 @@
 package co.grubdice.scorekeeper.engine
 
-public interface LeagueScoreEngine extends CommonScoreEngine{
+public interface LeagueScoreEngine extends CommonScoreEngine {
 }

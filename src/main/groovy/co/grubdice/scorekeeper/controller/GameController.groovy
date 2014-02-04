@@ -1,5 +1,4 @@
 package co.grubdice.scorekeeper.controller
-
 import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.SeasonDao
 import co.grubdice.scorekeeper.engine.LeagueScoreEngine
@@ -13,13 +12,8 @@ import groovy.util.logging.Slf4j
 import org.joda.time.DateTime
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/api/season/{seasonId}/game")
 @RestController
 @Slf4j
 class GameController {
@@ -36,21 +30,19 @@ class GameController {
     @Autowired
     SeasonDao seasonDao
 
-    @RequestMapping(method = RequestMethod.POST)
-    def postNewGameScore(@PathVariable("seasonId") String seasonId, @RequestBody ScoreModel model){
-        log.info("Posting game of type {}", model.gameType)
-        getSession(seasonId)
-        return createGameFromScoreModel(model, getSession(seasonId))
+    @RequestMapping(value = "/api/season/game", method = RequestMethod.POST)
+    public postNewGameScore(@RequestBody ScoreModel model){
+        def season = seasonDao.findCurrentSeason(DateTime.now())
+        return createGameFromScoreModel(model, season)
     }
 
-    private void getSession(String seasonId) {
-        if (seasonId.equalsIgnoreCase("current")) {
-            seasonDao.findCurrentSeason(DateTime.now())
-        } else if (seasonId.isNumber()) {
-            seasonDao.findOne(seasonId.toInteger())
-        } else {
-            throw new Exception("Season ID needs to be a valid season or 'current'")
-        }
+
+    @RequestMapping(value = "/api/season/{seasonId}/game", method = RequestMethod.POST)
+    def postNewGameScoreWithSeason(@PathVariable("seasonId") Integer seasonId, @RequestBody ScoreModel model){
+        log.info("Posting game of type {}", model.gameType)
+
+        def season = seasonDao.findOne(seasonId)
+        return createGameFromScoreModel(model, season)
     }
 
     @RequestMapping(value = "/example", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

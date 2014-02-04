@@ -1,7 +1,7 @@
 CREATE SEQUENCE season_id_seq START 1;
 create table seasons (
   id INTEGER NOT NULL PRIMARY KEY DEFAULT nextval('season_id_seq'),
-  title varchar(255) default "Awesome Season",
+  title varchar(255) default 'Awesome Season',
   start_date TIMESTAMP not null,
   end_data TIMESTAMP not null
 );
