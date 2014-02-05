@@ -29,8 +29,8 @@ class ScoreController {
 
     @RequestMapping()
     public def getScoreBoard() {
-        def seasonId = SeasonDaoHelper.getCurrentSeason(seasonDao).getId()
-        return getScoreBoardForSeason(seasonId)
+        def season = SeasonDaoHelper.getCurrentSeason(seasonDao)
+        return createScoreBoard(season)
     }
 
 //    @RequestMapping(value = ["/api/season/{seasonId}/score", "/api/public/season/{seasonId}/score"], method = RequestMethod.GET)
