@@ -1,4 +1,6 @@
 package co.grubdice.scorekeeper.engine
+
+import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.dao.SeasonScoreDao
 import co.grubdice.scorekeeper.dao.helper.PlayerDaoHelper
@@ -16,6 +18,9 @@ class LudicrousScoreEngineImpl extends CommonScoreEngineImpl implements Ludicrou
 
     @Autowired
     SeasonScoreDao seasonScoreDao
+
+    @Autowired
+    GameDao gameDao
 
     void updateSeasonScores(List<ScoreResult> results, Season season) {
         results.first().name.each { name ->

@@ -12,11 +12,9 @@ import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
-import javax.transaction.Transactional
-
+@RequestMapping
 @RestController
 @Slf4j
-@RequestMapping('/api/game')
 class GameController {
 
     @Autowired
@@ -31,26 +29,22 @@ class GameController {
     @Autowired
     SeasonDao seasonDao
 
-    @RequestMapping(method = RequestMethod.POST)
-    @Transactional
+    @RequestMapping(value = "/api/game", method = RequestMethod.POST)
     public postNewGameScore(@RequestBody ScoreModel model){
         def season = SeasonDaoHelper.getCurrentSeason(seasonDao)
         return createGameFromScoreModel(model, season)
     }
 
 
-//    @RequestMapping(value = "/season/{seasonId}/game", method = RequestMethod.POST)
-//    @Transactional
-//    def postNewGameScoreWithSeason(@PathVariable("seasonId") Integer seasonId, @RequestBody ScoreModel model){
-//        def season = SeasonDaoHelper.verifySeason(seasonDao.findOne(seasonId))
-//        return createGameFromScoreModel(model, season)
-//    }
+    @RequestMapping(value = "/season/{seasonId}/game", method = RequestMethod.POST)
+    def postNewGameScoreWithSeason(@PathVariable("seasonId") Integer seasonId, @RequestBody ScoreModel model){
+        def season = SeasonDaoHelper.verifySeason(seasonDao.findOne(seasonId))
+        return createGameFromScoreModel(model, season)
+    }
 
     public Game createGameFromScoreModel(ScoreModel model, Season season) {
         log.info("Posting game of type {}", model.gameType)
         Game game = createGameFromModelAndSeason(model, season)
-        game.setSeason(season)
-        getGameDao().save(game)
         return game
     }
 

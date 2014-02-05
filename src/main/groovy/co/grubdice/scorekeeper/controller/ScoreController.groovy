@@ -8,11 +8,13 @@ import co.grubdice.scorekeeper.model.external.ExternalScoreBoard
 import co.grubdice.scorekeeper.model.persistant.Season
 import co.grubdice.scorekeeper.model.persistant.SeasonScore
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping(value = ["/api/score", "/api/public/score"])
+@RequestMapping
 class ScoreController {
 
     @Autowired
@@ -27,18 +29,18 @@ class ScoreController {
     @Autowired
     SeasonScoreDao seasonScoreDao
 
-    @RequestMapping()
+    @RequestMapping(value = ["/api/score", "/api/public/score"])
     public def getScoreBoard() {
         def season = SeasonDaoHelper.getCurrentSeason(seasonDao)
         return createScoreBoard(season)
     }
 
-//    @RequestMapping(value = ["/api/season/{seasonId}/score", "/api/public/season/{seasonId}/score"], method = RequestMethod.GET)
-//    public def getScoreBoardForSeason(@PathVariable("seasonId") Integer seasionId) {
-//        def season = SeasonDaoHelper.verifySeason(seasonDao.findOne(seasionId))
-//        seasonScoreDao.findAllBySeasonOrderByCurrentScore(season)
-//        return createScoreBoard(season)
-//    }
+    @RequestMapping(value = ["/api/season/{seasonId}/score", "/api/public/season/{seasonId}/score"], method = RequestMethod.GET)
+    public def getScoreBoardForSeason(@PathVariable("seasonId") Integer seasionId) {
+        def season = SeasonDaoHelper.verifySeason(seasonDao.findOne(seasionId))
+        seasonScoreDao.findAllBySeasonOrderByCurrentScore(season)
+        return createScoreBoard(season)
+    }
 
     def createScoreBoard(Season season){
         List<SeasonScore> seasonScores = seasonScoreDao.findAllBySeasonOrderByCurrentScore(season)

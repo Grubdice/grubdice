@@ -1,4 +1,6 @@
 package co.grubdice.scorekeeper.engine
+
+import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.dao.SeasonScoreDao
 import co.grubdice.scorekeeper.dao.helper.PlayerDaoHelper
@@ -22,7 +24,8 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
 
         updateSeasonScores(model.results, season)
 
-        return game
+        game.setSeason(season)
+        return getGameDao().save(game)
     }
 
     private List<GameResult> createGameResults(ScoreModel model) {
@@ -75,4 +78,5 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
 
     abstract SeasonScoreDao getSeasonScoreDao();
     abstract PlayerDao getPlayerDao();
+    abstract GameDao getGameDao();
 }

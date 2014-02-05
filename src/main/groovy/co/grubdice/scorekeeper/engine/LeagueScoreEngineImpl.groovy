@@ -1,9 +1,13 @@
 package co.grubdice.scorekeeper.engine
+
+import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.dao.SeasonScoreDao
 import co.grubdice.scorekeeper.dao.helper.PlayerDaoHelper
 import co.grubdice.scorekeeper.model.external.ScoreResult
-import co.grubdice.scorekeeper.model.persistant.*
+import co.grubdice.scorekeeper.model.persistant.GameType
+import co.grubdice.scorekeeper.model.persistant.Season
+import co.grubdice.scorekeeper.model.persistant.SeasonScore
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 
@@ -15,6 +19,9 @@ class LeagueScoreEngineImpl extends CommonScoreEngineImpl implements LeagueScore
 
     @Autowired
     SeasonScoreDao seasonScoreDao
+
+    @Autowired
+    GameDao gameDao
 
     void updateSeasonScores(List<ScoreResult> results, Season season) {
 
