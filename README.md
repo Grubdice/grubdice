@@ -1,4 +1,4 @@
-grubdice
+Grubdice
 ========
 
 LIARS dice score keeper
