@@ -1,0 +1,9 @@
+deployment:
+    production:
+        branch: production
+        commands:
+            - ./scripts/deploy_prod.sh
+    staging:
+        branch: master
+        commands:
+            - ./scripts/deploy_dev.sh
