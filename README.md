@@ -3,6 +3,8 @@ Grubdice
 
 LIARS dice score keeper
 
+![Build Status](https://www.codeship.io/projects/90bd8060-7102-0131-7666-0ed222d81b8c/status)
+
 To add a DB script run `./gradlew createDbMigrationScript -Psql='some really descriptinve name of your script'`. Gradle will run and create a new file in `src/main/resources/db/migration`. It will tell you what the file name is.
 
 In Progress:
@@ -26,5 +28,3 @@ Done:
 * Update the data model to have ranking of a game vs score.  (see: persistance_updates)
 * Update the data model to have a 'score' on the player that gets updated when a point is scored. (see: persistance_updates)
 * Rember me auth (no more lots of signing in!)
-
-![Build Status](https://www.codeship.io/projects/90bd8060-7102-0131-7666-0ed222d81b8c/status)
