@@ -3,8 +3,6 @@ Grubdice
 
 LIARS dice score keeper
 
-![Build Status](https://www.codeship.io/projects/90bd8060-7102-0131-7666-0ed222d81b8c/status)
-
 To add a DB script run `./gradlew createDbMigrationScript -Psql='some really descriptinve name of your script'`. Gradle will run and create a new file in `src/main/resources/db/migration`. It will tell you what the file name is.
 
 In Progress:
