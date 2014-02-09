@@ -46,7 +46,7 @@ class GameController {
 
     @RequestMapping(value = "/recent", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public getMostRecentNGames(@RequestParam(required = false, defaultValue = "5") Integer n) {
-        return gameDao.findAll(new PageRequest(0, n, Sort.Direction.DESC, "postingDate")).getContent();
+        return gameDao.findRecentGames(n)
     }
 
     public Game createGameFromScoreModel(ScoreModel model) {

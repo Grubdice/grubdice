@@ -88,18 +88,12 @@ class GameControllerTest {
 
     @Test
     public void testMostRecentGames() throws Exception {
-        MockFor page = new MockFor(Page);
-
-        page.demand.getContent(1) {
+        gameDaoMockFor.demand.findRecentGames {
             def games = new ArrayList<Game>()
             for (def i=0;i<5;i++){
                 games.add(new Game())
             }
             return games;
-        }
-        gameDaoMockFor.demand.findAll(1) { Pageable pageable ->
-            assertThat(pageable.getSort().getOrderFor("postingDate").getDirection()).isEqualTo(Sort.Direction.DESC)
-            return page.proxyInstance();
         }
 
         GameController controller = createScoreControllerFromMock()
