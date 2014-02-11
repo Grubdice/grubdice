@@ -25,9 +25,9 @@ class PlayerDaoTest extends AbstractTransactionalTestNGSpringContextTests {
 
     @Test
     public void testFindingPlayerByName() throws Exception {
-        def player1 = playerDao.save(new Player(name: "player 1", currentScore: 6))
-        def player2 = playerDao.save(new Player(name: "player 2", currentScore: 6))
-        def player3 = playerDao.save(new Player(name: "player 3", currentScore: 6))
+        def player1 = playerDao.save(new Player(name: "player 1"))
+        def player2 = playerDao.save(new Player(name: "player 2"))
+        def player3 = playerDao.save(new Player(name: "player 3"))
 
         assertThat(playerDao.findByNameLikeIgnoreCase("1")).isEqualTo(player1)
         assertThat(playerDao.findByNameLikeIgnoreCase("2")).isEqualTo(player2)
@@ -38,8 +38,8 @@ class PlayerDaoTest extends AbstractTransactionalTestNGSpringContextTests {
 
     @Test(expectedExceptions = NonUniqueResultException.class)
     public void testFindingPlayerByName_shouldThrowNonUniqueResultException() throws Exception {
-        playerDao.save(new Player(name: "player 1", currentScore: 6))
-        playerDao.save(new Player(name: "player 2", currentScore: 6))
+        playerDao.save(new Player(name: "player 1"))
+        playerDao.save(new Player(name: "player 2"))
 
         playerDao.findByNameLikeIgnoreCase("player")
     }

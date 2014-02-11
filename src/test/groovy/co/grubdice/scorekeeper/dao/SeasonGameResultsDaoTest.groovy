@@ -48,9 +48,9 @@ class SeasonGameResultsDaoTest extends AbstractTransactionalTestNGSpringContextT
     }
 
     void givenThereAreFiveEntriesForEachSeason(Season season1, Season season2) {
-        def player1 = playerDao.save(new Player('player 1', 0))
-        def player2 = playerDao.save(new Player('player 2', 0))
-        def player3 = playerDao.save(new Player('player 3', 0))
+        def player1 = playerDao.save(new Player('player 1'))
+        def player2 = playerDao.save(new Player('player 2'))
+        def player3 = playerDao.save(new Player('player 3'))
 
         seasonScoreDao.save([new SeasonScore(season1, player1, 1), new SeasonScore(season1, player1, 2), new SeasonScore(season1, player1, 3)])
         seasonScoreDao.save([new SeasonScore(season1, player2, 4), new SeasonScore(season1, player2, 5)])
