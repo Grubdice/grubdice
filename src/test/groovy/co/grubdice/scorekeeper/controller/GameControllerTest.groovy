@@ -16,7 +16,6 @@ class GameControllerTest {
 
     private Season season = new Season()
 
-
     @Test
     public void testCreateGameFromScoreModel() throws Exception {
         GameController controller = createScoreControllerFromMock()
@@ -31,7 +30,6 @@ class GameControllerTest {
         def result = game.getResults().first()
         assertThat(result.player.name).isEqualTo("name")
         assertThat(result.place).isEqualTo(0)
-
     }
 
     @Test
@@ -53,7 +51,6 @@ class GameControllerTest {
 
         assertThat(game.results[3].playerName).isEqualTo("name4")
         assertThat(game.results[3].place).isEqualTo(3)
-
     }
 
     private GameController createScoreControllerFromMock() {
