@@ -35,4 +35,8 @@ class Game {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "game")
     List<GameResult> results = []
 
+    @ManyToOne
+    @JoinColumn(name = "season_id", nullable = false)
+    Season season
+
 }

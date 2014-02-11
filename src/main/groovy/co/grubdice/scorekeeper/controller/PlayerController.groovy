@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
+import javax.transaction.Transactional
+
 @RequestMapping("/api/player")
 @RestController
 class PlayerController {
@@ -16,6 +18,7 @@ class PlayerController {
     PlayerDao playerDao
 
     @RequestMapping(method = RequestMethod.POST)
+    @Transactional
     public createPlayer(@RequestBody Player player) {
         playerDao.save(new Player(player.name))
     }
