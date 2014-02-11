@@ -44,9 +44,10 @@ class GameController {
         return new ScoreModel([new ScoreResult(["john"]), new ScoreResult(["joel", 'ethan'])], GameType.LEAGUE)
     }
 
-    @RequestMapping(value = "/recent", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public getMostRecentNGames(@RequestParam(required = false, defaultValue = "5") Integer n) {
-        return gameDao.findRecentGames(n)
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public getPageOfGames(@RequestParam(required = false, defaultValue = "5") Integer s,
+                               @RequestParam(required = false, defaultValue = "0") Integer p) {
+        return gameDao.findAll(new PageRequest(p, s, Sort.Direction.DESC, "postingDate")).getContent();
     }
 
     public Game createGameFromScoreModel(ScoreModel model) {
