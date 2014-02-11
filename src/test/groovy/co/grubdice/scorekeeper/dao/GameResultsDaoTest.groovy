@@ -20,10 +20,10 @@ import static org.fest.assertions.Assertions.assertThat
 @Slf4j
 @ActiveProfiles("test")
 @ContextConfiguration(classes = [PropertyFileLoader.class, HibernateConfig.class])
-class ScoreDaoTest extends AbstractTransactionalTestNGSpringContextTests{
+class GameResultsDaoTest extends AbstractTransactionalTestNGSpringContextTests{
 
     @Autowired
-    ScoreDao scoreDao
+    GameResultsDao scoreDao
 
     @Autowired
     PlayerDao playerDao

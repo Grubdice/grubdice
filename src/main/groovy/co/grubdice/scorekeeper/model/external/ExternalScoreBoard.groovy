@@ -1,10 +1,13 @@
 package co.grubdice.scorekeeper.model.external
 
+import groovy.transform.TupleConstructor
+
+@TupleConstructor
 class ExternalScoreBoard {
 
-    def int place
     def String name
     def int score
+    def int place
 
     boolean equals(o) {
         if (this.is(o)) return true
