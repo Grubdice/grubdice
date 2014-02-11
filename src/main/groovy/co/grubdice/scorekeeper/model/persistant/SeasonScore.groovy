@@ -31,5 +31,5 @@ class SeasonScore {
     Player player
 
     @Column(name = 'current_score')
-    Integer currentScore
+    Integer currentScore = 0
 }

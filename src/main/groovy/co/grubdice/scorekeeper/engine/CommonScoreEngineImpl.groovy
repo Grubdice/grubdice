@@ -7,10 +7,20 @@ import co.grubdice.scorekeeper.dao.helper.PlayerDaoHelper
 import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.persistant.*
 import org.joda.time.DateTime
+import org.springframework.beans.factory.annotation.Autowired
 
 import javax.transaction.Transactional
 
 abstract class CommonScoreEngineImpl implements CommonScoreEngine {
+
+    @Autowired
+    PlayerDao playerDao
+
+    @Autowired
+    SeasonScoreDao seasonScoreDao
+
+    @Autowired
+    GameDao gameDao
 
     @Transactional
     public Game createGameFromScoreModel(ScoreModel model, Season season) {
@@ -25,7 +35,7 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
         updateSeasonScores(model.results, season)
 
         game.setSeason(season)
-        return getGameDao().save(game)
+        return gameDao.save(game)
     }
 
     private List<GameResult> createGameResults(ScoreModel model) {
@@ -68,15 +78,12 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
     }
 
     SeasonScore getSeasonScoreForPlayer(Player player, Season season) {
-        def seasonScore = getSeasonScoreDao().findByPlayerAndSeason(player, season);
-        if(null == getSeasonScoreDao()) {
-            return new SeasonScore(season, player, 0)
-        } else {
-            return seasonScore
-        }
-    }
+        def seasonScore = seasonScoreDao.findByPlayerAndSeason(player, season);
 
-    abstract SeasonScoreDao getSeasonScoreDao();
-    abstract PlayerDao getPlayerDao();
-    abstract GameDao getGameDao();
+        if(null == seasonScore) {
+            seasonScore = new SeasonScore(season, player, 0)
+        }
+
+        return seasonScore
+    }
 }

@@ -1,49 +1,29 @@
 package co.grubdice.scorekeeper.controller
-
 import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.PlayerDao
+import co.grubdice.scorekeeper.dao.SeasonScoreDao
 import co.grubdice.scorekeeper.engine.LeagueScoreEngineImpl
 import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.external.ScoreResult
 import co.grubdice.scorekeeper.model.persistant.GameType
 import co.grubdice.scorekeeper.model.persistant.Player
-import groovy.mock.interceptor.MockFor
-import org.testng.annotations.AfterMethod
-import org.testng.annotations.BeforeMethod
+import co.grubdice.scorekeeper.model.persistant.Season
 import org.testng.annotations.Test
 
 import static org.fest.assertions.Assertions.assertThat
 
 class GameControllerTest {
 
+    private Season season = new Season()
 
-    MockFor playerDaoMockFor
-    MockFor gameDaoMockFor
-
-    def playerDaoProxy
-    def gameDaoProxy
-
-    @BeforeMethod
-    public void setup() {
-        playerDaoMockFor = new MockFor(PlayerDao)
-        gameDaoMockFor = new MockFor(GameDao)
-
-        gameDaoMockFor.demand.save { }
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        playerDaoMockFor.verify playerDaoProxy
-        gameDaoMockFor.verify gameDaoProxy
-    }
 
     @Test
     public void testCreateGameFromScoreModel() throws Exception {
-        settingDemands()
-
         GameController controller = createScoreControllerFromMock()
         def game = controller.createGameFromScoreModel(
-                new ScoreModel(gameType: GameType.LEAGUE, results: [new ScoreResult(["name"])]) )
+                new ScoreModel(gameType: GameType.LEAGUE, results: [new ScoreResult(["name"])]),
+                season)
+
         assertThat(game.getPlayers()).isEqualTo(1)
         assertThat(game.getResults()).hasSize(1)
         assertThat(game.getPostingDate()).isNotNull()
@@ -56,15 +36,11 @@ class GameControllerTest {
 
     @Test
     public void testPlaceInGameCalculation() throws Exception {
-        for(def i in 1..4){
-            settingDemands()
-        }
-
         GameController controller = createScoreControllerFromMock()
 
         def scoreModel = new ScoreModel(gameType: GameType.LEAGUE, results: [
                 new ScoreResult(['name1']), new ScoreResult(['name2', 'name3']), new ScoreResult(['name4'])])
-        def game = controller.createGameFromScoreModel(scoreModel)
+        def game = controller.createGameFromScoreModel(scoreModel, season)
         assertThat(game.players).isEqualTo(4)
         assertThat(game.results[0].playerName).isEqualTo("name1")
         assertThat(game.results[0].place).isEqualTo(0)
@@ -80,14 +56,10 @@ class GameControllerTest {
 
     }
 
-    public void settingDemands() {
-        playerDaoMockFor.demand.findByNameLikeIgnoreCase() { name -> return new Player(name) }
-        playerDaoMockFor.demand.save() {}
-    }
-
     private GameController createScoreControllerFromMock() {
-        playerDaoProxy = playerDaoMockFor.proxyInstance()
-        gameDaoProxy = gameDaoMockFor.proxyInstance()
-        return new GameController(leagueScoreEngine: new LeagueScoreEngineImpl(playerDao: playerDaoProxy, gameDao: gameDaoProxy))
+        return new GameController(leagueScoreEngine: new LeagueScoreEngineImpl(
+                playerDao: [ save: { it }, findByNameLikeIgnoreCase: { String name -> return new Player(name) }] as PlayerDao,
+                gameDao: [ save : { it } ] as GameDao,
+                seasonScoreDao: [ findByPlayerAndSeason: { Player p, Season s -> null }, save : { it } ] as SeasonScoreDao))
     }
 }

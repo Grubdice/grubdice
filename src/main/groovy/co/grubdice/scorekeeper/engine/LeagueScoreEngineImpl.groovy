@@ -1,28 +1,19 @@
 package co.grubdice.scorekeeper.engine
 
-import co.grubdice.scorekeeper.dao.GameDao
-import co.grubdice.scorekeeper.dao.PlayerDao
-import co.grubdice.scorekeeper.dao.SeasonScoreDao
 import co.grubdice.scorekeeper.dao.helper.PlayerDaoHelper
 import co.grubdice.scorekeeper.model.external.ScoreResult
 import co.grubdice.scorekeeper.model.persistant.GameType
 import co.grubdice.scorekeeper.model.persistant.Season
 import co.grubdice.scorekeeper.model.persistant.SeasonScore
-import org.springframework.beans.factory.annotation.Autowired
+import com.google.common.annotations.VisibleForTesting
 import org.springframework.stereotype.Repository
+
+import javax.transaction.Transactional
 
 @Repository
 class LeagueScoreEngineImpl extends CommonScoreEngineImpl implements LeagueScoreEngine {
 
-    @Autowired
-    PlayerDao playerDao
-
-    @Autowired
-    SeasonScoreDao seasonScoreDao
-
-    @Autowired
-    GameDao gameDao
-
+    @Transactional
     void updateSeasonScores(List<ScoreResult> results, Season season) {
 
         List<Integer> playersInScoreGroup = results.collect {
@@ -38,13 +29,15 @@ class LeagueScoreEngineImpl extends CommonScoreEngineImpl implements LeagueScore
         }
     }
 
+    @VisibleForTesting
     void updateSeasonScore(SeasonScore seasonScore, int finishedAt, List<Integer> playersInScoreGroup){
         def scoreModifier = getScore(finishedAt, playersInScoreGroup)
         seasonScore.currentScore += scoreModifier
         seasonScoreDao.save(seasonScore)
     }
 
-    def static Integer getScore(int place, List<Integer> numberOfPlayersOutInEachPosition){
+    @VisibleForTesting
+    static def Integer getScore(int place, List<Integer> numberOfPlayersOutInEachPosition){
         int lostTo = numberOfPlayersLostTo(place, numberOfPlayersOutInEachPosition)
         int wonTo = numberOfPlayersWonTo(place, numberOfPlayersOutInEachPosition)
         return wonTo - lostTo
