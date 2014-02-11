@@ -1,4 +1,4 @@
-grubdice
+Grubdice
 ========
 
 LIARS dice score keeper
@@ -21,7 +21,6 @@ Todo:
    * Players will need to associate with a league?
    * How to do multi leage games?
 * Profit.
-* 
 
 Done:
 * Update the data model to have ranking of a game vs score.  (see: persistance_updates)
