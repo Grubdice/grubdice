@@ -1,0 +1,1 @@
+alter table players drop column current_score;

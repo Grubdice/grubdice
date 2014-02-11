@@ -1,47 +1,37 @@
 package co.grubdice.scorekeeper.engine
 
-import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.PlayerDao
+import co.grubdice.scorekeeper.dao.SeasonScoreDao
 import co.grubdice.scorekeeper.model.persistant.Player
-import groovy.mock.interceptor.MockFor
-import org.testng.annotations.AfterMethod
-import org.testng.annotations.BeforeMethod
+import co.grubdice.scorekeeper.model.persistant.Season
+import co.grubdice.scorekeeper.model.persistant.SeasonScore
 import org.testng.annotations.Test
 
 import static org.fest.assertions.Assertions.assertThat
 
 class LudicrousScoreEngineImplTest {
 
-    def mockPlayerDao
-    def mockGameDao
-    def playerDaoProxy
-    def gameDaoProxy
+    @Test
+    public void testGetScore_withThreePlayers() throws Exception {
 
-    @BeforeMethod
-    public void setup() {
-        mockPlayerDao = new MockFor(PlayerDao)
-        mockGameDao = new MockFor(GameDao)
-    }
+        def playerDao = [findByNameLikeIgnoreCase: { name -> new Player(name: name) } ] as PlayerDao
+        def seasonScoreDao = [findByPlayerAndSeason: { Player p, Season s -> null }, save: { SeasonScore seasonScore ->
+            assertThat(seasonScore.currentScore).isEqualTo(2)
+        } ] as SeasonScoreDao
 
-    @AfterMethod
-    public void tearDown() {
-        mockPlayerDao.verify playerDaoProxy
-        mockGameDao.verify gameDaoProxy
+        LudicrousScoreEngineImpl ludicrousScoreEngine = new LudicrousScoreEngineImpl(playerDao: playerDao, seasonScoreDao: seasonScoreDao)
+        ludicrousScoreEngine.updateScoreForWinner("name", 4, new Season())
     }
 
     @Test
-    public void testGetScore() throws Exception {
+    public void testGetScore_withFivePlayers() throws Exception {
 
-        mockPlayerDao.demand.findByNameLikeIgnoreCase { name -> new Player(name: name) }
+        def playerDao = [findByNameLikeIgnoreCase: { name -> new Player(name: name) } ] as PlayerDao
+        def seasonScoreDao = [findByPlayerAndSeason: { Player p, Season s -> null }, save: { SeasonScore seasonScore ->
+            assertThat(seasonScore.currentScore).isEqualTo(3)
+        } ] as SeasonScoreDao
 
-        LudicrousScoreEngineImpl ludicrousScoreEngine = createScoreEngineForMocks()
-
-        assertThat(ludicrousScoreEngine.setScoreForWinner("name", 4).currentScore).isEqualTo(2)
-    }
-
-    public LudicrousScoreEngineImpl createScoreEngineForMocks() {
-        playerDaoProxy = mockPlayerDao.proxyInstance()
-        gameDaoProxy = mockGameDao.proxyInstance()
-        return new LudicrousScoreEngineImpl(playerDao: playerDaoProxy, gameDao: gameDaoProxy)
+        LudicrousScoreEngineImpl ludicrousScoreEngine = new LudicrousScoreEngineImpl(playerDao: playerDao, seasonScoreDao: seasonScoreDao)
+        ludicrousScoreEngine.updateScoreForWinner("name", 5, new Season())
     }
 }

@@ -76,6 +76,7 @@ class HibernateConfig {
                         System.getProperty("spring.profiles.active")).toLowerCase())){
             def flyway = new Flyway()
             flyway.setDataSource(dataSource)
+            flyway.setOutOfOrder(true)
             flyway.migrate()
         }
     }

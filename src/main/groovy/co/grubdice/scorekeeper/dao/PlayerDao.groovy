@@ -9,7 +9,4 @@ interface PlayerDao extends JpaRepository<Player, Integer> {
 
     @Query("select player from Player player where lower(player.name) like lower(concat('%',:name,'%'))")
     Player findByNameLikeIgnoreCase(@Param("name") String name)
-
-    @Query("select player from Player player order by player.currentScore desc")
-    List<Player> findAllOrderByCurrentScore()
 }
