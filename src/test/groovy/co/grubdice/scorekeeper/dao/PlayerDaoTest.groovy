@@ -24,19 +24,6 @@ class PlayerDaoTest extends AbstractTransactionalTestNGSpringContextTests {
     PlayerDao playerDao
 
     @Test
-    public void testGettingPlayersInOrder() throws Exception {
-        def player1 = playerDao.save(new Player(name: "player 1", currentScore: 6))
-        def player2 = playerDao.save(new Player(name: "player 2", currentScore: 6))
-        def player3 = playerDao.save(new Player(name: "player 3", currentScore: 6))
-
-        def order = playerDao.findAllOrderByCurrentScore()
-        assertThat(order).hasSize(3)
-        assertThat(order[0]).isEqualTo(player1)
-        assertThat(order[1]).isEqualTo(player2)
-        assertThat(order[2]).isEqualTo(player3)
-    }
-
-    @Test
     public void testFindingPlayerByName() throws Exception {
         def player1 = playerDao.save(new Player(name: "player 1", currentScore: 6))
         def player2 = playerDao.save(new Player(name: "player 2", currentScore: 6))
