@@ -38,12 +38,12 @@ class LeagueScoreEngineImplTest {
 
     @Test
     public void testCalculatingScore() throws Exception {
-        def playerDao = [findByNameLikeIgnoreCase: {String name -> return new Player(name)}] as PlayerDao
+        def playerDao = [ findByNameLikeIgnoreCase: {String name -> return new Player(name)} ] as PlayerDao
         def seasonScoreDao = [ save: { SeasonScore seasonScore ->
-            if(seasonScore.player.name == 'player1') { assertThat(seasonScore.currentScore).isEqualTo(2)}
-            if(seasonScore.player.name == 'player2') { assertThat(seasonScore.currentScore).isEqualTo(0)}
-        },
-                findByPlayerAndSeason: {Player p, Season s -> return new SeasonScore(s, p, 1)}] as SeasonScoreDao
+                if(seasonScore.player.name == 'player1') { assertThat(seasonScore.currentScore).isEqualTo(2)}
+                if(seasonScore.player.name == 'player2') { assertThat(seasonScore.currentScore).isEqualTo(0)}
+            },
+            findByPlayerAndSeason: {Player p, Season s -> return new SeasonScore(s, p, 1)} ] as SeasonScoreDao
         leagueScoreEngine.setPlayerDao(playerDao)
         leagueScoreEngine.setSeasonScoreDao(seasonScoreDao)
         leagueScoreEngine.updateSeasonScores([new ScoreResult(["player1"]), new ScoreResult(["player2"])], new Season())

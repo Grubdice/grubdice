@@ -1,5 +1,4 @@
 package co.grubdice.scorekeeper.engine
-
 import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.dao.SeasonScoreDao
 import co.grubdice.scorekeeper.model.persistant.Player

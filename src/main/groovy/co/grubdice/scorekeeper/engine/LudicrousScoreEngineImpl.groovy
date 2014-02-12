@@ -20,11 +20,23 @@ class LudicrousScoreEngineImpl extends CommonScoreEngineImpl implements Ludicrou
     }
 
     @VisibleForTesting
-    void updateScoreForWinner(String name, int numberOfPlayers, Season season){
+    void updateScoreForWinner(String name, int numberOfPlayers, Season season) {
         def player = PlayerDaoHelper.verifyPlayerExists(playerDao, name)
         def seasonScore = getSeasonScoreForPlayer(player, season)
-        seasonScore.currentScore += Math.ceil(numberOfPlayers / 2)
+        seasonScore.currentScore += getScore(numberOfPlayers)
         seasonScoreDao.save(seasonScore)
+    }
+
+    def Integer getScore(int numberOfPlayers){
+        return getScore(numberOfPlayers - 1, 0)
+    }
+
+    def Integer getScore(int numberOfPlayersWonTo, int numberOfPlayersLostTo) {
+        if(numberOfPlayersLostTo == 0) {
+            return Math.ceil((numberOfPlayersWonTo + 1) / 2)
+        } else {
+            return 0
+        }
     }
 
     @Override

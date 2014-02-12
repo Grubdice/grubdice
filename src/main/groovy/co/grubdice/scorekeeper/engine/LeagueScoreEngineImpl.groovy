@@ -30,17 +30,22 @@ class LeagueScoreEngineImpl extends CommonScoreEngineImpl implements LeagueScore
     }
 
     @VisibleForTesting
-    void updateSeasonScore(SeasonScore seasonScore, int finishedAt, List<Integer> playersInScoreGroup){
+    void updateSeasonScore(SeasonScore seasonScore, int finishedAt, List<Integer> playersInScoreGroup) {
         def scoreModifier = getScore(finishedAt, playersInScoreGroup)
         seasonScore.currentScore += scoreModifier
         seasonScoreDao.save(seasonScore)
     }
 
     @VisibleForTesting
-    static def Integer getScore(int place, List<Integer> numberOfPlayersOutInEachPosition){
+    def Integer getScore(int place, List<Integer> numberOfPlayersOutInEachPosition) {
         int lostTo = numberOfPlayersLostTo(place, numberOfPlayersOutInEachPosition)
         int wonTo = numberOfPlayersWonTo(place, numberOfPlayersOutInEachPosition)
-        return wonTo - lostTo
+        return getScore(wonTo,  lostTo)
+    }
+
+    @VisibleForTesting
+    def Integer getScore(int numberOfPlayersWonTo, int numberOfPlayersLostTo) {
+        return numberOfPlayersWonTo - numberOfPlayersLostTo
     }
 
     @Override

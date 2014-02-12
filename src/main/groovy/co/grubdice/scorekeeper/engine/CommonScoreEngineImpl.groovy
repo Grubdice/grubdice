@@ -56,9 +56,10 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
     GameResult createGameResultForPlayer(String name, int finishedAt, playersInScoreGroup) {
         def player = PlayerDaoHelper.verifyPlayerExists(getPlayerDao(), name)
 
-        def position = numberOfPlayersLostTo(finishedAt, playersInScoreGroup)
+        def lostTo = numberOfPlayersLostTo(finishedAt, playersInScoreGroup)
+        def wonTo = numberOfPlayersWonTo(finishedAt, playersInScoreGroup)
 
-        return new GameResult(player: player, place: position)
+        return new GameResult(player: player, place: lostTo, score: getScore(wonTo, lostTo))
     }
 
     public static int numberOfPlayersLostTo(int place, List<Integer> numberOfPlayersOutInEachPosition) {
@@ -86,4 +87,6 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
 
         return seasonScore
     }
+
+    abstract Integer getScore(int numberOfPlayersWonTo, int numberOfPlayersLostTo);
 }
