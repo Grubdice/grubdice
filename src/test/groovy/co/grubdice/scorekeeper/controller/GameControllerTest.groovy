@@ -1,6 +1,7 @@
 package co.grubdice.scorekeeper.controller
 import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.PlayerDao
+import co.grubdice.scorekeeper.dao.SeasonDao
 import co.grubdice.scorekeeper.dao.SeasonScoreDao
 import co.grubdice.scorekeeper.engine.LeagueScoreEngineImpl
 import co.grubdice.scorekeeper.model.external.ScoreModel
@@ -21,13 +22,16 @@ import static org.fest.assertions.Assertions.assertThat
 class GameControllerTest {
 
     MockFor gameDaoMockFor
+    MockFor seasonDaoMockFor
     def gameDaoProxy
+    def seasonDaoProxy
 
     private Season season = new Season()
 
     @BeforeMethod
     public void setUp() throws Exception {
         gameDaoMockFor = new MockFor(GameDao)
+        seasonDaoMockFor = new MockFor(SeasonDao)
     }
 
     @Test
@@ -72,6 +76,10 @@ class GameControllerTest {
 
         MockFor page = new MockFor(Page);
 
+        seasonDaoMockFor.demand.findCurrentSeason {
+            new Season()
+        }
+
         page.demand.getContent(1) {
             def games = new ArrayList<Game>()
             for (def i=0;i<5;i++){
@@ -79,7 +87,7 @@ class GameControllerTest {
             }
             return games;
         }
-        gameDaoMockFor.demand.findAll(1) { Pageable pageable ->
+        gameDaoMockFor.demand.findBySeason(1) { Season season, Pageable pageable ->
             assertThat(pageable.getSort().getOrderFor("postingDate").getDirection()).isEqualTo(Sort.Direction.DESC)
             return page.proxyInstance();
         }
@@ -95,7 +103,9 @@ class GameControllerTest {
 
     private GameController createScoreControllerFromMock() {
         gameDaoProxy = gameDaoMockFor.proxyInstance()
-        return new GameController(gameDao: gameDaoProxy, leagueScoreEngine: new LeagueScoreEngineImpl(
+        seasonDaoProxy = seasonDaoMockFor.proxyInstance()
+        return new GameController(gameDao: gameDaoProxy, seasonDao: seasonDaoProxy,
+                leagueScoreEngine: new LeagueScoreEngineImpl(
                 playerDao: [ save: { it }, findByNameLikeIgnoreCase: { String name -> return new Player(name) }] as PlayerDao,
                 gameDao: [ save : { it } ] as GameDao,
                 seasonScoreDao: [ findByPlayerAndSeason: { Player p, Season s -> null }, save : { it } ] as SeasonScoreDao))

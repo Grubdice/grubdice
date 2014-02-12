@@ -45,10 +45,21 @@ class GameController {
         return createGameFromScoreModel(model, season)
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/api/game",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public getPageOfGames(@RequestParam(required = false, defaultValue = "5") Integer s,
-                               @RequestParam(required = false, defaultValue = "0") Integer p) {
-        return gameDao.findAll(new PageRequest(p, s, Sort.Direction.DESC, "postingDate")).getContent();
+                          @RequestParam(required = false, defaultValue = "0") Integer p) {
+        return retrievePageOfGamesSortedByDateDesc(s, p, SeasonDaoHelper.getCurrentSeason(seasonDao))
+    }
+
+    @RequestMapping(value="/season/{seasonId}/game", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public getPageOfGamesWithSeason(@PathVariable("seasonId") Integer seasonId,
+                                    @RequestParam(required = false, defaultValue = "5") Integer s,
+                                    @RequestParam(required = false, defaultValue = "0") Integer p){
+        retrievePageOfGamesSortedByDateDesc(s, p, seasonDao.findOne(seasonId))
+    }
+
+    private List<Game> retrievePageOfGamesSortedByDateDesc(Integer pageSize, Integer pageNumber, Season season){
+        return gameDao.findBySeason(season, new PageRequest(pageNumber, pageSize, Sort.Direction.DESC, "postingDate")).getContent();
     }
 
     public Game createGameFromScoreModel(ScoreModel model, Season season) {
