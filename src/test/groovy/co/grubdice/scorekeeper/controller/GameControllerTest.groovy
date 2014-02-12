@@ -1,18 +1,18 @@
 package co.grubdice.scorekeeper.controller
-
 import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.PlayerDao
+import co.grubdice.scorekeeper.dao.SeasonScoreDao
 import co.grubdice.scorekeeper.engine.LeagueScoreEngineImpl
 import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.external.ScoreResult
 import co.grubdice.scorekeeper.model.persistant.Game
 import co.grubdice.scorekeeper.model.persistant.GameType
 import co.grubdice.scorekeeper.model.persistant.Player
+import co.grubdice.scorekeeper.model.persistant.Season
 import groovy.mock.interceptor.MockFor
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
-import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
@@ -20,35 +20,23 @@ import static org.fest.assertions.Assertions.assertThat
 
 class GameControllerTest {
 
-
-    MockFor playerDaoMockFor
     MockFor gameDaoMockFor
-
-    def playerDaoProxy
     def gameDaoProxy
 
+    private Season season = new Season()
+
     @BeforeMethod
-    public void setup() {
-        playerDaoMockFor = new MockFor(PlayerDao)
+    public void setUp() throws Exception {
         gameDaoMockFor = new MockFor(GameDao)
-
-
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        playerDaoMockFor.verify playerDaoProxy
-        gameDaoMockFor.verify gameDaoProxy
     }
 
     @Test
     public void testCreateGameFromScoreModel() throws Exception {
-        gameDaoMockFor.demand.save { }
-        settingDemands()
-
         GameController controller = createScoreControllerFromMock()
         def game = controller.createGameFromScoreModel(
-                new ScoreModel(gameType: GameType.LEAGUE, results: [new ScoreResult(["name"])]) )
+                new ScoreModel(gameType: GameType.LEAGUE, results: [new ScoreResult(["name"])]),
+                season)
+
         assertThat(game.getPlayers()).isEqualTo(1)
         assertThat(game.getResults()).hasSize(1)
         assertThat(game.getPostingDate()).isNotNull()
@@ -56,21 +44,15 @@ class GameControllerTest {
         def result = game.getResults().first()
         assertThat(result.player.name).isEqualTo("name")
         assertThat(result.place).isEqualTo(0)
-
     }
 
     @Test
     public void testPlaceInGameCalculation() throws Exception {
-        gameDaoMockFor.demand.save { }
-        for(def i in 1..4){
-            settingDemands()
-        }
-
         GameController controller = createScoreControllerFromMock()
 
         def scoreModel = new ScoreModel(gameType: GameType.LEAGUE, results: [
                 new ScoreResult(['name1']), new ScoreResult(['name2', 'name3']), new ScoreResult(['name4'])])
-        def game = controller.createGameFromScoreModel(scoreModel)
+        def game = controller.createGameFromScoreModel(scoreModel, season)
         assertThat(game.players).isEqualTo(4)
         assertThat(game.results[0].playerName).isEqualTo("name1")
         assertThat(game.results[0].place).isEqualTo(0)
@@ -83,7 +65,6 @@ class GameControllerTest {
 
         assertThat(game.results[3].playerName).isEqualTo("name4")
         assertThat(game.results[3].place).isEqualTo(3)
-
     }
 
     @Test
@@ -108,16 +89,15 @@ class GameControllerTest {
         def recentGames = controller.getPageOfGames(5,0);
 
         assertThat(recentGames.size()).isEqualTo(5)
-    }
 
-    public void settingDemands() {
-        playerDaoMockFor.demand.findByNameLikeIgnoreCase() { name -> return new Player(name) }
-        playerDaoMockFor.demand.save() {}
+        gameDaoMockFor.verify(gameDaoProxy)
     }
 
     private GameController createScoreControllerFromMock() {
-        playerDaoProxy = playerDaoMockFor.proxyInstance()
         gameDaoProxy = gameDaoMockFor.proxyInstance()
-        return new GameController(leagueScoreEngine: new LeagueScoreEngineImpl(playerDao: playerDaoProxy, gameDao: gameDaoProxy), gameDao: gameDaoProxy)
+        return new GameController(gameDao: gameDaoProxy, leagueScoreEngine: new LeagueScoreEngineImpl(
+                playerDao: [ save: { it }, findByNameLikeIgnoreCase: { String name -> return new Player(name) }] as PlayerDao,
+                gameDao: [ save : { it } ] as GameDao,
+                seasonScoreDao: [ findByPlayerAndSeason: { Player p, Season s -> null }, save : { it } ] as SeasonScoreDao))
     }
 }

@@ -95,6 +95,7 @@ def dbName = hasProperty('db') ? getProperty('db') : 'grubdice_dev';
 flyway {
     url = "jdbc:postgresql://localhost/${dbName}"
     user = 'grubdice'
+    outOfOrder = true
 }
 
 repositories {

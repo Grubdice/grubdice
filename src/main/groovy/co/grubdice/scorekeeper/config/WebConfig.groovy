@@ -1,4 +1,5 @@
 package co.grubdice.scorekeeper.config
+
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.HttpMessageConverter

@@ -1,24 +1,22 @@
 package co.grubdice.scorekeeper.controller
 
 import co.grubdice.scorekeeper.dao.GameDao
+import co.grubdice.scorekeeper.dao.SeasonDao
+import co.grubdice.scorekeeper.dao.helper.SeasonDaoHelper
 import co.grubdice.scorekeeper.engine.LeagueScoreEngine
 import co.grubdice.scorekeeper.engine.LudicrousScoreEngine
 import co.grubdice.scorekeeper.model.external.ScoreModel
-import co.grubdice.scorekeeper.model.external.ScoreResult
 import co.grubdice.scorekeeper.model.persistant.Game
 import co.grubdice.scorekeeper.model.persistant.GameType
+import co.grubdice.scorekeeper.model.persistant.Season
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/api/game")
+@RequestMapping
 @RestController
 @Slf4j
 class GameController {
@@ -32,16 +30,19 @@ class GameController {
     @Autowired
     GameDao gameDao;
 
-    @RequestMapping(method = RequestMethod.POST)
-    def postNewGameScore(@RequestBody ScoreModel model){
-        log.info("Posting game of type {}", model.gameType)
+    @Autowired
+    SeasonDao seasonDao
 
-        return createGameFromScoreModel(model)
+    @RequestMapping(value = "/api/game", method = RequestMethod.POST)
+    public postNewGameScore(@RequestBody ScoreModel model){
+        def season = SeasonDaoHelper.getCurrentSeason(seasonDao)
+        return createGameFromScoreModel(model, season)
     }
 
-    @RequestMapping(value = "/example", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public getExample(){
-        return new ScoreModel([new ScoreResult(["john"]), new ScoreResult(["joel", 'ethan'])], GameType.LEAGUE)
+    @RequestMapping(value = "/season/{seasonId}/game", method = RequestMethod.POST)
+    def postNewGameScoreWithSeason(@PathVariable("seasonId") Integer seasonId, @RequestBody ScoreModel model){
+        def season = SeasonDaoHelper.verifySeason(seasonDao.findOne(seasonId))
+        return createGameFromScoreModel(model, season)
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -50,11 +51,17 @@ class GameController {
         return gameDao.findAll(new PageRequest(p, s, Sort.Direction.DESC, "postingDate")).getContent();
     }
 
-    public Game createGameFromScoreModel(ScoreModel model) {
-        if(GameType.LEAGUE == model.gameType) {
-            return leagueScoreEngine.createGameFromScoreModel(model)
-        } else if(GameType.LUDICROUS == model.gameType) {
-            return ludicrousScoreEngine.createGameFromScoreModel(model)
+    public Game createGameFromScoreModel(ScoreModel model, Season season) {
+        log.info("Posting game of type {}", model.gameType)
+        Game game = createGameFromModelAndSeason(model, season)
+        return game
+    }
+
+    private Game createGameFromModelAndSeason(ScoreModel model, Season season) {
+        if (GameType.LEAGUE == model.gameType) {
+            return leagueScoreEngine.createGameFromScoreModel(model, season)
+        } else if (GameType.LUDICROUS == model.gameType) {
+            return ludicrousScoreEngine.createGameFromScoreModel(model, season)
         } else {
             throw new RuntimeException("This shouldn't ever happen... WTF")
         }

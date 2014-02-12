@@ -1,51 +1,43 @@
 package co.grubdice.scorekeeper.engine
-import co.grubdice.scorekeeper.dao.GameDao
-import co.grubdice.scorekeeper.dao.PlayerDao
+
 import co.grubdice.scorekeeper.dao.helper.PlayerDaoHelper
-import co.grubdice.scorekeeper.model.external.ScoreModel
-import co.grubdice.scorekeeper.model.persistant.GameResult
+import co.grubdice.scorekeeper.model.external.ScoreResult
 import co.grubdice.scorekeeper.model.persistant.GameType
-import org.springframework.beans.factory.annotation.Autowired
+import co.grubdice.scorekeeper.model.persistant.Season
+import co.grubdice.scorekeeper.model.persistant.SeasonScore
+import com.google.common.annotations.VisibleForTesting
 import org.springframework.stereotype.Repository
+
+import javax.transaction.Transactional
 
 @Repository
 class LeagueScoreEngineImpl extends CommonScoreEngineImpl implements LeagueScoreEngine {
 
-    @Autowired
-    PlayerDao playerDao
+    @Transactional
+    void updateSeasonScores(List<ScoreResult> results, Season season) {
 
-    @Autowired
-    GameDao gameDao
-
-    List<GameResult> createGameResultList(ScoreModel model) {
-        def results = []
-
-        List<Integer> playersInScoreGroup = model.results.collect {
+        List<Integer> playersInScoreGroup = results.collect {
             it.name.size()
         }
 
-        model.results.eachWithIndex { gameResult, finishedAt ->
+        results.eachWithIndex { gameResult, finishedAt ->
             gameResult.name.each { name ->
-                results << createGameResultForPlayer(name, finishedAt, playersInScoreGroup)
+                def player = PlayerDaoHelper.verifyPlayerExists(playerDao, name)
+                def seasonScore = getSeasonScoreForPlayer(player, season)
+                updateSeasonScore(seasonScore, finishedAt, playersInScoreGroup)
             }
         }
-
-        return results
     }
 
-    GameResult createGameResultForPlayer(String name, int finishedAt, playersInScoreGroup) {
-        def player = PlayerDaoHelper.verifyPlayerExists(playerDao, name)
-
-        def position = numberOfPlayersLostTo(finishedAt, playersInScoreGroup)
+    @VisibleForTesting
+    void updateSeasonScore(SeasonScore seasonScore, int finishedAt, List<Integer> playersInScoreGroup){
         def scoreModifier = getScore(finishedAt, playersInScoreGroup)
-
-        player.currentScore += scoreModifier
-        playerDao.save(player)
-
-        return new GameResult(player: player, place: position)
+        seasonScore.currentScore += scoreModifier
+        seasonScoreDao.save(seasonScore)
     }
 
-    def static Integer getScore(int place, List<Integer> numberOfPlayersOutInEachPosition){
+    @VisibleForTesting
+    static def Integer getScore(int place, List<Integer> numberOfPlayersOutInEachPosition){
         int lostTo = numberOfPlayersLostTo(place, numberOfPlayersOutInEachPosition)
         int wonTo = numberOfPlayersWonTo(place, numberOfPlayersOutInEachPosition)
         return wonTo - lostTo
