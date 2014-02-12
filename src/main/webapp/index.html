@@ -16,6 +16,7 @@
 		<script type="text/javascript" src="js/modernizr.custom.79639.js"></script>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery.dropotron.min.js"></script>
+        <script src="js/moment.min.js" type="text/javascript"></script>
 		<script src="js/skel.min.js"></script>
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
@@ -33,6 +34,7 @@
             $( document ).ready(function() {
                 clearGameTable();
                 refreshScoreBoard();
+                updateRecentGames();
             });
         </script>
 	</head>
@@ -109,13 +111,16 @@
                     		<div><span class="byline" align="center">
 		                        <input type="text" id="newPlayer" placeholder="New player name" />
 		                        <button type="button" class="dice_button scrolly" onclick="createNewPlayer()">Add player to the league</button>
+                                </span>
 		                    </div>
                     	<div class="newplayer">
                        If you need to add someone to the league for the first time, use the form above.<br>
                        <strong>Non league players are 'Guest'</strong>
                     	</div>
                     	</div>
-               		 </div>
+                    <div id="recentGamesArea">
+                        recent games
+                    </div>
 				</article>
 			</div>
 		<!-- Footer -->

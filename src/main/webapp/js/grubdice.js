@@ -121,3 +121,27 @@ function createNewPlayer() {
         contentType: "application/json"
     });
 }
+
+function updateRecentGames() {
+    $.getJSON("/api/game", function(games) {
+        var recentGamesHtml = '<ul class="recentGamesList">';
+        $.each(games, function(i, game) {
+            recentGamesHtml += '<li class="recentGame"><ul class="recentGameReults">';
+            $.each(game.results, function (j, result){
+                recentGamesHtml += '<li>' + result.place + ": " + result.playerName + '</li>';
+            });
+            recentGamesHtml += '</ul>';
+
+            recentGamesHtml += '<div class="recentGameTime">'+ moment(game.postingDate).format("M/D/YYYY h:mm") +'</div>';
+
+            recentGamesHtml += '</li>';
+
+
+        });
+
+        recentGamesHtml += '</ul>';
+
+        $('#recentGamesArea').html(recentGamesHtml);
+    });
+
+}
