@@ -124,22 +124,16 @@ function createNewPlayer() {
 
 function updateRecentGames() {
     $.getJSON("/api/game", function(games) {
-        var recentGamesHtml = '<ul class="recentGamesList">';
+        var recentGamesHtml = "";
         $.each(games, function(i, game) {
-            recentGamesHtml += '<li class="recentGame"><ul class="recentGameReults">';
+            recentGamesHtml += '<div class="recentGame"><ul class="recentGameReults">';
             $.each(game.results, function (j, result){
-                recentGamesHtml += '<li>' + result.place + ": " + result.playerName + '</li>';
+                recentGamesHtml += '<li class="recentGameResult">' + result.place + ": " + result.playerName + '</li>';
             });
             recentGamesHtml += '</ul>';
-
-            recentGamesHtml += '<div class="recentGameTime">'+ moment(game.postingDate).format("M/D/YYYY h:mm") +'</div>';
-
-            recentGamesHtml += '</li>';
-
-
+            recentGamesHtml += '<div class="recentGameTime">'+ moment(game.postingDate).calendar() +'</div>';
+            recentGamesHtml += '</div>';
         });
-
-        recentGamesHtml += '</ul>';
 
         $('#recentGamesArea').html(recentGamesHtml);
     });
