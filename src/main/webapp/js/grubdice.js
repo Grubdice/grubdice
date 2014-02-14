@@ -128,7 +128,7 @@ function updateRecentGames() {
         $.each(games, function(i, game) {
             recentGamesHtml += '<div class="recentGame"><ul class="recentGameReults">';
             $.each(game.results, function (j, result){
-                recentGamesHtml += '<li class="recentGameResult">' + result.place + ": " + result.playerName + '</li>';
+                recentGamesHtml += '<li class="recentGameResult">' + (result.place + 1) + ":&nbsp;&nbsp;&nbsp;" + result.playerName + ' ('+ formatScore(result.score) +')</li>';
             });
             recentGamesHtml += '</ul>';
             recentGamesHtml += '<div class="recentGameTime">'+ moment(game.postingDate).calendar() +'</div>';
@@ -138,4 +138,12 @@ function updateRecentGames() {
         $('#recentGamesArea').html(recentGamesHtml);
     });
 
+}
+
+function formatScore(score) {
+    if (score > 0) {
+        return "+" + score;
+    } else {
+        return score.toString();
+    }
 }
