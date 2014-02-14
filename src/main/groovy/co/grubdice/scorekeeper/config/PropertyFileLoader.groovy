@@ -44,6 +44,17 @@ class PropertyFileLoader {
 
     }
 
+    @Configuration
+    @PropertySource("classpath:circle_ci.properties")
+    @Profile("circle_ci")
+    @Slf4j
+    static class CircleCiDefaults {
+        static {
+            log.info("Creating profile: circleCi")
+        }
+
+    }
+
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
