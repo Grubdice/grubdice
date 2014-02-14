@@ -27,7 +27,7 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
     public Game createGameFromScoreModel(ScoreModel model, Season season) {
         def game = new Game(postingDate: DateTime.now(), type: getGameType(), season: season)
 
-        game.results = createGameResults(model, season, game)
+        game.results = createGameResults(model, game)
         game.players = game.results.size()
 
         game.setSeason(season)
@@ -35,7 +35,7 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
     }
 
     @VisibleForTesting
-    List<GameResult> createGameResults(ScoreModel model, Season season, Game game) {
+    List<GameResult> createGameResults(ScoreModel model, Game game) {
         List<Integer> playersInScoreGroup = model.results.collect {
             it.name.size()
         }
@@ -50,18 +50,10 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
                 def scoreDelta = getScore(wonTo, lostTo)
 
                 gameResults << new GameResult(player: player, place: lostTo, score: scoreDelta, game: game)
-                updateSeasonScoreForPlayer(player, season, scoreDelta)
             }
         }
 
         return gameResults
-    }
-
-    @VisibleForTesting
-    void updateSeasonScoreForPlayer(Player player, Season season, int scoreDelta) {
-        def seasonScore = getSeasonScoreForPlayer(player, season)
-        seasonScore.currentScore += scoreDelta
-        seasonScoreDao.save(seasonScore)
     }
 
     public static int numberOfPlayersLostTo(int place, List<Integer> numberOfPlayersOutInEachPosition) {
@@ -78,15 +70,5 @@ abstract class CommonScoreEngineImpl implements CommonScoreEngine {
             wonTo += numberOfPlayers[i]
         }
         return wonTo
-    }
-
-    SeasonScore getSeasonScoreForPlayer(Player player, Season season) {
-        def seasonScore = seasonScoreDao.findByPlayerAndSeason(player, season);
-
-        if(null == seasonScore) {
-            seasonScore = new SeasonScore(season, player, 0)
-        }
-
-        return seasonScore
     }
 }

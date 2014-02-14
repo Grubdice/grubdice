@@ -24,22 +24,6 @@ class CommonScoreEngineImplTest {
     }
 
     @Test
-    public void testGettingSeasonScoreForPlayer_whereNoneExists() throws Exception {
-        commonScoreEngine.setSeasonScoreDao([ findByPlayerAndSeason: { player, season -> null } ] as SeasonScoreDao)
-        def seasonScore = commonScoreEngine.getSeasonScoreForPlayer(new Player("player1"), new Season())
-        assertThat(seasonScore).isNotNull()
-        assertThat(seasonScore.currentScore).isEqualTo(0)
-    }
-
-    @Test
-    public void testGettingSeasonScoreForPlayer_whereOneExists() throws Exception {
-        commonScoreEngine.setSeasonScoreDao([ findByPlayerAndSeason: { player, season -> new SeasonScore(season, player, 1) } ] as SeasonScoreDao)
-        def seasonScore = commonScoreEngine.getSeasonScoreForPlayer(new Player("player1"), new Season())
-        assertThat(seasonScore).isNotNull()
-        assertThat(seasonScore.currentScore).isEqualTo(1)
-    }
-
-    @Test
     public void testCalculatePlayersWonTo() throws Exception {
         assertThat(CommonScoreEngineImpl.numberOfPlayersWonTo(0, [1,1,1])).isEqualTo(2)
         assertThat(CommonScoreEngineImpl.numberOfPlayersWonTo(1, [1,1,1])).isEqualTo(1)
@@ -74,19 +58,12 @@ class CommonScoreEngineImplTest {
     }
 
     @Test
-    public void testUpdateSeasonScoreForPlayer() throws Exception {
-        commonScoreEngine.setSeasonScoreDao([ findByPlayerAndSeason: { player, season -> null },
-                save: { seasonScore -> assertThat(seasonScore.currentScore).isEqualTo(3)} ] as SeasonScoreDao)
-        commonScoreEngine.updateSeasonScoreForPlayer(new Player("player 2"), new Season(), 3)
-    }
-
-    @Test
     public void testCreateGameResult() throws Exception {
         commonScoreEngine.setSeasonScoreDao([ findByPlayerAndSeason: { player, season -> null }, save: { it } ] as SeasonScoreDao)
         commonScoreEngine.setPlayerDao([findByNameLikeIgnoreCase: { name -> new Player(name)}] as PlayerDao)
 
         def model = new ScoreModel([new ScoreResult(["Ethan"]), new ScoreResult(["Joel", "Lee"])], GameType.LEAGUE)
-        def results = commonScoreEngine.createGameResults(model, new Season(), new Game())
+        def results = commonScoreEngine.createGameResults(model, new Game())
         assertThat(results).hasSize(3)
         assertThat(results.score).isEqualTo([2, -1, -1])
         assertThat(results.player.name).isEqualTo(["Ethan", "Joel", "Lee"])
