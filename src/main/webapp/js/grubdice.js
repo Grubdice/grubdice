@@ -1,7 +1,14 @@
 function addNewPlayerRowToGameTable() {
-    var table = document.getElementById("newGameTable");
-    var numberOfRows = document.getElementById('newGameTable').getElementsByTagName('tr').length + 1;
-    add3RowToTable(table, '<div>' + numberOfRows + '</div>', '<div><input type="text" placeholder="name" /></div>', '<div><button type="button" class="fa fa-plus-circle" onclick="addTiePlayer(this)"></button></div>')
+    var table = $("#newGameTable");
+
+
+    var numberOfRows = $(table).children(".enterPlayerRow").length+1;
+
+    $(table).append('<div class="enterPlayerRow">' +
+        '<div class="newPlayerCell">'+numberOfRows+'</div>' +
+        '<div class="newPlayerCell newPlayerTextArea"><div><input type="text" placeholder="name" /></div></div>' +
+        '<div class="newPlayerCell"><button type="button" class="fa fa-fighter-jet" onclick="addTiePlayer(this)"></button></div>' +
+        '</div>')
 }
 
 function add3RowToTable(table, cell1Contents, cell2Contents, cell3Contents) {
@@ -18,7 +25,7 @@ function add3RowToTable(table, cell1Contents, cell2Contents, cell3Contents) {
 }
 
 function addTiePlayer(reference) {
-    $(reference).parents('td').siblings().get(1).innerHTML+='<div><input type="text" placeholder="name" /></div>';
+    $(reference).parents('div').siblings('.newPlayerTextArea').first().append('<div><input type="text" placeholder="name" /></div>');
 }
 
 function publicRefreshScoreBoard() {
@@ -42,8 +49,8 @@ function refreshScoreBoard() {
 }
 
 function updateScoreBoard(values) {
-    var table = document.getElementById("scoreTable");
-    table.innerHTML = '<THEAD><tr><td></td><td><h6> Name </h6></td><td><h6> Score </h6></td></tr></THEAD>';
+    var table = document.getElementById("scoreTableData");
+    table.innerHTML = '';
 
     for (var i = 0; i < values.length; i++) {
         var player = values[i];
@@ -52,9 +59,10 @@ function updateScoreBoard(values) {
     }
 }
 
-function preformPostAndClearTable() {
+function performPostAndClearTable() {
     var json = { };
-    var nodeList = document.getElementById('newGameTable').getElementsByTagName('tr');
+    var nodeList = $('#newGameTable').children('.enterPlayerRow');
+
     var gameResults = new Array()
     for (var i = 0; i < nodeList.length; ++i) {
         var textBoxes = nodeList[i].getElementsByTagName("input");
@@ -83,8 +91,9 @@ function preformPostAndClearTable() {
         processData: false,
         data: JSON.stringify(json),
         success: function () {
-            alert("This game has been successfully posted")
+            alert("Booyah! Success!");
             refreshScoreBoard();
+            updateRecentGames();
             clearGameTable();
         },
         error: reportNewGameError,
@@ -99,7 +108,9 @@ function reportNewGameError(jqXHR, textStatus, errorThrown){
 }
 
 function clearGameTable() {
-    document.getElementById("newGameTable").innerHTML = '';
+
+    $("#newGameTable").html('');
+
     for(var i = 0; i < 4; i++) {
         addNewPlayerRowToGameTable();
     }
@@ -120,4 +131,30 @@ function createNewPlayer() {
         },
         contentType: "application/json"
     });
+}
+
+function updateRecentGames() {
+    $.getJSON("/api/game", function(games) {
+        var recentGamesHtml = '';
+        $.each(games, function(i, game) {
+            recentGamesHtml += '<div class="recentGame"><ul class="recentGameResults">';
+            $.each(game.results, function (j, result){
+                recentGamesHtml += '<li class="recentGameResult">' + (result.place + 1) + ":&nbsp;&nbsp;&nbsp;" + result.playerName + ' ('+ formatScore(result.score) +')</li>';
+            });
+            recentGamesHtml += '</ul>';
+            recentGamesHtml += '<div class="recentGameTime">'+ moment(game.postingDate).calendar() +'</div>';
+            recentGamesHtml += '</div>';
+        });
+
+        $('#recentGamesArea').html(recentGamesHtml);
+    });
+
+}
+
+function formatScore(score) {
+    if (score > 0) {
+        return "+" + score;
+    } else {
+        return score.toString();
+    }
 }

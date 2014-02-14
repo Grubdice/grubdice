@@ -1,5 +1,5 @@
 insert into games (note, players, start_time, start_timezone, type) values
-	('1', -1, '2014-01-17 03:09:32.357', 'Etc/GMT', 'LEAUGE'),
+	('1', -1, '2014-01-17 03:09:32.357', 'Etc/GMT', 'LEAGUE'),
 	('95', 5, '2014-01-17 18:34:25.101', 'Etc/GMT', 'LEAGUE'),
 	('102', 6, '2014-01-17 19:01:18.646', 'Etc/GMT', 'LEAGUE'),
 	('112', 6, '2014-01-18 00:22:44.114', 'Etc/GMT', 'LEAGUE'),

@@ -18,8 +18,8 @@ class Game {
     @JsonIgnore
     Integer id
 
-    @Columns(columns=[ @Column(name="start_time"), @Column(name="start_timezone")])
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTimeAndZoneWithOffset")
+    @Column(name="start_time")
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime postingDate
 
     @Enumerated(EnumType.STRING)
@@ -32,7 +32,8 @@ class Game {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "game")
     List<Turn> turns = []
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "game")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "game", fetch = FetchType.EAGER)
+    @OrderBy("place ASC")
     List<GameResult> results = []
 
     @ManyToOne
