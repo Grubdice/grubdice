@@ -149,7 +149,7 @@
 							<div class="button_container">
 								<section>
 								<div id="container_buttons">
-									<a href="#scores" class="button circled scrolly">Enter Scores</a>
+									<a href="#leaderboard" class="button circled scrolly">View Leaderboard</a>
 									<a href="#player" class="button circled scrolly">Add New Player</a>
                                 </div>
 								</section></div>
@@ -159,6 +159,24 @@
 			<div class="wrapper style2">
 				<article id="main" class="container special">
 					<header>
+                        <!--Scores -->
+                        <div id="scores">
+                            <div class="byline" align="center">
+                                Enter the order in which the players of your game finished. We'll automagically figure everything else out.<br>To calculate a tie, use the fighter jet next to the position the players tied.<br>
+                                <div id="newGameTable"></div>
+                                <div class="fleft">
+                                    <select id="cd-dropdown" class="cd-select">
+                                        <option value="-1" selected>Choose the game style</option>
+                                        <option value="LEAGUE">Standard</option>
+                                        <option value="LUDICROUS">Ludicrous</option>
+                                        <option value="NOSCORE">Just for shits</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="button circle" onclick="performPostAndClearTable()">Score It!</button>
+                                <button type="button" class="button circle" onclick="addNewPlayerRowToGameTable()">Add More Players</button>
+                                <button type="button" class="button circle" onclick="clearGameTable()">Clear</button>
+                            </div>
+                        </div>
                         <div id="leaderboard"><h2>Check out the current world leaderboard below!</h2></div>
                         <div id="page-wrap">
                         <table class="responsive" id="scoreTable">
@@ -169,26 +187,10 @@
                         </table>
                         </div>
 					</header>
+                    <div class="recentGameTitle">Recent Games</div>
                     <div id="recentGamesArea"></div>
 					<footer>
-                        <!--Scores -->
-                        <div id="scores">
-                            <div class="byline" align="center">
-                                Enter the order in which the players of your game finished. We'll automagically figure everything else out.<br>To calculate a tie, use the fighter jet next to the position the players tied.<br>
-                                <div id="newGameTable"></div>
-                                <div class="fleft">
-									<select id="cd-dropdown" class="cd-select">
-										<option value="-1" selected>Choose the game style</option>
-										<option value="LEAGUE">Standard</option>
-										<option value="LUDICROUS">Ludicrous</option>
-										<option value="NOSCORE">Just for shits</option>
-									</select>
-								</div>
-                                <button type="button" class="button circle" onclick="performPostAndClearTable()">Score It!</button>
-                                <button type="button" class="button circle" onclick="addNewPlayerRowToGameTable()">Add More Players</button>
-                                <button type="button" class="button circle" onclick="clearGameTable()">Clear</button>
-                            </div>
-                        </div>
+
                     </footer>
                     	<div id="player">
                     		<div><span class="byline" align="center">

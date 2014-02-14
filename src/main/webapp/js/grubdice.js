@@ -135,7 +135,7 @@ function createNewPlayer() {
 
 function updateRecentGames() {
     $.getJSON("/api/game", function(games) {
-        var recentGamesHtml = '<span class="recentGameTitle">Recent Games</span>';
+        var recentGamesHtml = '';
         $.each(games, function(i, game) {
             recentGamesHtml += '<div class="recentGame"><ul class="recentGameResults">';
             $.each(game.results, function (j, result){
