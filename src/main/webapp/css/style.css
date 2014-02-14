@@ -1416,3 +1416,16 @@
 	margin-top: 1.5em;
 	text-align: center;
 }
+
+
+#newGameTable{
+    display: table;
+}
+
+.enterPlayerRow {
+    display: table-row;
+}
+
+.newPlayerCell {
+    display:table-cell;
+}

@@ -1,7 +1,14 @@
 function addNewPlayerRowToGameTable() {
-    var table = document.getElementById("newGameTable");
-    var numberOfRows = document.getElementById('newGameTable').getElementsByTagName('tr').length + 1;
-    add3RowToTable(table, '<div>' + numberOfRows + '</div>', '<div><input type="text" placeholder="name" /></div>', '<div><button type="button" class="fa fa-plus-circle" onclick="addTiePlayer(this)"></button></div>')
+    var table = $("#newGameTable");
+
+
+    var numberOfRows = $(table).children(".enterPlayerRow").length+1;
+
+    $(table).append('<div class="enterPlayerRow">' +
+        '<div class="newPlayerCell">'+numberOfRows+'</div>' +
+        '<div class="newPlayerCell newPlayerTextArea"><input type="text" placeholder="name" /></div>' +
+        '<div class="newPlayerCell"><button type="button" class="fa fa-fighter-jet" onclick="addTiePlayer(this)"></button></div>' +
+        '</div>')
 }
 
 function add3RowToTable(table, cell1Contents, cell2Contents, cell3Contents) {
@@ -18,7 +25,7 @@ function add3RowToTable(table, cell1Contents, cell2Contents, cell3Contents) {
 }
 
 function addTiePlayer(reference) {
-    $(reference).parents('td').siblings().get(1).innerHTML+='<div><input type="text" placeholder="name" /></div>';
+    $(reference).parents('div').siblings('.newPlayerTextArea').first().append('<div><input type="text" placeholder="name" /></div>');
 }
 
 function publicRefreshScoreBoard() {
@@ -98,7 +105,9 @@ function reportNewGameError(jqXHR, textStatus, errorThrown){
 }
 
 function clearGameTable() {
-    document.getElementById("newGameTable").innerHTML = '';
+
+    $("#newGameTable").html('');
+
     for(var i = 0; i < 4; i++) {
         addNewPlayerRowToGameTable();
     }
