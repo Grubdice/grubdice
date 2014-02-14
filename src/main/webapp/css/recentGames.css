@@ -1,6 +1,9 @@
 #recentGamesArea {
     padding: 20px;
     font-family: 'Source Sans Pro', sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
 .recentGame {
