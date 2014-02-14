@@ -33,6 +33,7 @@ class Game {
     List<Turn> turns = []
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "game", fetch = FetchType.EAGER)
+    @OrderBy("place ASC")
     List<GameResult> results = []
 
     @ManyToOne
