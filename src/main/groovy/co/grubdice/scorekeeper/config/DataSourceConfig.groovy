@@ -1,10 +1,12 @@
 package co.grubdice.scorekeeper.config
 
 import com.jolbox.bonecp.BoneCPDataSource
+import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy
+import sun.swing.StringUIClientPropertyKey
 
 import javax.sql.DataSource
 
@@ -43,9 +45,14 @@ class DataSourceConfig {
     public BoneCPDataSource boneDataSource() {
         def source = new BoneCPDataSource();
         source.setDriverClass(driver)
-        source.setUsername(userName)
-        source.setPassword(password)
-        source.setJdbcUrl(jdbcUrl)
+        String fullUrl = System.getenv("DATABASE_URL")
+        if(StringUtils.trimToEmpty(fullUrl).isEmpty()){
+            source.setUsername(userName)
+            source.setPassword(password)
+            source.setJdbcUrl(jdbcUrl)
+        } else {
+            source.setJdbcUrl(fullUrl)
+        }
         source.setIdleConnectionTestPeriodInSeconds(Integer.decode(idleConnections))
         source.setIdleMaxAgeInSeconds(Integer.decode(maxIdleAge))
         source.setMaxConnectionsPerPartition(Integer.decode(maxConnections))
