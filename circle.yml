@@ -1,7 +1,7 @@
 machine:
   environment:
       DATABASE_URL: postgres://ubuntu:@127.0.0.1:5432/circle_test
-      JAVA_OPTS: spring.profiles.active=circle_ci
+      JAVA_OPTS: -Dspring.profiles.active=circle_ci
 deployment:
     production:
         branch: production
