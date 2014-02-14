@@ -42,8 +42,7 @@ function refreshScoreBoard() {
 }
 
 function updateScoreBoard(values) {
-    var table = document.getElementById("scoreTable");
-    table.innerHTML = '<THEAD><tr><td></td><td><h6> Name </h6></td><td><h6> Score </h6></td></tr></THEAD>';
+    var table = document.getElementById("scoreTableData");
 
     for (var i = 0; i < values.length; i++) {
         var player = values[i];
@@ -124,9 +123,9 @@ function createNewPlayer() {
 
 function updateRecentGames() {
     $.getJSON("/api/game", function(games) {
-        var recentGamesHtml = "";
+        var recentGamesHtml = '<span class="recentGameTitle">Recent Games</span>';
         $.each(games, function(i, game) {
-            recentGamesHtml += '<div class="recentGame"><ul class="recentGameReults">';
+            recentGamesHtml += '<div class="recentGame"><ul class="recentGameResults">';
             $.each(game.results, function (j, result){
                 recentGamesHtml += '<li class="recentGameResult">' + (result.place + 1) + ":&nbsp;&nbsp;&nbsp;" + result.playerName + ' ('+ formatScore(result.score) +')</li>';
             });

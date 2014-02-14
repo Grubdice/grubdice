@@ -12,7 +12,9 @@
 		<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" type="text/css" href="css/style2.css" />
+        <link rel="stylesheet" type="text/css" href="css/recentGames.css"/>
 		<link rel="stylesheet" type="text/css" href="css/buttonstyle.css" />
+		<link rel="stylesheet" type="text/css" href="css/responsivestyle.css" />
 		<script type="text/javascript" src="js/modernizr.custom.79639.js"></script>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery.dropotron.min.js"></script>
@@ -21,6 +23,7 @@
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
         <script src="js/grubdice.js"></script>
+        <script src="js/responsive-tables.js"></script>
         <script type="text/javascript" src="js/twitterFetcher_v10_min.js"></script>
         <script src="js/modernizr.custom.63321.js"></script>
 		<noscript>
@@ -37,6 +40,79 @@
                 updateRecentGames();
             });
         </script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--[if !IE]><!-->
+        <style>
+
+                /*
+                Max width before the table gets nasty.
+                */
+            @media
+            only screen and (max-width: 760px),
+            (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+                /* Force table to not be like tables anymore */
+                table, thead, tbody, th, td, tr {
+                    display: block;
+                }
+
+                /* Hide table headers*/
+                thead tr {
+                    position: absolute;
+                    top: -9999px;
+                    left: -9999px;
+                }
+
+                tr { border: 1px solid #ccc; }
+
+                td {
+                    /* Behave  like a "row" */
+                    border: none;
+                    border-bottom: 1px solid #eee;
+                    position: relative;
+                    padding-left: 50%;
+                }
+
+                td:before {
+                    /* Now like a table header */
+                    position: absolute;
+                    /* Top/left values mimic padding */
+                    top: 6px;
+                    left: 6px;
+                    width: 45%;
+                    padding-right: 10px;
+                    white-space: nowrap;
+                }
+
+                /*
+                Label the data
+                */
+                td:nth-of-type(1):before { content: "Rank"; }
+                td:nth-of-type(2):before { content: "Name"; }
+                td:nth-of-type(3):before { content: "Score"; }
+            }
+
+                /* Smartphones (portrait and landscape) ----------- */
+            @media only screen
+            and (min-device-width : 320px)
+            and (max-device-width : 480px) {
+                body {
+                    padding: 0;
+                    margin: 0;
+                    width: 320px; }
+            }
+
+                /* iPads (portrait and landscape) ----------- */
+            @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+                body {
+                    width: 495px;
+                }
+            }
+
+        </style>
+        <!--<![endif]-->
 	</head>
 	<body class="homepage">
     <a href="https://github.com/ethankhall/grubdice"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 1000;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
@@ -74,8 +150,9 @@
 							<div class="button_container">
 								<section>
 								<div id="container_buttons">
-									<a href="#scores" class="dice_button scrolly">Enter Scores</a>
-									<a href="#player" class="dice_button scrolly">Add New Player</a>
+									<a href="#scores" class="button circled scrolly">Enter Scores</a>
+									<a href="#player" class="button circled scrolly">Add New Player</a>
+                                </div>
 								</section></div>
 								</div>
 				</div>
@@ -83,10 +160,17 @@
 			<div class="wrapper style2">
 				<article id="main" class="container special">
 					<header>
-						<div id="leaderboard"><h2>Check out the current world leaderboard below!</h2></div>
+                        <div id="leaderboard"><h2>Check out the current world leaderboard below!</h2></div>
+                        <div id="page-wrap">
                         <table class="responsive" id="scoreTable">
+                            <thead><tr><th>Rank</th><th>Name</th><th>Score</th></tr></thead>
+                            <tbody id="scoreTableData">
+                                <!-- Score data goes here -->
+                            </tbody>
                         </table>
+                        </div>
 					</header>
+                    <div id="recentGamesArea"></div>
 					<footer>
                         <!--Scores -->
                         <div id="scores">
@@ -101,16 +185,16 @@
 										<option value="NOSCORE">Just for shits</option>
 									</select>
 								</div>
-                                <button type="button" class="dice_button"onclick="preformPostAndClearTable()">Score It!</button>
-                                <button type="button" class="dice_button"onclick="addNewPlayerRowToGameTable()">Add More Players</button>
-                                <button type="button" class="dice_button" onclick="clearGameTable()">Clear</button>
+                                <button type="button" class="button circle" onclick="preformPostAndClearTable()">Score It!</button>
+                                <button type="button" class="button circle" onclick="addNewPlayerRowToGameTable()">Add More Players</button>
+                                <button type="button" class="button circle" onclick="clearGameTable()">Clear</button>
                             </span>
                         </div>
                     </footer>
                     	<div id="player">
                     		<div><span class="byline" align="center">
 		                        <input type="text" id="newPlayer" placeholder="New player name" />
-		                        <button type="button" class="dice_button scrolly" onclick="createNewPlayer()">Add player to the league</button>
+		                        <button type="button" class="button circled scrolly" onclick="createNewPlayer()">Add player to the league</button>
                                 </span>
 		                    </div>
                     	<div class="newplayer">
@@ -118,9 +202,6 @@
                        <strong>Non league players are 'Guest'</strong>
                     	</div>
                     	</div>
-                    <div id="recentGamesArea">
-                        recent games
-                    </div>
 				</article>
 			</div>
 		<!-- Footer -->
@@ -139,7 +220,7 @@
 							<!-- Contact -->
 								<section class="contact">
 									<header>
-										<h3><a href="#banner" class= "dice_button scrolly">Take it from the top!</a></h3>
+										<h3><a href="#banner" class= "button circled scrolly">Take it from the top!</a></h3>
 									</header>
 									<p>If you're not tying ol' yeller, I'm gonna call you no matter what. Unless you show some digits, ofcourse.</p>
 								<div class="shield" style="width: 100%">
