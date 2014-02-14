@@ -6,7 +6,7 @@ function addNewPlayerRowToGameTable() {
 
     $(table).append('<div class="enterPlayerRow">' +
         '<div class="newPlayerCell">'+numberOfRows+'</div>' +
-        '<div class="newPlayerCell newPlayerTextArea"><input type="text" placeholder="name" /></div>' +
+        '<div class="newPlayerCell newPlayerTextArea"><div><input type="text" placeholder="name" /></div></div>' +
         '<div class="newPlayerCell"><button type="button" class="fa fa-fighter-jet" onclick="addTiePlayer(this)"></button></div>' +
         '</div>')
 }
@@ -50,6 +50,7 @@ function refreshScoreBoard() {
 
 function updateScoreBoard(values) {
     var table = document.getElementById("scoreTableData");
+    table.innerHTML = '';
 
     for (var i = 0; i < values.length; i++) {
         var player = values[i];
@@ -58,9 +59,10 @@ function updateScoreBoard(values) {
     }
 }
 
-function preformPostAndClearTable() {
+function performPostAndClearTable() {
     var json = { };
-    var nodeList = document.getElementById('newGameTable').getElementsByTagName('tr');
+    var nodeList = $('#newGameTable').children('.enterPlayerRow');
+
     var gameResults = new Array()
     for (var i = 0; i < nodeList.length; ++i) {
         var textBoxes = nodeList[i].getElementsByTagName("input");
@@ -89,8 +91,9 @@ function preformPostAndClearTable() {
         processData: false,
         data: JSON.stringify(json),
         success: function () {
-            alert("This game has been successfully posted")
+            alert("Booyah! Success!");
             refreshScoreBoard();
+            updateRecentGames();
             clearGameTable();
         },
         error: reportNewGameError,
