@@ -26,6 +26,12 @@ class SeasonScore {
     @Column(name = 'current_score', updatable = false, insertable = false)
     Integer currentScore
 
+    @Column(name = 'average_score', updatable = false, insertable = false)
+    Double averageScore
+
+    @Column(name = 'games_played', updatable = false, insertable = false)
+    Integer gamesPlayed
+
     Season getSeason() {
         return season
     }
@@ -36,5 +42,13 @@ class SeasonScore {
 
     Integer getCurrentScore() {
         return currentScore
+    }
+
+    Double getAverageScore() {
+        return averageScore
+    }
+
+    Integer getGamesPlayed() {
+        return gamesPlayed
     }
 }

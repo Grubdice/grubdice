@@ -1,7 +1,7 @@
 drop table season_scores;
 
-create materialized view season_scores (id, player_id, season_id, current_score) as
-  select nextval('season_score_id_seq'), r.player_id, g.season_id, sum(r.score)
+create materialized view season_scores (id, player_id, season_id, current_score, average_score, games_played) as
+  select nextval('season_score_id_seq'), r.player_id, g.season_id, sum(r.score), avg(r.score), count(*)
     from game_results r join games g on r.game_id = g.id group by r.player_id, g.season_id with data;
 
 CREATE OR REPLACE FUNCTION fun_refresh_season_score_materialized_view() returns trigger as
