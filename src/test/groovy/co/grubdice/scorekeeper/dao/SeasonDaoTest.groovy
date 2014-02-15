@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests
+import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 import static org.fest.assertions.Assertions.assertThat
@@ -22,6 +23,13 @@ class SeasonDaoTest extends AbstractTransactionalTestNGSpringContextTests {
     SeasonDao seasonDao
 
     def now = DateTime.now()
+
+    @BeforeMethod
+    public void setup() {
+        jdbcTemplate.update("truncate players cascade")
+        jdbcTemplate.update("truncate games cascade")
+        jdbcTemplate.update("truncate seasons cascade")
+    }
 
     @Test
     public void testFindingCurrentSeason() {
