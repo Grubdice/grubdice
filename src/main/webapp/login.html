@@ -10,6 +10,7 @@
 		<meta name="keywords" content="" />
 		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" rel="stylesheet" type="text/css" />
 		<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="css/responsivestyle.css" />
 		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery.dropotron.min.js"></script>
@@ -32,7 +33,78 @@
             });
         </script>
 		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
-        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--[if !IE]><!-->
+        <style>
+
+                /*
+                Max width before the table gets nasty.
+                */
+            @media
+            only screen and (max-width: 760px),
+            (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+                /* Force table to not be like tables anymore */
+                table, thead, tbody, th, td, tr {
+                    display: block;
+                }
+
+                /* Hide table headers*/
+                thead tr {
+                    position: absolute;
+                    top: -9999px;
+                    left: -9999px;
+                }
+
+                tr { border: 1px solid #ccc; }
+
+                td {
+                    /* Behave  like a "row" */
+                    border: none;
+                    border-bottom: 1px solid #eee;
+                    position: relative;
+                    padding-left: 50%;
+                }
+
+                td:before {
+                    /* Now like a table header */
+                    position: absolute;
+                    /* Top/left values mimic padding */
+                    top: 6px;
+                    left: 6px;
+                    width: 45%;
+                    padding-right: 10px;
+                    white-space: nowrap;
+                }
+
+                /*
+                Label the data
+                */
+                td:nth-of-type(1):before { content: "Rank"; }
+                td:nth-of-type(2):before { content: "Name"; }
+                td:nth-of-type(3):before { content: "Score"; }
+            }
+
+                /* Smartphones (portrait and landscape) ----------- */
+            @media only screen
+            and (min-device-width : 320px)
+            and (max-device-width : 480px) {
+                body {
+                    padding: 0;
+                    margin: 0;
+                    width: 320px; }
+            }
+
+                /* iPads (portrait and landscape) ----------- */
+            @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+                body {
+                    width: 495px;
+                }
+            }
+
+        </style>
+        <!--<![endif]-->
 	</head>
 	<body class="homepage">
 		
@@ -60,8 +132,14 @@
                 <article id="main" class="container special">
                     <header>
                         <div id="leaderboard"><h2>Check out the current world leaderboard below!</h2></div>
-                        <table class="responsive" id="scoreTable">
-                        </table>
+                        <div id="page-wrap">
+                            <table class="responsive" id="scoreTable">
+                                <thead><tr><th>Rank</th><th>Name</th><th>Score</th></tr></thead>
+                                <tbody id="scoreTableData">
+                                <!-- Score data goes here -->
+                                </tbody>
+                            </table>
+                        </div>
                     </header>
                     <p>
                 </article>

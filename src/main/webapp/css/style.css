@@ -497,6 +497,7 @@
 			cursor: url(images/cursor.cur);
 			cursor: url(images/cursor.png) x y, auto;
 			outline: 0;
+            margin: 2px;
 		}
 
 			.button:hover
@@ -1427,4 +1428,5 @@
 
 .newPlayerCell {
     display:table-cell;
+    padding:2px;
 }
