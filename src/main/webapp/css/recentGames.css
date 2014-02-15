@@ -1,0 +1,39 @@
+#recentGamesArea {
+    padding: 20px;
+    font-family: 'Source Sans Pro', sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.recentGame {
+    padding: 3px;
+    margin: 3px;
+    display:inline-block;
+    vertical-align: top;
+}
+
+.recentGameResults{
+    padding: 3px 3px 0 3px;
+    margin: 3px 3px 0 3px;
+}
+
+.recentGameResult {
+    font-weight: bold;
+}
+
+.recentGameTime {
+    font-size: 80%;
+    font-style: italic;
+}
+
+.recentGameTitle{
+    font-size: 2em;
+    font-weight: bold;
+    color: #0D5E85;
+    text-align: center;
+}
+
+.scoreTableArea {
+
+}
