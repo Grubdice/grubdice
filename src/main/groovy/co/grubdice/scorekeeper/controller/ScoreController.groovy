@@ -51,10 +51,10 @@ class ScoreController {
     @VisibleForTesting
     static void calculatePlacePositionsForScoreBoard(List<ExternalScoreBoard> returnList) {
         def placeHolder = [place: 0, score: 10000000]
-        returnList.each { ExternalScoreBoard scoreBoard ->
+        returnList.eachWithIndex { ExternalScoreBoard scoreBoard, int i ->
             if (scoreBoard.score < placeHolder.score) {
                 placeHolder.score = scoreBoard.score
-                placeHolder.place++
+                placeHolder.place = i + 1
             }
             scoreBoard.place = placeHolder.place
         }

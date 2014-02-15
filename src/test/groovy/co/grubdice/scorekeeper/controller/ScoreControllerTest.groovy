@@ -45,4 +45,11 @@ class ScoreControllerTest {
         ScoreController.calculatePlacePositionsForScoreBoard(updateList)
         assertThat(updateList.place).isEqualTo([1, 2])
     }
+
+    @Test
+    public void testUpdatePlacePositionsForScoreBoard_withTie_shouldSkip() throws Exception {
+        def updateList = [new ExternalScoreBoard("name1", 1500), new ExternalScoreBoard("name2", 1500), new ExternalScoreBoard("name3", 1400)]
+        ScoreController.calculatePlacePositionsForScoreBoard(updateList)
+        assertThat(updateList.place).isEqualTo([1, 1, 3])
+    }
 }
