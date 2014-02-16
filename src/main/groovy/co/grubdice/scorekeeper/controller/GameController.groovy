@@ -1,4 +1,5 @@
 package co.grubdice.scorekeeper.controller
+
 import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.SeasonDao
 import co.grubdice.scorekeeper.dao.helper.SeasonDaoHelper
@@ -10,6 +11,9 @@ import co.grubdice.scorekeeper.model.persistant.GameType
 import co.grubdice.scorekeeper.model.persistant.Season
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 
 @RequestMapping
@@ -24,7 +28,7 @@ class GameController {
     LeagueScoreEngine leagueScoreEngine
 
     @Autowired
-    GameDao gameDao
+    GameDao gameDao;
 
     @Autowired
     SeasonDao seasonDao
@@ -35,11 +39,27 @@ class GameController {
         return createGameFromScoreModel(model, season)
     }
 
-
     @RequestMapping(value = "/season/{seasonId}/game", method = RequestMethod.POST)
     def postNewGameScoreWithSeason(@PathVariable("seasonId") Integer seasonId, @RequestBody ScoreModel model){
         def season = SeasonDaoHelper.verifySeason(seasonDao.findOne(seasonId))
         return createGameFromScoreModel(model, season)
+    }
+
+    @RequestMapping(value = "/api/game",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public getPageOfGames(@RequestParam(required = false, defaultValue = "4") Integer s,
+                          @RequestParam(required = false, defaultValue = "0") Integer p) {
+        return retrievePageOfGamesSortedByDateDesc(s, p, SeasonDaoHelper.getCurrentSeason(seasonDao))
+    }
+
+    @RequestMapping(value="/season/{seasonId}/game", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public getPageOfGamesWithSeason(@PathVariable("seasonId") Integer seasonId,
+                                    @RequestParam(required = false, defaultValue = "4") Integer s,
+                                    @RequestParam(required = false, defaultValue = "0") Integer p){
+        retrievePageOfGamesSortedByDateDesc(s, p, seasonDao.findOne(seasonId))
+    }
+
+    private List<Game> retrievePageOfGamesSortedByDateDesc(Integer pageSize, Integer pageNumber, Season season){
+        return gameDao.findBySeason(season, new PageRequest(pageNumber, pageSize, Sort.Direction.DESC, "postingDate")).getContent();
     }
 
     public Game createGameFromScoreModel(ScoreModel model, Season season) {
