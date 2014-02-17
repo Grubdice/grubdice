@@ -22,14 +22,13 @@ class ScoreControllerTest {
     public void testGettingScoreBoardForSeason() throws Exception {
         scoreController.setSeasonScoreDao([
                 findAllBySeasonOrderByCurrentScore: { Season season ->
-                    [new SeasonScore(season, new Player("player1"), 2), new SeasonScore(season, new Player("player2"), 1)]
+                    [new SeasonScore(season, new Player("player1"), 2, 5.2, 45), new SeasonScore(season, new Player("player2"), 1, -0.45, 11)]
                 }
         ] as SeasonScoreDao)
         def board = scoreController.createScoreBoard(null)
         assertThat(board).hasSize(2)
-        assertThat(board.first().name).isEqualTo("player1")
-        assertThat(board.first().score).isEqualTo(1502)
-        assertThat(board.first().place).isEqualTo(1)
+        assertThat(board.get(0)).isEqualTo(new ExternalScoreBoard(name: "player1", score: 1502, place: 1, gamesPlayed: 45, averageScore: 5.2))
+        assertThat(board.get(1)).isEqualTo(new ExternalScoreBoard(name: "player2", score: 1501, place: 2, gamesPlayed: 11, averageScore: -0.45))
     }
 
     @Test

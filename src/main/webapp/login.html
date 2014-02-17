@@ -71,7 +71,7 @@
                     /* Now like a table header */
                     position: absolute;
                     /* Top/left values mimic padding */
-                    top: 6px;
+                    top: 0;
                     left: 6px;
                     width: 45%;
                     padding-right: 10px;
@@ -84,6 +84,8 @@
                 td:nth-of-type(1):before { content: "Rank"; }
                 td:nth-of-type(2):before { content: "Name"; }
                 td:nth-of-type(3):before { content: "Score"; }
+                td:nth-of-type(4):before { content: "Games Played"; }
+                td:nth-of-type(5):before { content: "Average Score"; }
             }
 
                 /* Smartphones (portrait and landscape) ----------- */
@@ -134,7 +136,7 @@
                         <div id="leaderboard"><h2>Check out the current world leaderboard below!</h2></div>
                         <div id="page-wrap">
                             <table class="responsive" id="scoreTable">
-                                <thead><tr><th>Rank</th><th>Name</th><th>Score</th></tr></thead>
+                                <thead><tr><th>Rank</th><th>Name</th><th>Score</th><th>Games Played</th><th>Average Score</th></tr></thead>
                                 <tbody id="scoreTableData">
                                 <!-- Score data goes here -->
                                 </tbody>
