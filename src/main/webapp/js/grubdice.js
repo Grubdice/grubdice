@@ -55,7 +55,13 @@ function updateScoreBoard(values) {
     for (var i = 0; i < values.length; i++) {
         var player = values[i];
         console.log(player);
-        add3RowToTable(table, '<div>' + player['place'] + '</div>', '<div>' + player['name'] + '</div>', "<div>" + player['score'] + "</div>");
+
+        var row = table.insertRow(-1);
+        row.insertCell(0).innerHTML = '<div>' + player['place'] + '</div>';
+        row.insertCell(1).innerHTML = '<div>' + player['name'] + '</div>';
+        row.insertCell(2).innerHTML = '<div>' + player['score'] + '</div>';
+        row.insertCell(3).innerHTML = '<div>' + player['gamesPlayed'] + '</div>';
+        row.insertCell(4).innerHTML = '<div>' + player['averageScore'].toFixed(3) + '</div>';
     }
 }
 
