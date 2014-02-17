@@ -40,7 +40,13 @@ class ScoreController {
         List<SeasonScore> seasonScores = seasonScoreDao.findAllBySeasonOrderByCurrentScore(season)
         def returnList = []
         seasonScores.eachWithIndex { it, index ->
-            returnList += new ExternalScoreBoard(name: it.player.name, score: it.currentScore + 1500, place: 0)
+            returnList += new ExternalScoreBoard(
+                    name: it.player.name,
+                    score: it.currentScore + 1500,
+                    place: 0,
+                    gamesPlayed: it.gamesPlayed,
+                    averageScore: it.averageScore
+            )
         }
 
         calculatePlacePositionsForScoreBoard(returnList)
