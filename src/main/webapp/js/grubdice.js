@@ -7,7 +7,7 @@ function addNewPlayerRowToGameTable() {
     $(table).append('<div class="enterPlayerRow">' +
         '<div class="newPlayerCell">'+numberOfRows+'</div>' +
         '<div class="newPlayerCell newPlayerTextArea"><div><input type="text" placeholder="name" /></div></div>' +
-        '<div class="newPlayerCell"><button type="button" class="fa fa-fighter-jet" onclick="addTiePlayer(this)"></button></div>' +
+        '<div class="newPlayerCell"><button type="button" class="fa fa-level-down" onclick="addTiePlayer(this)"></button></div>' +
         '</div>')
 }
 
