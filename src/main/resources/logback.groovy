@@ -13,7 +13,7 @@ appender("STDOUT", ConsoleAppender) {
 }
 
 appender("LE", LogentriesAppender) {
-  token = "a00f98cc-5fa8-4cdc-94e7-8ca97afdbe94"
+  token = "307aa4af-9c1d-494d-96d2-88181a5e233b"
   ssl = "False"
   facility = "USER"
   layout(PatternLayout) {
@@ -24,7 +24,7 @@ appender("LE", LogentriesAppender) {
 appender("ROOT-LOG", RollingFileAppender) {
     file = System.getProperty("catalina.base") + "/logs/grub-dice.log"
     rollingPolicy(TimeBasedRollingPolicy) {
-        fileNamePattern = "grubdice.%d{yyyy-MM-dd}.log"
+        fileNamePattern = System.getProperty("catalina.base") + "/logs/grub-dice.%d{yyyy-MM-dd}.log"
         maxHistory = 30
     }
     encoder(PatternLayoutEncoder) {
