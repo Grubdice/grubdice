@@ -13,12 +13,16 @@ appender("STDOUT", ConsoleAppender) {
 }
 
 appender("LE", LogentriesAppender) {
-  token = "307aa4af-9c1d-494d-96d2-88181a5e233b"
-  ssl = "False"
-  facility = "USER"
-  layout(PatternLayout) {
-    pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-  }
+    if( hostname =~ /dev/) {
+        token = "307aa4af-9c1d-494d-96d2-88181a5e233b"
+    } else { 
+        token = "5483973c-3375-47d3-9eed-33b2553090a0"
+    }
+    ssl = "False"
+    facility = "USER"
+    layout(PatternLayout) {
+        pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    }
 }
 
 appender("ROOT-LOG", RollingFileAppender) {
