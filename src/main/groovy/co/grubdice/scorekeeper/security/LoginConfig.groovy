@@ -51,6 +51,14 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
                     .attributeExchange("https://www.google.com/.*")
                         .attribute("email")
                             .type("http://axschema.org/contact/email")
+                            .required(true)
+                            .and()
+                        .attribute("firstname")
+                            .type("http://axschema.org/namePerson/first")
+                            .required(true)
+                            .and()
+                        .attribute("lastname")
+                            .type("http://axschema.org/namePerson/last")
                             .required(true);
     }
 

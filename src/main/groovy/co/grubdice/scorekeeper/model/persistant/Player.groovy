@@ -15,6 +15,12 @@ class Player {
     @Column(unique = true, name = 'player_name')
     String name
 
+    @Column(unique = true, name ='identity_url')
+    String identityUrl
+
+    @Column(unique = true, name = 'email_address')
+    String emailAddress
+
     @OneToMany(mappedBy = "player")
     List<NickName> nickNames
 }
