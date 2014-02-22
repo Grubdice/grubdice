@@ -15,16 +15,17 @@
         <link rel="stylesheet" type="text/css" href="css/recentGames.css"/>
 		<link rel="stylesheet" type="text/css" href="css/buttonstyle.css" />
 		<link rel="stylesheet" type="text/css" href="css/responsivestyle.css" />
-		<script type="text/javascript" src="js/modernizr.custom.79639.js"></script>
-		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery-1.11.0.js"></script>
 		<script src="js/jquery.dropotron.min.js"></script>
         <script src="js/moment.min.js" type="text/javascript"></script>
 		<script src="js/skel.min.js"></script>
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
         <script src="js/grubdice.js"></script>
+        <script src="js/typeahead.bundle.js"></script>
         <script type="text/javascript" src="js/twitterFetcher_v10_min.js"></script>
         <script src="js/modernizr.custom.63321.js"></script>
+        <script src="js/handlebars-v1.3.0.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="css/skel-noscript.css" />
 			<link rel="stylesheet" href="css/style.css" />
@@ -37,6 +38,24 @@
                 clearGameTable();
                 refreshScoreBoard();
                 updateRecentGames();
+
+                var players = new Bloodhound({
+                    datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    prefetch: '/api/player/'
+                });
+
+                players.initialize();
+
+                $('.typeahead').typeahead(null, {
+                    displayKey: 'name',
+                    source: players.ttAdapter(),
+                    templates: {
+                        suggestion: Handlebars.compile([
+                            '<div style="background-color:#fff;" ><p style="display: inline;"><strong>{{name}}</strong> – {{email}}</p></div>'
+                        ].join(''))
+                    }
+                });
             });
         </script>
 

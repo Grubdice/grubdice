@@ -6,7 +6,7 @@ function addNewPlayerRowToGameTable() {
 
     $(table).append('<div class="enterPlayerRow">' +
         '<div class="newPlayerCell">'+numberOfRows+'</div>' +
-        '<div class="newPlayerCell newPlayerTextArea"><div><input type="text" placeholder="name" /></div></div>' +
+        '<div class="newPlayerCell newPlayerTextArea"><div><input class="typeahead" type="text" placeholder="name" /></div></div>' +
         '<div class="newPlayerCell"><button type="button" class="fa fa-level-down" onclick="addTiePlayer(this)"></button></div>' +
         '</div>')
 }
@@ -25,7 +25,7 @@ function add3RowToTable(table, cell1Contents, cell2Contents, cell3Contents) {
 }
 
 function addTiePlayer(reference) {
-    $(reference).parents('div').siblings('.newPlayerTextArea').first().append('<div><input type="text" placeholder="name" /></div>');
+    $(reference).parents('div').siblings('.newPlayerTextArea').first().append('<div><input class="typeahead" type="text" placeholder="name" /></div>');
 }
 
 function publicRefreshScoreBoard() {
@@ -54,7 +54,6 @@ function updateScoreBoard(values) {
 
     for (var i = 0; i < values.length; i++) {
         var player = values[i];
-        console.log(player);
 
         var row = table.insertRow(-1);
         row.insertCell(0).innerHTML = player['place'];

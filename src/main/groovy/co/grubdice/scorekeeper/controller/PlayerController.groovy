@@ -2,29 +2,28 @@ package co.grubdice.scorekeeper.controller
 import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.model.external.ExternalPlayer
 import co.grubdice.scorekeeper.model.persistant.Player
+import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
-import javax.transaction.Transactional
-
 @RequestMapping("/api/player")
 @RestController
+@Slf4j
 class PlayerController {
 
     @Autowired
     PlayerDao playerDao
 
     @RequestMapping(method = RequestMethod.POST)
-    @Transactional
-    public createPlayer(@RequestBody Player player) {
+    public def createPlayer(@RequestBody Player player) {
         playerDao.save(new Player(player.name))
     }
 
-    @RequestMapping(value = "/example", method = RequestMethod.GET)
-    public showExample() {
-        return new ExternalPlayer("Grub Dice")
+    @RequestMapping(method = RequestMethod.GET)
+    public def getUserForTypeAhead() {
+        return playerDao.findAll().collect { player -> new ExternalPlayer(player) }
     }
 }
