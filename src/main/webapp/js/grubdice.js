@@ -79,7 +79,9 @@ function performPostAndClearTable() {
     json['cd-dropdown'] = $('#cd-dropdown').val();
     console.log(json);
 
-    if(numberOfPlayers >= 4){
+    if(numberOfPlayers > 7) {
+        alert("This game is invalid, due to there being space for 2 games");
+    }  else if(numberOfPlayers >= 4){
         $.ajax({
             type: "POST",
             url: "/api/game",
@@ -100,9 +102,7 @@ function performPostAndClearTable() {
 }
 
 function reportNewGameError(jqXHR, textStatus, errorThrown){
-    alert(textStatus);
-    console.log(jqXHR);
-    console.log(errorThrown);
+    alert(jQuery.parseJSON(jqXHR.responseText).error);
 }
 
 function clearGameTable() {

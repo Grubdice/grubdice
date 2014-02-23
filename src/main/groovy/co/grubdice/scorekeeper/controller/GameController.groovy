@@ -5,6 +5,8 @@ import co.grubdice.scorekeeper.dao.SeasonDao
 import co.grubdice.scorekeeper.dao.helper.SeasonDaoHelper
 import co.grubdice.scorekeeper.engine.LeagueScoreEngine
 import co.grubdice.scorekeeper.engine.LudicrousScoreEngine
+import co.grubdice.scorekeeper.exception.NotFoundException
+import co.grubdice.scorekeeper.exception.PlayerNotFoundException
 import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.persistant.Game
 import co.grubdice.scorekeeper.model.persistant.GameType
@@ -13,6 +15,7 @@ import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 
@@ -76,5 +79,12 @@ class GameController {
         } else {
             throw new RuntimeException("This shouldn't ever happen... WTF")
         }
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @RequestMapping(produces = "application/json")
+    public Map handleBadUserException(PlayerNotFoundException ex) {
+        return [ error: ex.textMessage as String ]
     }
 }
