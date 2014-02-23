@@ -11,19 +11,6 @@ function addNewPlayerRowToGameTable() {
         '</div>')
 }
 
-function add3RowToTable(table, cell1Contents, cell2Contents, cell3Contents) {
-    var row = table.insertRow(-1);
-
-    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    var cell3 = row.insertCell(2);
-
-    cell1.innerHTML = cell1Contents;
-    cell2.innerHTML = cell2Contents;
-    cell3.innerHTML = cell3Contents;
-}
-
 function addTiePlayer(reference) {
     $(reference).parents('div').siblings('.newPlayerTextArea').first().append('<div><input class="typeahead" type="text" placeholder="name" /></div>');
 }
@@ -68,7 +55,8 @@ function performPostAndClearTable() {
     var json = { };
     var nodeList = $('#newGameTable').children('.enterPlayerRow');
 
-    var gameResults = new Array()
+    var gameResults = new Array();
+    var numberOfPlayers = 0;
     for (var i = 0; i < nodeList.length; ++i) {
         var textBoxes = nodeList[i].getElementsByTagName("input");
         var result = {}
@@ -81,8 +69,9 @@ function performPostAndClearTable() {
         }
 
         if(nameResults.length != 0){
-            result['name'] = nameResults
-            gameResults.push(result)
+            result['name'] = nameResults;
+            gameResults.push(result);
+            numberOfPlayers++;
         }
     }
 
@@ -90,20 +79,24 @@ function performPostAndClearTable() {
     json['cd-dropdown'] = $('#cd-dropdown').val();
     console.log(json);
 
-    $.ajax({
-        type: "POST",
-        url: "/api/game",
-        processData: false,
-        data: JSON.stringify(json),
-        success: function () {
-            alert("Booyah! Success!");
-            refreshScoreBoard();
-            updateRecentGames();
-            clearGameTable();
-        },
-        error: reportNewGameError,
-        contentType: "application/json"
-    });
+    if(numberOfPlayers >= 4){
+        $.ajax({
+            type: "POST",
+            url: "/api/game",
+            processData: false,
+            data: JSON.stringify(json),
+            success: function () {
+                alert("Booyah! Success!");
+                refreshScoreBoard();
+                updateRecentGames();
+                clearGameTable();
+            },
+            error: reportNewGameError,
+            contentType: "application/json"
+        });
+    } else {
+        alert("You need at least 4 players");
+    }
 }
 
 function reportNewGameError(jqXHR, textStatus, errorThrown){
