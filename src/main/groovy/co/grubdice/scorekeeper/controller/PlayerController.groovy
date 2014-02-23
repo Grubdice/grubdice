@@ -17,7 +17,7 @@ class PlayerController {
 
     @RequestMapping(method = RequestMethod.POST)
     public def createPlayer(@RequestBody Player player) {
-        if(!player.name?.isEmpty() || player.emailAddress?.isEmpty()){
+        if(player.name?.isEmpty() || player.emailAddress?.isEmpty()){
             throw new InvalidPlayerException(player)
         } else {
             return playerDao.save(new Player(name: player.name, emailAddress: player.emailAddress))

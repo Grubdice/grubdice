@@ -56,6 +56,6 @@ class PlayerControllerIntegrationTest {
     public void testSubmittingAnInvalidUser() throws Exception {
         this.mockMvc.perform(post("/api/player/").content('{"name":"asdf","emailAddress":""}').contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotAcceptable())
-                .andExpect(jsonPath('$.badValue').value("errorMessage"))
+                .andExpect(jsonPath('$.badValue').value("There was an error while trying to decode Email Address"))
     }
 }

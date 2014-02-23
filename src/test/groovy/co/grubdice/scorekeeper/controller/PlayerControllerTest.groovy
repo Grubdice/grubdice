@@ -21,7 +21,7 @@ class PlayerControllerTest {
         mockPlayerDao.demand.save { }
 
         PlayerController controller = createControllerForMock()
-        controller.createPlayer(new Player(name: 'test name'))
+        controller.createPlayer(new Player(name: 'test name', emailAddress: 'test@mock.com'))
 
         mockPlayerDao.verify playerDoa
     }
