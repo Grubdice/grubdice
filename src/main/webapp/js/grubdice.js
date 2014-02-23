@@ -124,7 +124,8 @@ function clearGameTable() {
 function createNewPlayer() {
     var playerName = {};
     playerName['name'] = document.getElementById("newPlayer").value;
-    console.log(playerName);
+    playerName['emailAddress'] = document.getElementById("newPlayerEmail").value;
+    console.log(JSON.stringify(playerName));
     $.ajax({
         type: "POST",
         url: "/api/player",
@@ -133,6 +134,9 @@ function createNewPlayer() {
         success: function() {
             alert("Player has been added");
             document.getElementById("newPlayer").value = "";
+        },
+        error: function(xhr) {
+            alert("The player was not added because: " + jQuery.parseJSON(xhr.responseText).badValue)
         },
         contentType: "application/json"
     });
