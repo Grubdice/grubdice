@@ -69,6 +69,11 @@ dependencies {
     compile "org.springframework:spring-orm:${versions['springVersion']}"
     compile "org.springframework:spring-webmvc:${versions['springVersion']}"
 
+    //Google
+    compile 'com.google.api-client:google-api-client:1.17.0-rc',
+            'com.google.apis:google-api-services-oauth2:v2-rev64-1.17.0-rc',
+            'com.google.http-client:google-http-client-jackson2:1.17.0-rc'
+
     //Spring security
     compile 'org.springframework.security:spring-security-web:3.2.0.RELEASE'
     compile 'org.springframework.security:spring-security-config:3.2.0.RELEASE'

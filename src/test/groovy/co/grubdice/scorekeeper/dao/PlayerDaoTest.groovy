@@ -51,8 +51,8 @@ class PlayerDaoTest extends AbstractTransactionalTestNGSpringContextTests {
 
     @Test
     public void testFindingUserByIdentityUrl() throws Exception {
-        playerDao.save(new Player(name: "player 1", identityUrl: "something"))
-        def player = playerDao.findByIdentityUrl("something")
+        playerDao.save(new Player(name: "player 1", googleId: "something"))
+        def player = playerDao.findByGoogleId("something")
         assertThat(player).isNotNull()
     }
 

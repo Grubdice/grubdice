@@ -1,0 +1,74 @@
+<!-- The top of file index.html -->
+<html itemscope itemtype="http://schema.org/Article">
+<head>
+    <!-- BEGIN Pre-requisites -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+    </script>
+    <script type="text/javascript">
+        (function () {
+            var po = document.createElement('script');
+            po.type = 'text/javascript';
+            po.async = true;
+            po.src = 'https://plus.google.com/js/client:plusone.js?onload=start';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(po, s);
+        })();
+    </script>
+    <!-- Last part of BODY element in file index.html -->
+    <script type="text/javascript">
+        function signInCallback(authResult) {
+            if (authResult['code']) {
+
+                // Hide the sign-in button now that the user is authorized, for example:
+                $('#signinButton').attr('style', 'display: none');
+
+                console.log(authResult)
+                var googleAuth = {};
+                googleAuth['code'] = authResult['code'];
+                // Send the code to the server
+                $.ajax({
+                    type: 'POST',
+                    url: '/login',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        // Handle or verify the server response if necessary.
+
+                        // Prints the list of people that the user has allowed the app to know
+                        // to the console.
+                        console.log(result);
+                        if (result['profile'] && result['people']) {
+                            $('#results').html('Hello ' + result['profile']['displayName'] + '. You successfully made a server side call to people.get and people.list');
+                        } else {
+                            $('#results').html('Failed to make a server-side call. Check your configuration and console.');
+                        }
+                    },
+                    processData: false,
+                    data: JSON.stringify(googleAuth)
+                });
+            } else if (authResult['error']) {
+                // There was an error.
+                // Possible error codes:
+                //   "access_denied" - User denied access to your app
+                //   "immediate_failed" - Could not automatially log in the user
+                // console.log('There was an error: ' + authResult['error']);
+            }
+        }
+    </script>
+    <!-- END Pre-requisites -->
+</head>
+<body>
+<!-- Add where you want your sign-in button to render -->
+<div id="signinButton">
+             <span class="g-signin"
+                   data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read"
+                   data-clientid="473871335789-pvhdjn9l858gi5ant19g4l9cp6lkd4rr.apps.googleusercontent.com"
+                   data-redirecturi="postmessage"
+                   data-accesstype="offline"
+                   data-cookiepolicy="single_host_origin"
+                   data-callback="signInCallback">
+             </span>
+</div>
+<div id="result"></div>
+</body>
+<!-- ... -->
+</html>
