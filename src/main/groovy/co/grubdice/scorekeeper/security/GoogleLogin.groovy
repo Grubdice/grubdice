@@ -61,33 +61,8 @@ class GoogleLogin {
             throw new NotAuthorizedUser(userMessage: "Token's client ID does not match app's.")
         }
     }
-//
-//    @ExceptionHandler(NotAuthorizedUser.class)
-//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-//    public @ResponseBody
-//    showUserNotAuthorized(NotAuthorizedUser ex) {
-//        return ['error': ex.userMessage]
-//    }
-//
-//    @ExceptionHandler(TokenResponseException.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public @ResponseBody
-//    showInternalError_tokenResponseBad() {
-//        return ['error': "Failed to upgrade the authorization code."]
-//    }
-//
-//    @ExceptionHandler(IOException.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public @ResponseBody
-//    showInternalError_ioError(IOException ioe) {
-//        return ['error': "Failed to read token data from Google. " + ioe.getMessage()]
-//    }
 
     class NotAuthorizedUser extends RuntimeException {
-        def userMessage = ''
-    }
-
-    class OhFuckException extends RuntimeException {
         def userMessage = ''
     }
 
