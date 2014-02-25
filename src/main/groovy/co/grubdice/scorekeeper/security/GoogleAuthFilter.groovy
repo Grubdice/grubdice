@@ -1,5 +1,4 @@
 package co.grubdice.scorekeeper.security
-
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
@@ -22,11 +21,10 @@ class GoogleAuthFilter extends AbstractAuthenticationProcessingFilter implements
     JsonSlurper slurper
     SecureUserDetailsService userDetailsService
 
-
-    public GoogleAuthFilter(SecureUserDetailsService userDetailsService) {
+    public GoogleAuthFilter(SecureUserDetailsService userDetailsService, String clientSecret, String clientId) {
         super("/login")
         this.userDetailsService = userDetailsService
-        googleLogin = new GoogleLogin()
+        googleLogin = new GoogleLogin(clientSecret, clientId)
         slurper = new JsonSlurper()
 
     }

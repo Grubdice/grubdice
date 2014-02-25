@@ -1,5 +1,4 @@
 package co.grubdice.scorekeeper.security
-
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse
@@ -13,7 +12,13 @@ import groovy.util.logging.Slf4j
 @Slf4j
 class GoogleLogin {
 
+    String CLIENT_ID, CLIENT_SECRET
 
+    GoogleLogin(String clientSecret, String clientId) {
+        CLIENT_ID = clientId
+        CLIENT_SECRET = clientSecret
+        log.info("Client Secret: " + CLIENT_SECRET)
+    }
 
     public authToGoogleServers(String code) {
         def jacksonFactory = new JacksonFactory()

@@ -1,6 +1,7 @@
 package co.grubdice.scorekeeper.security
 import co.grubdice.scorekeeper.config.DataSourceConfig
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
@@ -28,10 +29,17 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
 
     static public final String TOKEN_KEY = "tie 'ol yeller"
 
+
+    @Value('${client_secret}')
+    String clientSecret
+
+    @Value('${client_id}')
+    String clientId
+
     @Override
     protected void configure(HttpSecurity http) {
 
-        def googleFilter = new GoogleAuthFilter(secureUserDetailsService)
+        def googleFilter = new GoogleAuthFilter(secureUserDetailsService, clientSecret, clientId)
         http
             .csrf().disable()
             .authorizeRequests()
