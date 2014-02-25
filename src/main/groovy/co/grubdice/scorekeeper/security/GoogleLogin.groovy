@@ -17,7 +17,7 @@ class GoogleLogin {
     GoogleLogin(String clientSecret, String clientId) {
         CLIENT_ID = clientId
         CLIENT_SECRET = clientSecret
-        log.info("Client Secret: " + CLIENT_SECRET)
+        log.info("Client Id: " + CLIENT_ID)
     }
 
     public authToGoogleServers(String code) {
