@@ -13,8 +13,8 @@ import groovy.util.logging.Slf4j
 @Slf4j
 class GoogleLogin {
 
-    private final String CLIENT_ID = ""
-    private final String CLIENT_SECRET = ""
+    private final String CLIENT_ID = "473871335789-pvhdjn9l858gi5ant19g4l9cp6lkd4rr.apps.googleusercontent.com"
+    private final String CLIENT_SECRET = "cKSmQjxKhxX9AqXX3yt0BtFO"
 
     public authToGoogleServers(String code) {
         def jacksonFactory = new JacksonFactory()
