@@ -4,6 +4,7 @@ import co.grubdice.scorekeeper.dao.PlayerDao
 import co.grubdice.scorekeeper.dao.SeasonDao
 import co.grubdice.scorekeeper.dao.SeasonScoreDao
 import co.grubdice.scorekeeper.engine.LeagueScoreEngineImpl
+import co.grubdice.scorekeeper.engine.LudicrousScoreEngine
 import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.external.ScoreResult
 import co.grubdice.scorekeeper.model.persistant.Game
@@ -99,6 +100,24 @@ class GameControllerTest {
         assertThat(recentGames.size()).isEqualTo(5)
 
         gameDaoMockFor.verify(gameDaoProxy)
+    }
+
+    @Test
+    public void testPostNewGame() throws Exception {
+        GameController controller = new GameController()
+        controller.setSeasonDao( [ findCurrentSeason: { return new Season() } ] as SeasonDao )
+        controller.setLudicrousScoreEngine( [ createGameFromScoreModel: { model, season -> return new Game(id: -1) } ] as LudicrousScoreEngine )
+        def game = controller.postNewGameScore(new ScoreModel(gameType: GameType.LUDICROUS))
+        assertThat(game.id).isEqualTo(-1)
+    }
+
+    @Test
+    public void testPostNewGameScoreWithSeason() throws Exception {
+        GameController controller = new GameController()
+        controller.setSeasonDao( [ findOne: { return new Season() } ] as SeasonDao )
+        controller.setLudicrousScoreEngine( [ createGameFromScoreModel: { model, season -> return new Game(id: -1) } ] as LudicrousScoreEngine )
+        def game = controller.postNewGameScoreWithSeason(-1, new ScoreModel(gameType: GameType.LUDICROUS))
+        assertThat(game.id).isEqualTo(-1)
     }
 
     private GameController createScoreControllerFromMock() {

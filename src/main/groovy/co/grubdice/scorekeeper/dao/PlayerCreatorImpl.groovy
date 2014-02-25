@@ -1,6 +1,7 @@
 package co.grubdice.scorekeeper.dao
 import co.grubdice.scorekeeper.model.persistant.Player
 import co.grubdice.scorekeeper.security.GoogleToken
+import com.google.common.annotations.VisibleForTesting
 import groovy.json.JsonBuilder
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,7 +30,7 @@ class PlayerCreatorImpl implements PlayerCreator {
         return player
     }
 
-    private Player createUserToStore(GoogleToken token) {
+    Player createUserToStore(GoogleToken token) {
         def player = playerDao.findByEmailAddress(token.getEmail())
 
         if (null == player) {
@@ -40,7 +41,8 @@ class PlayerCreatorImpl implements PlayerCreator {
         return player
     }
 
-    static def updatePlayerFromToken(GoogleToken token, Player player) {
+    @VisibleForTesting
+    static void updatePlayerFromToken(GoogleToken token, Player player) {
         player.setName(token.getName())
         player.setEmailAddress(token.getEmail())
         player.setGoogleId(token.getGoogleId())

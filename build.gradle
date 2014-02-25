@@ -4,6 +4,7 @@ apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'tomcat'
 apply plugin: 'flyway'
+apply plugin: "jacoco"
 
 def versions = [
         springVersion: '4.0.1.RELEASE',
@@ -129,4 +130,8 @@ task createDbMigrationScript() << {
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.10'
+}
+
+jacoco {
+    toolVersion = "0.6.2.201302030002"
 }
