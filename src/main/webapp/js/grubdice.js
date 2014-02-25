@@ -1,3 +1,12 @@
+var players = new Bloodhound({
+    datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    prefetch: '/api/player/'
+});
+
+players.initialize();
+
+
 function addNewPlayerRowToGameTable() {
     var table = $("#newGameTable");
 
@@ -11,8 +20,20 @@ function addNewPlayerRowToGameTable() {
         '</div>')
 }
 
+function setTypeAhead() {
+    $('.typeahead').typeahead(null, {
+        displayKey: 'name',
+        source: players.ttAdapter(),
+        templates: {
+            suggestion: Handlebars.compile([
+                '<div style="background-color:#fff;" ><p style="display: inline;"><strong>{{name}}</strong> – {{email}}</p></div>'
+            ].join(''))
+        }
+    });
+}
 function addTiePlayer(reference) {
     $(reference).parents('div').siblings('.newPlayerTextArea').first().append('<div><input class="typeahead" type="text" placeholder="name" /></div>');
+    setTypeAhead();
 }
 
 function publicRefreshScoreBoard() {
@@ -78,6 +99,7 @@ function performPostAndClearTable() {
     json['results'] = gameResults;
     json['cd-dropdown'] = $('#cd-dropdown').val();
     console.log(json);
+    setTypeAhead();
 
     if(numberOfPlayers > 7) {
         alert("This game is invalid, due to there being space for 2 games");

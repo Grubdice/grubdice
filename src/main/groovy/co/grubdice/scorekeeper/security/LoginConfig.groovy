@@ -37,6 +37,8 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers("/api/public/**").permitAll()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/css/**").permitAll()
+                .antMatchers("/js/**").permitAll()
                 .antMatchers("/alt_login.html").permitAll()
                 .antMatchers("/index.html").permitAll()
                 .antMatchers('/api/**').authenticated()

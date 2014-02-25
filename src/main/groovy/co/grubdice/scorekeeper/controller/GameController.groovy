@@ -42,7 +42,7 @@ class GameController {
         return createGameFromScoreModel(model, season)
     }
 
-    @RequestMapping(value = "/season/{seasonId}/game", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/season/{seasonId}/game", method = RequestMethod.POST)
     def postNewGameScoreWithSeason(@PathVariable("seasonId") Integer seasonId, @RequestBody ScoreModel model){
         def season = SeasonDaoHelper.verifySeason(seasonDao.findOne(seasonId))
         return createGameFromScoreModel(model, season)
@@ -54,7 +54,7 @@ class GameController {
         return retrievePageOfGamesSortedByDateDesc(s, p, SeasonDaoHelper.getCurrentSeason(seasonDao))
     }
 
-    @RequestMapping(value="/season/{seasonId}/game", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/api/season/{seasonId}/game", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public getPageOfGamesWithSeason(@PathVariable("seasonId") Integer seasonId,
                                     @RequestParam(required = false, defaultValue = "4") Integer s,
                                     @RequestParam(required = false, defaultValue = "0") Integer p){
