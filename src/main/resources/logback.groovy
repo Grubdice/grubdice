@@ -37,6 +37,7 @@ appender("ROOT-LOG", RollingFileAppender) {
 }
 
 logger("org.hibernate", Level.WARN)
+logger("org.apache.http", Level.WARN)
 
 if(System.getProperty("spring.profiles.active")?.equalsIgnoreCase("prod")){
     root(Level.INFO, ["STDOUT", "ROOT-LOG", "LE"])

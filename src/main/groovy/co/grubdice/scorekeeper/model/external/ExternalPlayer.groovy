@@ -1,8 +1,12 @@
 package co.grubdice.scorekeeper.model.external
 
-import groovy.transform.TupleConstructor
+import co.grubdice.scorekeeper.model.persistant.Player
 
-@TupleConstructor
 class ExternalPlayer {
     String name
+    String email
+    ExternalPlayer(Player player) {
+        name = player.name
+        email = player.emailAddress
+    }
 }
