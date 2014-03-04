@@ -48,7 +48,7 @@ class GameController {
         return createGameFromScoreModel(model, season)
     }
 
-    @RequestMapping(value = "/api/game",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = ["/api/game", "/api/public/game"],method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public getPageOfGames(@RequestParam(required = false, defaultValue = "4") Integer s,
                           @RequestParam(required = false, defaultValue = "0") Integer p) {
         return retrievePageOfGamesSortedByDateDesc(s, p, SeasonDaoHelper.getCurrentSeason(seasonDao))

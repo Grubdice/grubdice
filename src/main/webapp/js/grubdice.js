@@ -1,7 +1,7 @@
 var players = new Bloodhound({
     datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    prefetch: '/api/player/'
+    prefetch: '/api/public/player'
 });
 
 players.initialize();
@@ -40,16 +40,6 @@ function publicRefreshScoreBoard() {
     $.ajax({
         type: "GET",
         url: "/api/public/score",
-        processData: false,
-        success: updateScoreBoard,
-        dataType: 'JSON'
-    });
-}
-
-function refreshScoreBoard() {
-    $.ajax({
-        type: "GET",
-        url: "/api/score",
         processData: false,
         success: updateScoreBoard,
         dataType: 'JSON'
@@ -111,7 +101,7 @@ function performPostAndClearTable() {
             data: JSON.stringify(json),
             success: function () {
                 alert("Booyah! Success!");
-                refreshScoreBoard();
+                publicRefreshScoreBoard();
                 updateRecentGames();
                 clearGameTable();
             },
@@ -158,7 +148,7 @@ function createNewPlayer() {
 }
 
 function updateRecentGames() {
-    $.getJSON("/api/game", function(games) {
+    $.getJSON("/api/public/game", function(games) {
         var recentGamesHtml = '';
         $.each(games, function(i, game) {
             recentGamesHtml += '<div class="recentGame"><ul class="recentGameResults">';
