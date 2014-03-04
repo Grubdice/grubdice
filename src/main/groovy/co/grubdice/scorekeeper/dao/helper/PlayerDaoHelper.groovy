@@ -6,7 +6,7 @@ import co.grubdice.scorekeeper.model.persistant.Player
 
 class PlayerDaoHelper {
 
-    public static void verifyPlayerExistst(Player player) {
+    public static void verifyPlayerExists(Player player) {
         if(!player) {
             throw new PlayerNotFoundException()
         }

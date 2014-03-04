@@ -1,6 +1,7 @@
 package co.grubdice.scorekeeper.security
 import co.grubdice.scorekeeper.config.DataSourceConfig
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository
+import org.springframework.security.web.authentication.switchuser.SwitchUserFilter
 
 import javax.sql.DataSource
 
@@ -22,36 +24,43 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     DataSource dataSource
 
-    final String token_key = "tie 'ol yeller"
+    @Autowired
+    SecureUserDetailsService secureUserDetailsService
+
+    static public final String TOKEN_KEY = "tie 'ol yeller"
+
+
+    @Value('${client_secret}')
+    String clientSecret
+
+    @Value('${client_id}')
+    String clientId
 
     @Override
     protected void configure(HttpSecurity http) {
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                    .antMatchers("/resources/**").permitAll()
-                    .antMatchers("/js/**").permitAll()
-                    .antMatchers("/css/**").permitAll()
-                    .antMatchers("/images/**").permitAll()
-                    .antMatchers("/api/public/**").permitAll()
-                    .antMatchers("favicon.ico").permitAll()
-                    .antMatchers('/api/**').authenticated()
-                    .anyRequest().authenticated()
-                    .and()
-                .rememberMe()
-                    .tokenRepository(tokenRepo())
-                    .rememberMeServices(rememberMeServices())
-                    .key(token_key)
 
+        def googleFilter = new GoogleAuthFilter(secureUserDetailsService, clientSecret, clientId)
+        http
+            .csrf().disable()
+            .authorizeRequests()
+                .antMatchers("/api/public/**").permitAll()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/css/**").permitAll()
+                .antMatchers("/js/**").permitAll()
+                .antMatchers("/alt_login.html").permitAll()
+                .antMatchers("/index.html").permitAll()
+                .antMatchers('/api/**').authenticated()
+                .anyRequest().authenticated()
                 .and()
-                .openidLogin()
-                    .loginPage("/login.html")
-                    .permitAll()
-                    .authenticationUserDetailsService(secureUserDetailsService())
-                    .attributeExchange("https://www.google.com/.*")
-                        .attribute("email")
-                            .type("http://axschema.org/contact/email")
-                            .required(true);
+            .rememberMe()
+                .tokenRepository(tokenRepo())
+                .rememberMeServices(rememberMeServices())
+                .key(TOKEN_KEY)
+                .and()
+            .getOrApply(new GoogleLoginConfigurer<HttpSecurity>(googleFilter)).and()
+            .addFilterAfter(googleFilter, SwitchUserFilter.class)
+
+
     }
 
     @Autowired
@@ -63,14 +72,10 @@ class LoginConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PersistentTokenBasedRememberMeServices rememberMeServices() {
-        def services = new PersistentTokenBasedRememberMeServices(token_key, secureUserDetailsService(), tokenRepo())
+        def services = new PersistentTokenBasedRememberMeServices(TOKEN_KEY, secureUserDetailsService, tokenRepo())
         services.setAlwaysRemember(true)
+        //services.setCookieName("GRUBDICE_TOKEN")
         return services
-    }
-
-    @Bean
-    public SecureUserDetailsService secureUserDetailsService() {
-        new SecureUserDetailsServiceImpl()
     }
 
     @Bean(name = 'tokenRepo')

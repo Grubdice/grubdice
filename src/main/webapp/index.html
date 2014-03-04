@@ -15,16 +15,17 @@
         <link rel="stylesheet" type="text/css" href="css/recentGames.css"/>
 		<link rel="stylesheet" type="text/css" href="css/buttonstyle.css" />
 		<link rel="stylesheet" type="text/css" href="css/responsivestyle.css" />
-		<script type="text/javascript" src="js/modernizr.custom.79639.js"></script>
-		<script src="js/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script src="js/jquery.dropotron.min.js"></script>
         <script src="js/moment.min.js" type="text/javascript"></script>
 		<script src="js/skel.min.js"></script>
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
-        <script src="js/grubdice.js"></script>
+        <script src="js/typeahead.bundle.js"></script>
         <script type="text/javascript" src="js/twitterFetcher_v10_min.js"></script>
         <script src="js/modernizr.custom.63321.js"></script>
+        <script src="js/handlebars-v1.3.0.js"></script>
+        <script src="js/grubdice.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="css/skel-noscript.css" />
 			<link rel="stylesheet" href="css/style.css" />
@@ -37,6 +38,7 @@
                 clearGameTable();
                 refreshScoreBoard();
                 updateRecentGames();
+                setTypeAhead();
             });
         </script>
 
@@ -113,9 +115,31 @@
             }
 
         </style>
+
+
+        <script type="text/javascript">
+            (function () {
+                var po = document.createElement('script');
+                po.type = 'text/javascript';
+                po.async = true;
+                po.src = 'https://plus.google.com/js/client:plusone.js?onload=start';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(po, s);
+            })();
+        </script>
         <!--<![endif]-->
 	</head>
 	<body class="homepage">
+    <div id="signinButton" style="display: none;">
+             <span class="g-signin"
+                   data-scope="https://www.googleapis.com/auth/plus.login"
+                   data-clientid="473871335789-pvhdjn9l858gi5ant19g4l9cp6lkd4rr.apps.googleusercontent.com"
+                   data-redirecturi="postmessage"
+                   data-accesstype="offline"
+                   data-cookiepolicy="single_host_origin"
+                   data-callback="signInCallback">
+             </span>
+    </div>
     <a href="https://github.com/ethankhall/grubdice"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 1000;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
 		<!-- Nav -->
 					<nav id="nav">
@@ -162,7 +186,7 @@
 				<article id="main" class="container special">
 					<header>
                         <!--Scores -->
-                        <div id="scores">
+                        <div id="scores" style="display: none">
                             <div class="byline" align="center">
                                 Enter the order in which the players of your game finished. We'll automagically figure everything else out.<br>To calculate a tie, click the arrow next to the position the players tied.<br>
                                 <div id="newGameTable"></div>
@@ -197,6 +221,7 @@
                     	<div id="player">
                     		<div><span class="byline" align="center">
 		                        <input type="text" id="newPlayer" placeholder="New player name" />
+                                <input type="text" id="newPlayerEmail" placeholder="email" />
 		                        <button type="button" class="button circled scrolly" onclick="createNewPlayer()">Add player to the league</button>
                                 </span>
 		                    </div>
@@ -270,6 +295,36 @@
           html += '</ul>';
           element.innerHTML = html;
       }
+    </script>
+    <script type="text/javascript">
+        function signInCallback(authResult) {
+            if (authResult['code']) {
+
+                // Hide the sign-in button now that the user is authorized, for example:
+                $('#signinButton').attr('style', 'display: none');
+                $('#scores').attr('style', 'display: inline');
+
+                console.log(authResult)
+                var googleAuth = {};
+                googleAuth['code'] = authResult['code'];
+                // Send the code to the server
+                $.ajax({
+                    type: 'POST',
+                    url: '/login',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        console.log("User logged in");
+                    },
+                    processData: false,
+                    data: JSON.stringify(googleAuth)
+                });
+            } else if (authResult['error']) {
+                console.log('There was an error: ' + authResult['error']);
+                $('#signinButton').attr('style', 'display: inline');
+            } else {
+                $('#signinButton').attr('style', 'display: inline');
+            }
+        }
     </script>
 	</body>
 </html>

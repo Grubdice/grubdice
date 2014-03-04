@@ -1,15 +1,12 @@
 package co.grubdice.scorekeeper.config
-
 import groovy.util.logging.Slf4j
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
-import org.springframework.context.annotation.PropertySource
+import org.springframework.context.annotation.*
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
 
 @Configuration
 @Slf4j
 class PropertyFileLoader {
+
 
     @Configuration
     @PropertySource("classpath:test.properties")
@@ -42,6 +39,16 @@ class PropertyFileLoader {
             log.info("Creating profile: prod")
         }
 
+    }
+
+    @Configuration
+    @PropertySource(value = "file:/opt/grubdice/config/local.properties", ignoreResourceNotFound = true)
+    @Import([ TestDefaults.class, DevDefaults.class, ProdDefaults.class])
+    @Slf4j
+    static class OverrideDefaults {
+        static {
+            log.info("Loading defaults")
+        }
     }
 
     @Bean

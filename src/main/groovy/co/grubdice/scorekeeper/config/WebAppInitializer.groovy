@@ -22,6 +22,7 @@ class WebAppInitializer implements WebApplicationInitializer {
         container.addListener(new ContextLoaderListener(rootContext));
         container.addFilter("springSecurityFilterChain", new DelegatingFilterProxy("springSecurityFilterChain"))
                 .addMappingForUrlPatterns(null, false, "/*");
+        container.addFilter("cors", new CrossDomainRequestFilter()).addMappingForUrlPatterns(null, false, "/*");
 
         // Register and map the dispatcher servlet
         ServletRegistration.Dynamic dispatcher =

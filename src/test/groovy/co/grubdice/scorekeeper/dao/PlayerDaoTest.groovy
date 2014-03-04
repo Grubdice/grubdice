@@ -49,4 +49,18 @@ class PlayerDaoTest extends AbstractTransactionalTestNGSpringContextTests {
         assertThat(playerDao.findByNameLikeIgnoreCase("zzz")).isNull()
     }
 
+    @Test
+    public void testFindingUserByIdentityUrl() throws Exception {
+        playerDao.save(new Player(name: "player 1", googleId: "something"))
+        def player = playerDao.findByGoogleId("something")
+        assertThat(player).isNotNull()
+    }
+
+    @Test
+    public void testFindingUserByEmail() throws Exception {
+        playerDao.save(new Player(name: "player 1", emailAddress: "some@thing.com"))
+        def player = playerDao.findByEmailAddress("some@thing.com")
+        assertThat(player).isNotNull()
+    }
+
 }

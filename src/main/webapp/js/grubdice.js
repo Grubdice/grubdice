@@ -1,3 +1,12 @@
+var players = new Bloodhound({
+    datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    prefetch: '/api/player/'
+});
+
+players.initialize();
+
+
 function addNewPlayerRowToGameTable() {
     var table = $("#newGameTable");
 
@@ -6,26 +15,25 @@ function addNewPlayerRowToGameTable() {
 
     $(table).append('<div class="enterPlayerRow">' +
         '<div class="newPlayerCell">'+numberOfRows+'</div>' +
-        '<div class="newPlayerCell newPlayerTextArea"><div><input type="text" placeholder="name" /></div></div>' +
+        '<div class="newPlayerCell newPlayerTextArea"><div><input class="typeahead" type="text" placeholder="name" /></div></div>' +
         '<div class="newPlayerCell"><button type="button" class="fa fa-level-down" onclick="addTiePlayer(this)"></button></div>' +
         '</div>')
 }
 
-function add3RowToTable(table, cell1Contents, cell2Contents, cell3Contents) {
-    var row = table.insertRow(-1);
-
-    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    var cell3 = row.insertCell(2);
-
-    cell1.innerHTML = cell1Contents;
-    cell2.innerHTML = cell2Contents;
-    cell3.innerHTML = cell3Contents;
+function setTypeAhead() {
+    $('.typeahead').typeahead(null, {
+        displayKey: 'name',
+        source: players.ttAdapter(),
+        templates: {
+            suggestion: Handlebars.compile([
+                '<div style="background-color:#fff;" ><p style="display: inline;"><strong>{{name}}</strong> – {{email}}</p></div>'
+            ].join(''))
+        }
+    });
 }
-
 function addTiePlayer(reference) {
-    $(reference).parents('div').siblings('.newPlayerTextArea').first().append('<div><input type="text" placeholder="name" /></div>');
+    $(reference).parents('div').siblings('.newPlayerTextArea').first().append('<div><input class="typeahead" type="text" placeholder="name" /></div>');
+    setTypeAhead();
 }
 
 function publicRefreshScoreBoard() {
@@ -54,7 +62,6 @@ function updateScoreBoard(values) {
 
     for (var i = 0; i < values.length; i++) {
         var player = values[i];
-        console.log(player);
 
         var row = table.insertRow(-1);
         row.insertCell(0).innerHTML = player['place'];
@@ -69,7 +76,8 @@ function performPostAndClearTable() {
     var json = { };
     var nodeList = $('#newGameTable').children('.enterPlayerRow');
 
-    var gameResults = new Array()
+    var gameResults = new Array();
+    var numberOfPlayers = 0;
     for (var i = 0; i < nodeList.length; ++i) {
         var textBoxes = nodeList[i].getElementsByTagName("input");
         var result = {}
@@ -82,35 +90,41 @@ function performPostAndClearTable() {
         }
 
         if(nameResults.length != 0){
-            result['name'] = nameResults
-            gameResults.push(result)
+            result['name'] = nameResults;
+            gameResults.push(result);
+            numberOfPlayers++;
         }
     }
 
     json['results'] = gameResults;
     json['cd-dropdown'] = $('#cd-dropdown').val();
     console.log(json);
+    setTypeAhead();
 
-    $.ajax({
-        type: "POST",
-        url: "/api/game",
-        processData: false,
-        data: JSON.stringify(json),
-        success: function () {
-            alert("Booyah! Success!");
-            refreshScoreBoard();
-            updateRecentGames();
-            clearGameTable();
-        },
-        error: reportNewGameError,
-        contentType: "application/json"
-    });
+    if(numberOfPlayers > 7) {
+        alert("This game is invalid, due to there being space for 2 games");
+    }  else if(numberOfPlayers >= 4){
+        $.ajax({
+            type: "POST",
+            url: "/api/game",
+            processData: false,
+            data: JSON.stringify(json),
+            success: function () {
+                alert("Booyah! Success!");
+                refreshScoreBoard();
+                updateRecentGames();
+                clearGameTable();
+            },
+            error: reportNewGameError,
+            contentType: "application/json"
+        });
+    } else {
+        alert("You need at least 4 players");
+    }
 }
 
 function reportNewGameError(jqXHR, textStatus, errorThrown){
-    alert(textStatus);
-    console.log(jqXHR);
-    console.log(errorThrown);
+    alert(jQuery.parseJSON(jqXHR.responseText).error);
 }
 
 function clearGameTable() {
@@ -125,7 +139,8 @@ function clearGameTable() {
 function createNewPlayer() {
     var playerName = {};
     playerName['name'] = document.getElementById("newPlayer").value;
-    console.log(playerName);
+    playerName['emailAddress'] = document.getElementById("newPlayerEmail").value;
+    console.log(JSON.stringify(playerName));
     $.ajax({
         type: "POST",
         url: "/api/player",
@@ -134,6 +149,9 @@ function createNewPlayer() {
         success: function() {
             alert("Player has been added");
             document.getElementById("newPlayer").value = "";
+        },
+        error: function(xhr) {
+            alert("The player was not added because: " + jQuery.parseJSON(xhr.responseText).badValue)
         },
         contentType: "application/json"
     });
