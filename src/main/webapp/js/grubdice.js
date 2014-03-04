@@ -1,12 +1,3 @@
-var players = new Bloodhound({
-    datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    prefetch: '/api/player/'
-});
-
-players.initialize();
-
-
 function addNewPlayerRowToGameTable() {
     var table = $("#newGameTable");
 
@@ -21,6 +12,14 @@ function addNewPlayerRowToGameTable() {
 }
 
 function setTypeAhead() {
+    var players = new Bloodhound({
+        datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        prefetch: '/api/public/player'
+    });
+
+    players.initialize();
+
     $('.typeahead').typeahead(null, {
         displayKey: 'name',
         source: players.ttAdapter(),
@@ -40,16 +39,6 @@ function publicRefreshScoreBoard() {
     $.ajax({
         type: "GET",
         url: "/api/public/score",
-        processData: false,
-        success: updateScoreBoard,
-        dataType: 'JSON'
-    });
-}
-
-function refreshScoreBoard() {
-    $.ajax({
-        type: "GET",
-        url: "/api/score",
         processData: false,
         success: updateScoreBoard,
         dataType: 'JSON'
@@ -99,7 +88,6 @@ function performPostAndClearTable() {
     json['results'] = gameResults;
     json['cd-dropdown'] = $('#cd-dropdown').val();
     console.log(json);
-    setTypeAhead();
 
     if(numberOfPlayers > 7) {
         alert("This game is invalid, due to there being space for 2 games");
@@ -111,9 +99,10 @@ function performPostAndClearTable() {
             data: JSON.stringify(json),
             success: function () {
                 alert("Booyah! Success!");
-                refreshScoreBoard();
+                publicRefreshScoreBoard();
                 updateRecentGames();
                 clearGameTable();
+                setTypeAhead();
             },
             error: reportNewGameError,
             contentType: "application/json"
@@ -158,7 +147,7 @@ function createNewPlayer() {
 }
 
 function updateRecentGames() {
-    $.getJSON("/api/game", function(games) {
+    $.getJSON("/api/public/game", function(games) {
         var recentGamesHtml = '';
         $.each(games, function(i, game) {
             recentGamesHtml += '<div class="recentGame"><ul class="recentGameResults">';
