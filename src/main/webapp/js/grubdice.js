@@ -88,7 +88,6 @@ function performPostAndClearTable() {
     json['results'] = gameResults;
     json['cd-dropdown'] = $('#cd-dropdown').val();
     console.log(json);
-    setTypeAhead();
 
     if(numberOfPlayers > 7) {
         alert("This game is invalid, due to there being space for 2 games");
@@ -103,6 +102,7 @@ function performPostAndClearTable() {
                 publicRefreshScoreBoard();
                 updateRecentGames();
                 clearGameTable();
+                setTypeAhead();
             },
             error: reportNewGameError,
             contentType: "application/json"

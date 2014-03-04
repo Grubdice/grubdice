@@ -1,12 +1,9 @@
 package co.grubdice.scorekeeper.controller
-
 import co.grubdice.scorekeeper.dao.GameDao
 import co.grubdice.scorekeeper.dao.SeasonDao
 import co.grubdice.scorekeeper.dao.helper.SeasonDaoHelper
 import co.grubdice.scorekeeper.engine.LeagueScoreEngine
 import co.grubdice.scorekeeper.engine.LudicrousScoreEngine
-import co.grubdice.scorekeeper.exception.NotFoundException
-import co.grubdice.scorekeeper.exception.PlayerNotFoundException
 import co.grubdice.scorekeeper.model.external.ScoreModel
 import co.grubdice.scorekeeper.model.persistant.Game
 import co.grubdice.scorekeeper.model.persistant.GameType
@@ -18,6 +15,8 @@ import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
+
+import javax.persistence.NonUniqueResultException
 
 @RequestMapping
 @RestController
@@ -81,10 +80,10 @@ class GameController {
         }
     }
 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(NonUniqueResultException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @RequestMapping(produces = "application/json")
-    public Map handleBadUserException(PlayerNotFoundException ex) {
-        return [ error: ex.textMessage as String ]
+    static public Map handleNonUniqueResultException() {
+        return [ error: "Unable to find specific player, I found several" as String ]
     }
 }
