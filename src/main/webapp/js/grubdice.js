@@ -1,12 +1,3 @@
-var players = new Bloodhound({
-    datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    prefetch: '/api/public/player'
-});
-
-players.initialize();
-
-
 function addNewPlayerRowToGameTable() {
     var table = $("#newGameTable");
 
@@ -21,6 +12,14 @@ function addNewPlayerRowToGameTable() {
 }
 
 function setTypeAhead() {
+    var players = new Bloodhound({
+        datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        prefetch: '/api/public/player'
+    });
+
+    players.initialize();
+
     $('.typeahead').typeahead(null, {
         displayKey: 'name',
         source: players.ttAdapter(),
