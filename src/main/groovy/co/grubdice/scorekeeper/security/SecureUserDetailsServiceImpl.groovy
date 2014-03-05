@@ -37,6 +37,6 @@ class SecureUserDetailsServiceImpl implements SecureUserDetailsService {
      */
     public UserDetails loadUserDetails(GoogleToken token) {
         def player = playerCreator.loadOrCreatePlayer(token)
-        return new SecureUserDetails(player.emailAddress)
+        return new SecureUserDetails(player.name)
     }
 }

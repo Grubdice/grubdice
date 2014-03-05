@@ -10,7 +10,8 @@ interface PlayerDao extends JpaRepository<Player, Integer> {
     @Query("select player from Player player where lower(player.name) like lower(concat('%',:name,'%'))")
     Player findByNameLikeIgnoreCase(@Param("name") String name)
 
-    Player findByGoogleId(String googleId)
+    @Query("select player from Player player join player.authentications as playerAuth where playerAuth.googleId = :googleId")
+    Player findByGoogleId(@Param("googleId") String googleId)
 
     Player findByEmailAddress(String email)
 }

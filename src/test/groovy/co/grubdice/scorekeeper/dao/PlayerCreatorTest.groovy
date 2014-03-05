@@ -1,5 +1,6 @@
 package co.grubdice.scorekeeper.dao
 import co.grubdice.scorekeeper.model.persistant.Player
+import co.grubdice.scorekeeper.model.persistant.PlayerAuthentication
 import co.grubdice.scorekeeper.security.GoogleToken
 import org.testng.annotations.Test
 
@@ -13,8 +14,9 @@ class PlayerCreatorTest {
         Player p = new Player()
         PlayerCreatorImpl.updatePlayerFromToken(token, p)
         assertThat(p.name).isEqualTo("ethan")
-        assertThat(p.emailAddress).isEqualTo("ethan@void.com")
-        assertThat(p.googleId).isEqualTo("something")
+        assertThat(p.authentications).hasSize(1)
+        assertThat(p.authentications.first().emailAddress).isEqualTo("ethan@void.com")
+        assertThat(p.authentications.first().googleId).isEqualTo("something")
     }
 
     @Test
@@ -23,9 +25,10 @@ class PlayerCreatorTest {
         PlayerCreatorImpl playerCreator = new PlayerCreatorImpl()
         playerCreator.setPlayerDao([ findByEmailAddress: { null }] as PlayerDao)
         def player = playerCreator.createUserToStore(token)
-        assertThat(player.googleId).isEqualTo(token.getGoogleId())
+        assertThat(player.authentications).hasSize(1)
+        assertThat(player.authentications.first().googleId).isEqualTo(token.getGoogleId())
         assertThat(player.name).isEqualTo(token.getName())
-        assertThat(player.emailAddress).isEqualTo(token.getEmail())
+        assertThat(player.authentications.first().emailAddress).isEqualTo(token.getEmail())
     }
 
     @Test
@@ -35,9 +38,24 @@ class PlayerCreatorTest {
         Player p = new Player()
         playerCreator.setPlayerDao([ findByEmailAddress: { p }] as PlayerDao)
         def returnedPlayer = playerCreator.createUserToStore(token)
-        assertThat(returnedPlayer.googleId).isEqualTo(token.getGoogleId())
+        assertThat(returnedPlayer.authentications.first().googleId).isEqualTo(token.getGoogleId())
         assertThat(returnedPlayer.name).isEqualTo(token.getName())
-        assertThat(returnedPlayer.emailAddress).isEqualTo(token.getEmail())
+        assertThat(returnedPlayer.authentications.first().emailAddress).isEqualTo(token.getEmail())
+        assertThat(returnedPlayer).isSameAs(p)
+    }
+
+    @Test
+    public void testGettingUserFromEmailFromToken_multipleAuthentications() throws Exception {
+        def token = new GoogleToken("something", "ethan@void.com", "ethan")
+        PlayerCreatorImpl playerCreator = new PlayerCreatorImpl()
+        Player p = new Player()
+        p.authentications += new PlayerAuthentication('googleid', 'not@user.com')
+        playerCreator.setPlayerDao([ findByEmailAddress: { p }] as PlayerDao)
+        def returnedPlayer = playerCreator.createUserToStore(token)
+        assertThat(returnedPlayer.authentications).hasSize(2)
+        assertThat(returnedPlayer.authentications.googleId).isEqualTo(['googleid', token.getGoogleId()])
+        assertThat(returnedPlayer.name).isEqualTo(token.getName())
+        assertThat(returnedPlayer.authentications.emailAddress).isEqualTo(['not@user.com', token.getEmail()])
         assertThat(returnedPlayer).isSameAs(p)
     }
 }
