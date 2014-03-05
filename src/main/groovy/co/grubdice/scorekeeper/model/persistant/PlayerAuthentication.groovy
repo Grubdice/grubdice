@@ -31,6 +31,7 @@ class PlayerAuthentication {
     String emailAddress
 
     @ManyToOne
-    @JoinColumn(name = "player_id")
+    @JoinColumn(name = "player_id", nullable = false)
+    @JsonIgnore
     Player player
 }

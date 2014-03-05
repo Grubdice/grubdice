@@ -20,6 +20,16 @@ class PlayerCreatorTest {
     }
 
     @Test
+    public void testUpdatePlayerFromToken_whenGoogleIdIsSetCreateNew() throws Exception {
+        def token = new GoogleToken("something", "ethan@void.com", "ethan")
+        Player p = new Player(authentications: [ new PlayerAuthentication('not null', "ethan@void.com")])
+        PlayerCreatorImpl.updatePlayerFromToken(token, p)
+        assertThat(p.authentications).hasSize(2)
+        assertThat(p.authentications.emailAddress).contains("ethan@void.com", "ethan@void.com")
+        assertThat(p.authentications.googleId).contains("something", "not null")
+    }
+
+    @Test
     public void testGettingUserFromEmailFromToken_noneIsFound() throws Exception {
         def token = new GoogleToken("something", "ethan@void.com", "ethan")
         PlayerCreatorImpl playerCreator = new PlayerCreatorImpl()

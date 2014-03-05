@@ -60,9 +60,18 @@ class PlayerDaoTest extends AbstractTransactionalTestNGSpringContextTests {
     }
 
     @Test
-    public void testFindingUserByEmail() throws Exception {
+    public void testFindingUserByEmail_whenEmailIsOnPlayer() throws Exception {
         playerDao.save(new Player(name: "player 1", emailAddress: "some@thing.com"))
         def player = playerDao.findByEmailAddress("some@thing.com")
+        assertThat(player).isNotNull()
+    }
+
+    @Test
+    public void testFindingUserByEmail_whenEmailIdOnAuth() throws Exception {
+        def storedPlayer = new Player(name: "player 1", emailAddress: "some@thing.com")
+        storedPlayer.authentications += new PlayerAuthentication("something", "email.address", storedPlayer)
+        playerDao.save(storedPlayer)
+        def player = playerDao.findByEmailAddress("email.address")
         assertThat(player).isNotNull()
     }
 

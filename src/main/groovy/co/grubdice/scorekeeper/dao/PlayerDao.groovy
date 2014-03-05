@@ -13,5 +13,6 @@ interface PlayerDao extends JpaRepository<Player, Integer> {
     @Query("select player from Player player join player.authentications as playerAuth where playerAuth.googleId = :googleId")
     Player findByGoogleId(@Param("googleId") String googleId)
 
-    Player findByEmailAddress(String email)
+    @Query("select player from Player player left join player.authentications as playerAuth where playerAuth.emailAddress = :email or player.emailAddress = :email")
+    Player findByEmailAddress(@Param("email") String email)
 }

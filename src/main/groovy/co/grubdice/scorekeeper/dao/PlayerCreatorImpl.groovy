@@ -3,7 +3,6 @@ import co.grubdice.scorekeeper.model.persistant.Player
 import co.grubdice.scorekeeper.model.persistant.PlayerAuthentication
 import co.grubdice.scorekeeper.security.GoogleToken
 import com.google.common.annotations.VisibleForTesting
-import groovy.json.JsonBuilder
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
@@ -26,7 +25,6 @@ class PlayerCreatorImpl implements PlayerCreator {
             player = createUserToStore(token)
             player = playerDao.save(player)
         }
-        log.info("Player will be: " + new JsonBuilder(player).toString())
         log.debug("trying to login with email {}", player.getEmailAddress())
         return player
     }
@@ -46,14 +44,15 @@ class PlayerCreatorImpl implements PlayerCreator {
     static void updatePlayerFromToken(GoogleToken token, Player player) {
         player.setName(token.getName())
         def auth = player.authentications.find { PlayerAuthentication pa ->
-            return pa.id == token.getGoogleId() && pa.emailAddress.equalsIgnoreCase(token.email)
+            return pa.emailAddress.equalsIgnoreCase(token.email) && pa.googleId == null
         }
 
+        log.info("Auth found: {}", auth)
         if(auth) {
             auth.emailAddress = token.getEmail()
             auth.googleId = token.getGoogleId()
         } else {
-            player.authentications += new PlayerAuthentication(token.googleId, token.email)
+            player.authentications += new PlayerAuthentication(token.googleId, token.email, player)
         }
     }
 }
