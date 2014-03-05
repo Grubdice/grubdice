@@ -5,3 +5,5 @@ create table player_authentications (
   google_id varchar(255),
   email_address varchar(255)
 );
+
+insert into player_authentications(player_id, google_id, email_address) from (select id, google_id, email_address from players where google_id is not null)
