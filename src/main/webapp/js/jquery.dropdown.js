@@ -49,7 +49,7 @@
 		_layout : function() {
 
 			var self = this;
-			this.minZIndex = 1000;
+			this.minZIndex = 50;
 			var value = this._transformSelect();
 			this.opts = this.listopts.children( 'li' );
 			this.optsCount = this.opts.length;
