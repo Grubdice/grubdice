@@ -54,7 +54,7 @@ function addTiePlayer(reference) {
 
     playerArea.append(playerInputElement);
 
-    applyTypeAheadToElement(playerInputElement.find('typeahead'));
+    applyTypeAheadToElement(playerInputElement.find('.typeahead'));
 }
 
 function publicRefreshScoreBoard() {
