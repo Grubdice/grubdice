@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/api/player")
+@RequestMapping
 @RestController
 @Slf4j
 class PlayerController {
@@ -17,7 +17,7 @@ class PlayerController {
     @Autowired
     PlayerDao playerDao
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/api/player", method = RequestMethod.POST)
     public def createPlayer(@RequestBody Player player) {
         if(player.name?.isEmpty() || player.emailAddress?.isEmpty()){
             throw new InvalidPlayerException(player)
@@ -26,7 +26,7 @@ class PlayerController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = ["/api/player", "/api/public/player"], method = RequestMethod.GET)
     public def getUserForTypeAhead() {
         return playerDao.findAll().collect { player -> new ExternalPlayer(player) }
     }
