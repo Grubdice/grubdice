@@ -3,24 +3,40 @@ function addNewPlayerRowToGameTable() {
 
 
     var numberOfRows = $(table).children(".enterPlayerRow").length+1;
-
-    $(table).append('<div class="enterPlayerRow">' +
+    var newPlayerRowHtml = '<div class="enterPlayerRow">' +
         '<div class="newPlayerCell">'+numberOfRows+'</div>' +
         '<div class="newPlayerCell newPlayerTextArea"><div><input class="typeahead" type="text" placeholder="name" /></div></div>' +
-        '<div class="newPlayerCell"><button type="button" class="fa fa-level-down" onclick="addTiePlayer(this)"></button></div>' +
-        '</div>')
+        '<div class="newPlayerCell"><button type="button" class="fa fa-level-down" onclick="addTiePlayer(this)" tabindex="-1"></button></div>' +
+        '</div>';
+    var newPlayerRowElement = $(newPlayerRowHtml);
+    $(table).append(newPlayerRowElement);
+
+    applyTypeAheadToElement($(newPlayerRowElement).find('.typeahead'));
 }
 
-function setTypeAhead() {
-    var players = new Bloodhound({
-        datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        prefetch: '/api/public/player'
-    });
+function loadPlayersForTypeAhead() {
 
-    players.initialize();
+    var newGameTable = $('#newGameTable');
 
-    $('.typeahead').typeahead(null, {
+    if (!newGameTable.data('players')) {
+        var players = new Bloodhound({
+            datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.name); },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: '/api/public/player'
+        });
+
+        players.initialize();
+
+        newGameTable.data('players', players);
+    }
+}
+function applyTypeAheadToElement(elements) {
+
+    loadPlayersForTypeAhead();
+
+    var players = $('#newGameTable').data('players');
+
+    $(elements).typeahead(null, {
         displayKey: 'name',
         source: players.ttAdapter(),
         templates: {
@@ -30,9 +46,15 @@ function setTypeAhead() {
         }
     });
 }
+
 function addTiePlayer(reference) {
-    $(reference).parents('div').siblings('.newPlayerTextArea').first().append('<div><input class="typeahead" type="text" placeholder="name" /></div>');
-    setTypeAhead();
+    var playerArea = $(reference).parents('div').siblings('.newPlayerTextArea').first();
+    var playerInputHtml = '<div><input class="typeahead" type="text" placeholder="name" /></div>';
+    var playerInputElement = $(playerInputHtml);
+
+    playerArea.append(playerInputElement);
+
+    applyTypeAheadToElement(playerInputElement.find('typeahead'));
 }
 
 function publicRefreshScoreBoard() {
@@ -102,7 +124,6 @@ function performPostAndClearTable() {
                 publicRefreshScoreBoard();
                 updateRecentGames();
                 clearGameTable();
-                setTypeAhead();
             },
             error: reportNewGameError,
             contentType: "application/json"
