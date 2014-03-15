@@ -18,7 +18,7 @@ class PlayerController {
     PlayerDao playerDao
 
     @RequestMapping(value = "/api/player", method = RequestMethod.POST)
-    public def createPlayer(@RequestBody Player player) {
+    public def createPlayer(@RequestBody ExternalPlayer player) {
         if(player.name?.isEmpty() || player.emailAddress?.isEmpty()){
             throw new InvalidPlayerException(player)
         } else {

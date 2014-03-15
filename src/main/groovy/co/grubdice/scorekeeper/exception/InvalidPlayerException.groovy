@@ -1,6 +1,6 @@
 package co.grubdice.scorekeeper.exception
 
-import co.grubdice.scorekeeper.model.persistant.Player
+import co.grubdice.scorekeeper.model.external.ExternalPlayer
 
 class InvalidPlayerException extends RuntimeException {
 
@@ -10,7 +10,7 @@ class InvalidPlayerException extends RuntimeException {
         badValue = "Unknown"
     }
 
-    InvalidPlayerException(Player p) {
+    InvalidPlayerException(ExternalPlayer p) {
         name = p.name
         emailAddress = p.emailAddress
         badValue = "There was an error while trying to decode "

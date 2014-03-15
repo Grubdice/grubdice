@@ -83,7 +83,8 @@ class GameController {
     @ExceptionHandler(NonUniqueResultException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @RequestMapping(produces = "application/json")
-    static public Map handleNonUniqueResultException() {
+    static public Map handleNonUniqueResultException(NonUniqueResultException e) {
+        log.error("There was an error: ", e)
         return [ error: "Unable to find specific player, I found several" as String ]
     }
 }
