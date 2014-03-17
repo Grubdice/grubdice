@@ -97,13 +97,13 @@ function performPostAndClearTable() {
         for (var j=0; j<textBoxes.length; j++) {
             if(textBoxes[j].value != "") {
                 nameResults.push(textBoxes[j].value);
+                numberOfPlayers++;
             }
         }
 
         if(nameResults.length != 0){
             result['name'] = nameResults;
             gameResults.push(result);
-            numberOfPlayers++;
         }
     }
 
