@@ -4,9 +4,17 @@ import co.grubdice.scorekeeper.model.persistant.Player
 
 class ExternalPlayer {
     String name
-    String email
+    String emailAddress
     ExternalPlayer(Player player) {
         name = player.name
-        email = player.emailAddress
+        emailAddress = player.emailAddress
+    }
+
+    ExternalPlayer(String name, String emailAddress) {
+        this.name = name
+        this.emailAddress = emailAddress
+    }
+
+    ExternalPlayer() {
     }
 }

@@ -2,6 +2,7 @@ package co.grubdice.scorekeeper.dao
 import co.grubdice.scorekeeper.config.HibernateConfig
 import co.grubdice.scorekeeper.config.PropertyFileLoader
 import co.grubdice.scorekeeper.model.persistant.Player
+import co.grubdice.scorekeeper.model.persistant.PlayerAuthentication
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ActiveProfiles
@@ -50,16 +51,27 @@ class PlayerDaoTest extends AbstractTransactionalTestNGSpringContextTests {
     }
 
     @Test
-    public void testFindingUserByIdentityUrl() throws Exception {
-        playerDao.save(new Player(name: "player 1", googleId: "something"))
+    public void testFindingUserByGoogleId() throws Exception {
+        def storedPlayer = new Player(name: "player 1")
+        storedPlayer.authentications += new PlayerAuthentication("something", "email.address", storedPlayer)
+        playerDao.saveAndFlush(storedPlayer)
         def player = playerDao.findByGoogleId("something")
         assertThat(player).isNotNull()
     }
 
     @Test
-    public void testFindingUserByEmail() throws Exception {
+    public void testFindingUserByEmail_whenEmailIsOnPlayer() throws Exception {
         playerDao.save(new Player(name: "player 1", emailAddress: "some@thing.com"))
         def player = playerDao.findByEmailAddress("some@thing.com")
+        assertThat(player).isNotNull()
+    }
+
+    @Test
+    public void testFindingUserByEmail_whenEmailIdOnAuth() throws Exception {
+        def storedPlayer = new Player(name: "player 1", emailAddress: "some@thing.com")
+        storedPlayer.authentications += new PlayerAuthentication("something", "email.address", storedPlayer)
+        playerDao.save(storedPlayer)
+        def player = playerDao.findByEmailAddress("email.address")
         assertThat(player).isNotNull()
     }
 

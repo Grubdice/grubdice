@@ -39,7 +39,7 @@ class GoogleAuthFilter extends AbstractAuthenticationProcessingFilter implements
         log.info("User Details: {}", new JsonBuilder(userDetail).toString())
 
         def rememberMeToken = new RememberMeAuthenticationToken(TOKEN_KEY, userDetail, userDetail.authorities)
-        log.info("Remember Me Token: {}", new JsonBuilder(rememberMeToken).toString())
+        log.debug("Remember Me Token: {}", new JsonBuilder(rememberMeToken).toString())
         getAuthenticationManager().authenticate(rememberMeToken);
     }
 }

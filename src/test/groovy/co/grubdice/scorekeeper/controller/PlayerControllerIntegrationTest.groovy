@@ -47,7 +47,7 @@ class PlayerControllerIntegrationTest {
     private createPlayers() {
         def playerList = []
         for (int i in 1..10) {
-            playerList += new Player("name${i}", null, "some${i}@email.com")
+            playerList += new Player("name${i}", "some${i}@email.com")
         }
         return playerList
     }

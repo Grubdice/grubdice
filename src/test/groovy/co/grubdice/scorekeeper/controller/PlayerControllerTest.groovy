@@ -1,7 +1,6 @@
 package co.grubdice.scorekeeper.controller
-
 import co.grubdice.scorekeeper.dao.PlayerDao
-import co.grubdice.scorekeeper.model.persistant.Player
+import co.grubdice.scorekeeper.model.external.ExternalPlayer
 import groovy.mock.interceptor.MockFor
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
@@ -21,7 +20,7 @@ class PlayerControllerTest {
         mockPlayerDao.demand.save { }
 
         PlayerController controller = createControllerForMock()
-        controller.createPlayer(new Player(name: 'test name', emailAddress: 'test@mock.com'))
+        controller.createPlayer(new ExternalPlayer('test name', 'test@mock.com'))
 
         mockPlayerDao.verify playerDoa
     }
